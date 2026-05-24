@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "🏠 Launch NestMate Backend",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/nestmate-backend/server.js",
+      "cwd": "${workspaceFolder}/nestmate-backend",
+      "console": "integratedTerminal",
+      "env": {
+        "PORT": "3000",
+        "SESSION_SECRET": "nestmate-local-development-secret-key"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "🚀 Launch with Hot-Reload (Nodemon)",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "cwd": "${workspaceFolder}/nestmate-backend",
+      "console": "integratedTerminal"
+    }
+  ]
+}

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NestMate | Find Your Home-Coming</title>
+<link rel="stylesheet" href="/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e1bfb5;
+        border-radius: 10px;
+      }
+      .card-lift {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      }
+      .card-lift:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px -4px rgba(171, 53, 0, 0.12);
+      }
+      /* Custom checkbox & radio styling */
+      .custom-check {
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 1px solid #e1bfb5;
+        border-radius: 4px;
+        background-color: white;
+        display: grid;
+        place-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .custom-check::before {
+        content: "";
+        width: 0.65rem;
+        height: 0.65rem;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #ab3500;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      }
+      .custom-check:checked {
+        border-color: #ab3500;
+        background-color: #fff1ed;
+      }
+      .custom-check:checked::before {
+        transform: scale(1);
+      }
+      .listing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container/30">
+<!-- Top Navigation Bar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<div class="flex items-center gap-xl">
+<a href="/nestmate_home_refined/code.html" class="text-h3 font-h3 font-bold text-primary tracking-tight">NestMate</a>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-primary border-b-2 border-primary font-bold pb-1 font-button text-button" href="#">Browse</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-button text-button" href="#">List Property</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-button text-button" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-sm rounded-lg text-on-surface-variant hover:bg-primary/5 transition-all font-button text-button">Login</button>
+<button class="px-lg py-sm rounded-lg bg-primary-container text-on-primary font-bold shadow-md hover:opacity-90 active:scale-95 transition-all font-button text-button">Sign Up</button>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-lg py-xl flex gap-xl items-start">
+<!-- Left Sidebar: App-like Filters -->
+<aside class="hidden lg:flex flex-col w-72 shrink-0 bg-surface border border-outline-variant/30 rounded-2xl sticky top-[100px] max-h-[calc(100vh-140px)] overflow-hidden shadow-sm">
+<div class="p-lg border-b border-outline-variant/20 flex items-center justify-between">
+<h2 class="font-h3 text-h3 text-xl">Filters</h2>
+<button class="text-primary font-button text-body-sm hover:underline">Clear all</button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-lg space-y-xl">
+<!-- Price Range -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<label class="font-bold text-on-surface text-body-sm uppercase tracking-wider">Price Range</label>
+<span class="text-xs text-on-surface-variant">Monthly</span>
+</div>
+<div class="px-xs pt-sm">
+<input type="range" id="price-slider" min="1000" max="30000" step="500" value="30000" class="w-full accent-primary" />
+<div class="flex justify-between mt-sm">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Min</span>
+<span class="font-bold text-on-surface">₹1,000</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-on-surface-variant uppercase font-bold">Max</span>
+<span id="price-max-display" class="font-bold text-on-surface">₹30,000</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Property Type -->
+<section class="space-y-md">
+<label class="font-bold text-on-surface text-body-sm uppercase tracking-wider">Property Type</label>
+<div class="space-y-sm">
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="custom-check type-filter" type="checkbox" value="PG"/>
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">PG</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="custom-check type-filter" type="checkbox" value="Flat"/>
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">Flat</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="custom-check type-filter" type="checkbox" value="Hostel"/>
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">Hostel</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="custom-check type-filter" type="checkbox" value="Shared"/>
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">Shared Room</span>
+</label>
+</div>
+</section>
+<!-- Gender Preference -->
+<section class="space-y-md">
+<label class="font-bold text-on-surface text-body-sm uppercase tracking-wider">Gender Preference</label>
+<div class="grid grid-cols-2 gap-xs">
+<button class="gender-btn px-sm py-xs rounded-lg border border-primary bg-primary text-white text-body-sm font-bold" data-val="all">All</button>
+<button class="gender-btn px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary/50 text-body-sm" data-val="female">Female</button>
+<button class="gender-btn px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary/50 text-body-sm" data-val="male">Male</button>
+<button class="gender-btn px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary/50 text-body-sm" data-val="mixed">Mixed</button>
+</div>
+</section>
+<!-- Amenities -->
+<section class="space-y-md">
+<label class="font-bold text-on-surface text-body-sm uppercase tracking-wider">Amenities</label>
+<div class="space-y-sm">
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">High-speed WiFi</span>
+<input checked="" class="custom-check" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">Air Conditioning</span>
+<input checked="" class="custom-check" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">On-site Parking</span>
+<input class="custom-check" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-on-surface-variant group-hover:text-on-surface transition-colors">24/7 Gym</span>
+<input class="custom-check" type="checkbox"/>
+</label>
+</div>
+</section>
+</div>
+<div class="p-lg bg-surface-container-low border-t border-outline-variant/20">
+<button class="w-full py-sm bg-primary text-white rounded-lg font-button text-button shadow-sm hover:brightness-110 active:scale-[0.98] transition-all">Apply Results</button>
+</div>
+</aside>
+<!-- Right Content: Grid -->
+<div class="flex-1 flex flex-col gap-lg">
+<!-- Sorting and Results Count -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md pb-md border-b border-outline-variant/10">
+<div>
+<h1 class="font-h2 text-h2 text-on-background">Find your next home</h1>
+<p class="text-on-surface-variant text-body-sm flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    24 properties available near University District
+                </p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs bg-surface border border-outline-variant/30 rounded-full px-md py-xs shadow-sm">
+<span class="text-[12px] font-bold text-on-surface-variant uppercase">Sort:</span>
+<select class="bg-transparent border-none py-0 pl-1 pr-8 text-on-surface text-body-sm focus:ring-0 cursor-pointer">
+<option>Recommended</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Highest Rated</option>
+</select>
+</div>
+<div class="flex items-center bg-surface border border-outline-variant/30 rounded-lg p-xs shadow-sm">
+<button class="p-xs text-primary bg-primary/10 rounded-sm">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Property Grid with organic rhythm -->
+<div class="listing-grid gap-xl">
+<!-- Listing Card 1 -->
+<div class="bg-surface rounded-2xl card-lift overflow-hidden border border-outline-variant/30 flex flex-col h-full">
+<div class="relative aspect-[16/11] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" data-alt="A warm and brightly lit modern studio apartment interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZRnW96dXyF4NPDtG-_GTJSQFWb5LYHbXWIIXb7q6MP1p8y2wOw0esd-vCtPUvy-iZof4LDoF6VjLtZJEYrKXGPUlZUwj_Bm_3ml3QkWFe3J6WnfFvwgDeoHFMxli1zMxH3FpQGd_8PIAfKw6XO7EzQz4_dGZzP7X-poit192HxVlsdpUp74zpIkr6lqLPWTGJIFvQID8fr4sm_VKfVQL2p4QPzxBrizeS_VHBtYzft6AHGAkZggP70AtL7DhRin2ZmKAAFQCFdOVh"/>
+<div class="absolute top-4 left-4 bg-[#FFBE0B] text-on-background px-3 py-1 rounded-full font-bold text-[11px] uppercase tracking-tighter shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                        Featured
+                    </div>
+<div class="absolute bottom-4 right-4 bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg backdrop-blur-sm bg-opacity-95">
+                        $750<span class="text-xs font-normal opacity-80">/mo</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-h3 text-lg font-bold text-on-surface leading-tight">Sunset Modern Studio</h3>
+<div class="flex items-center gap-1 text-secondary font-bold text-sm bg-secondary/5 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            4.9
+                        </div>
+</div>
+<p class="flex items-center gap-1 text-on-surface-variant text-body-sm mb-lg">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                        2 blocks from East Campus
+                    </p>
+<div class="mt-auto pt-lg border-t border-outline-variant/10 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">wifi</span> WiFi
+                        </span>
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">ac_unit</span> AC
+                        </span>
+</div>
+</div>
+</div>
+<!-- Listing Card 2 -->
+<div class="bg-surface rounded-2xl card-lift overflow-hidden border border-outline-variant/30 flex flex-col h-full">
+<div class="relative aspect-[16/11] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" data-alt="A spacious shared student living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAluzHvXU4BX20a1HPrZk4oP4SgLhYqeaVgyhgtAlsLTSSaMVYGpz2JOYxewDJ54fEA_e-cHfJGMn41uqbtQvzEaQJaT0gPE8IQpouDVFx7k3Ws4iZ08cVIx9bSfoVjsPd8pP_jgnRLtiaQzsTbt7nVoVQWdKTjgat-5XbmYfpNbRCxRDNpqtdnqB-aDtoAZDkajpXNh5IsZSsNanw9GsSej0Bs3IHU3tPYLK1dZA23PSQ_fm2n3-f3dUCllbms3bZHmZFeH1bQNgks"/>
+<div class="absolute bottom-4 right-4 bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg backdrop-blur-sm bg-opacity-95">
+                        $520<span class="text-xs font-normal opacity-80">/mo</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-h3 text-lg font-bold text-on-surface leading-tight">The Hive Shared Hall</h3>
+<div class="flex items-center gap-1 text-secondary font-bold text-sm bg-secondary/5 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            4.7
+                        </div>
+</div>
+<p class="flex items-center gap-1 text-on-surface-variant text-body-sm mb-lg">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                        South Hill Terrace
+                    </p>
+<div class="mt-auto pt-lg border-t border-outline-variant/10 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">fitness_center</span> Gym
+                        </span>
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_parking</span> Parking
+                        </span>
+</div>
+</div>
+</div>
+<!-- Listing Card 3 -->
+<div class="bg-surface rounded-2xl card-lift overflow-hidden border border-outline-variant/30 flex flex-col h-full md:mt-8">
+<div class="relative aspect-[16/11] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" data-alt="Interior of a luxury student apartment suite" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi5OJXfAR93jLijxM4j8-d0Inv-aJXEskmq-ACer-uDA4fjJ2EePQ9qixDd4ZQzRfRGXXL_8fpQ5yU_bm_0LuyDT3iUafBbXT3FgYsZo_cuvHt-W7LGFzQYpPVe5mPe1VuitQtPzX6vIWjLwTa0_bmzxkChrqxIXPKl4r2uVQm_B72JPpAefFeCVjvwkVqu3nOEfBE4sipuebRmeRsMVu6WTzlYFDy3veeX__VBZtodznk0eVkoBqvh6nYfa_165troBVOt4eAXHii"/>
+<div class="absolute bottom-4 right-4 bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg backdrop-blur-sm bg-opacity-95">
+                        $980<span class="text-xs font-normal opacity-80">/mo</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-h3 text-lg font-bold text-on-surface leading-tight">Premium Suite 402</h3>
+<div class="flex items-center gap-1 text-secondary font-bold text-sm bg-secondary/5 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            5.0
+                        </div>
+</div>
+<p class="flex items-center gap-1 text-on-surface-variant text-body-sm mb-lg">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                        Main St. Lofts
+                    </p>
+<div class="mt-auto pt-lg border-t border-outline-variant/10 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">wifi</span> WiFi
+                        </span>
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_laundry_service</span> Laundry
+                        </span>
+</div>
+</div>
+</div>
+<!-- Listing Card 4 -->
+<div class="bg-surface rounded-2xl card-lift overflow-hidden border border-outline-variant/30 flex flex-col h-full md:mt-8">
+<div class="relative aspect-[16/11] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" data-alt="A cozy, high-end loft bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwKxXFiYGw0o9-e9PbLd4eybYJkIid712godtVUS2WeEIYZEiiok4luB0ZFaY91UKiYkEOQ2yNMnCnI_wgRgDYPq9CuzyH2ZuXnAWBEg-UZ2KgUlv1qGxzqdM1jK7xOSdAiFHRrfVJBlaUw8RLclUyc6sOZ_hlkw5tCOAWzFUgkudbbdIxwZzlHn9z8obegExviPYid61rmGXd3nYpbG6SElwFz7Hp65BxjDQj1fFglPcpqI9qzqGdxqG6PJs_8UGUJXIGZvEv5FHC"/>
+<div class="absolute top-4 left-4 bg-tertiary-container text-white px-3 py-1 rounded-full font-bold text-[11px] uppercase tracking-tighter shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">new_releases</span>
+                        New
+                    </div>
+<div class="absolute bottom-4 right-4 bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg backdrop-blur-sm bg-opacity-95">
+                        $680<span class="text-xs font-normal opacity-80">/mo</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-h3 text-lg font-bold text-on-surface leading-tight">Heritage Hill Loft</h3>
+<div class="flex items-center gap-1 text-secondary font-bold text-sm bg-secondary/5 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            4.8
+                        </div>
+</div>
+<p class="flex items-center gap-1 text-on-surface-variant text-body-sm mb-lg">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                        Old Town District
+                    </p>
+<div class="mt-auto pt-lg border-t border-outline-variant/10 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chair</span> Furnished
+                        </span>
+<span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pets</span> Pets
+                        </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div id="pagination-container" class="flex justify-center items-center mt-xl gap-2">
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-xxl bg-on-background text-surface border-t border-outline/20">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-start px-xl py-xxl max-w-7xl mx-auto gap-xl">
+<div class="flex flex-col gap-md max-w-xs">
+<a href="/nestmate_home_refined/code.html" class="text-h3 font-h3 font-bold text-primary-fixed tracking-tight">NestMate</a>
+<p class="text-surface-variant font-body-sm text-body-sm leading-relaxed">
+                Empowering students to find high-quality housing and vibrant communities. We make your transition to university life seamless and safe.
+            </p>
+<p class="text-surface-variant/60 text-[12px] mt-md">
+                © 2024 NestMate. Finding your home-coming.
+            </p>
+</div>
+<div class="flex flex-wrap gap-xl lg:gap-xxl">
+<div class="flex flex-col gap-sm">
+<span class="font-bold text-white text-sm uppercase tracking-widest mb-xs">Explore</span>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Find Housing</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">List a Space</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Resources</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Student Stories</a>
+</div>
+<div class="flex flex-col gap-sm">
+<span class="font-bold text-white text-sm uppercase tracking-widest mb-xs">Company</span>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Our Mission</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Careers</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Partnerships</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm text-body-sm" href="#">Press Kit</a>
+</div>
+<div class="flex flex-col gap-sm">
+<span class="font-bold text-white text-sm uppercase tracking-widest mb-xs">Social</span>
+<div class="flex gap-md mt-sm">
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:text-white transition-colors bg-white/5 p-2 rounded-full">social_leaderboard</span>
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:text-white transition-colors bg-white/5 p-2 rounded-full">share</span>
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:text-white transition-colors bg-white/5 p-2 rounded-full">public</span>
+</div>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// ─── NestMate Browse Listings Page API Wiring ─────────────────────────────────
+
+(async function initBrowsePage() {
+  // Amenity icon map
+  const amenityIcons = {
+    'wifi': 'wifi', 'ac': 'ac_unit', 'gym': 'fitness_center',
+    'parking': 'local_parking', 'laundry': 'local_laundry_service',
+    'food': 'local_dining', 'furnished': 'chair', 'security': 'security',
+    'cleaning': 'cleaning_services', 'food included': 'local_dining'
+  };
+
+  function getIcon(amenity) {
+    const key = amenity.toLowerCase();
+    for (const [k, v] of Object.entries(amenityIcons)) {
+      if (key.includes(k)) return v;
+    }
+    return 'check_circle';
+  }
+
+  // 1. Auth state — update nav
+  let currentUser = null;
+  try {
+    const authRes = await fetch('/api/auth/me');
+    if (authRes.ok) {
+      const { user } = await authRes.json();
+      currentUser = user;
+      const nav = document.querySelector('nav');
+      if (nav) {
+        const actionDiv = nav.querySelector('.flex.items-center.gap-md');
+        if (actionDiv) {
+          actionDiv.innerHTML = `
+            <span class="text-on-surface font-medium px-md py-2 text-button">Hi, ${user.name.split(' ')[0]}</span>
+            ${user.role === 'owner' || user.role === 'admin'
+              ? `<a href="/owner_dashboard_nestmate/code.html" class="px-md py-sm rounded-lg text-on-surface-variant hover:bg-primary/5 transition-all font-button text-button">Dashboard</a>`
+              : ''}
+            <button id="logout-btn" class="px-lg py-sm rounded-lg bg-primary-container text-on-primary font-bold shadow-md hover:opacity-90 active:scale-95 transition-all font-button text-button">Logout</button>
+          `;
+          document.getElementById('logout-btn').addEventListener('click', async () => {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.reload();
+          });
+        }
+      }
+    }
+  } catch (_) {}
+
+  // 2. Wire nav links
+  document.querySelectorAll('a[href="#"]').forEach(link => {
+    const text = link.textContent.trim().toLowerCase();
+    if (text === 'browse')        link.href = '/browse_listings_nestmate_refined/code.html';
+    if (text === 'list property') link.href = '/list_your_property_nestmate/code.html';
+  });
+  document.querySelectorAll('nav button').forEach(btn => {
+    const text = btn.textContent.trim();
+    if (text === 'Login')   btn.addEventListener('click', () => window.location.href = '/nestmate_home_refined/code.html');
+    if (text === 'Sign Up') btn.addEventListener('click', () => window.location.href = '/nestmate_home_refined/code.html');
+  });
+
+  // 3. Fetch listings from API
+  const urlParams = new URLSearchParams(window.location.search);
+  const locationParam = urlParams.get('location') || '';
+
+  let allListings = [];
+  try {
+    const apiUrl = locationParam
+      ? `/api/listings?location=${encodeURIComponent(locationParam)}`
+      : '/api/listings';
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+    allListings = data.listings || [];
+  } catch (err) {
+    console.error('Failed to fetch listings:', err);
+  }
+
+  // 4. Find the listing grid container and replace with dynamic content
+  const grid = document.querySelector('.listing-grid');
+  if (!grid) return;
+
+  function renderCard(listing) {
+    const amenitiesArr = listing.amenities ? listing.amenities.split(',').map(a => a.trim()) : [];
+    const amenityChips = amenitiesArr.slice(0, 3).map(a => `
+      <span class="px-2 py-1 bg-surface-container-low rounded-md text-[11px] font-bold text-on-secondary-container uppercase tracking-tight flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">${getIcon(a)}</span> ${a}
+      </span>
+    `).join('');
+
+    const imgSrc = listing.image_path
+      ? `/${listing.image_path}`
+      : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZRnW96dXyF4NPDtG-_GTJSQFWb5LYHbXWIIXb7q6MP1p8y2wOw0esd-vCtPUvy-iZof4LDoF6VjLtZJEYrKXGPUlZUwj_Bm_3ml3QkWFe3J6WnfFvwgDeoHFMxli1zMxH3FpQGd_8PIAfKw6XO7EzQz4_dGZzP7X-poit192HxVlsdpUp74zpIkr6lqLPWTGJIFvQID8fr4sm_VKfVQL2p4QPzxBrizeS_VHBtYzft6AHGAkZggP70AtL7DhRin2ZmKAAFQCFdOVh';
+
+    return `
+      <div class="bg-surface rounded-2xl card-lift overflow-hidden border border-outline-variant/30 flex flex-col h-full" style="cursor:pointer;" onclick="window.location.href='/premium_studio_nestmate_detail/code.html?id=${listing.id}'">
+        <div class="relative aspect-[16/11] overflow-hidden">
+          <img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" src="${imgSrc}" alt="${listing.title}"/>
+          <div class="absolute bottom-4 right-4 bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg backdrop-blur-sm bg-opacity-95">
+            ₹${listing.price.toLocaleString('en-IN')}<span class="text-xs font-normal opacity-80">/mo</span>
+          </div>
+          ${!listing.is_available ? '<div class="absolute top-4 left-4 bg-gray-500 text-white px-3 py-1 rounded-full font-bold text-[11px] uppercase">Unavailable</div>' : ''}
+        </div>
+        <div class="p-lg flex-1 flex flex-col">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-h3 text-lg font-bold text-on-surface leading-tight">${listing.title}</h3>
+          </div>
+          <p class="flex items-center gap-1 text-on-surface-variant text-body-sm mb-lg">
+            <span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+            ${listing.location}
+          </p>
+          <div class="mt-auto pt-lg border-t border-outline-variant/10 flex flex-wrap gap-2">
+            ${amenityChips}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderListings(listings) {
+    const countEl = document.querySelector('p.text-on-surface-variant.text-body-sm.flex');
+    if (countEl) {
+      countEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> ${listings.length} propert${listings.length !== 1 ? 'ies' : 'y'} available${locationParam ? ' near ' + locationParam : ''}`;
+    }
+
+    if (listings.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;">
+          <span class="material-symbols-outlined" style="font-size:4rem;color:#e1bfb5;">search_off</span>
+          <h3 style="font-family:Poppins,sans-serif;color:#261814;margin:1rem 0 0.5rem;">No listings found</h3>
+          <p style="color:#594139;">Try a different location or clear the filters.</p>
+        </div>`;
+      const pc = document.getElementById('pagination-container');
+      if (pc) pc.innerHTML = '';
+      return;
+    }
+    window.currentFilteredListings = listings;
+    renderPage(1, listings);
+  }
+
+  let currentPage = 1;
+  const PER_PAGE = 6;
+  window.goToPage = function(page) {
+    renderPage(page, window.currentFilteredListings);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };
+
+  function renderPage(page, listings) {
+    currentPage = page;
+    const start = (page - 1) * PER_PAGE;
+    const paginated = listings.slice(start, start + PER_PAGE);
+    
+    grid.innerHTML = paginated.map(renderCard).join('');
+    
+    const totalPages = Math.ceil(listings.length / PER_PAGE);
+    const pageContainer = document.getElementById('pagination-container');
+    if (!pageContainer) return;
+    
+    if (totalPages <= 1) {
+      pageContainer.innerHTML = '';
+      return;
+    }
+    
+    let html = `<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all disabled:opacity-30" ${currentPage === 1 ? 'disabled' : ''} onclick="window.goToPage(${currentPage - 1})"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button>`;
+    html += `<div class="flex items-center gap-1 px-2 py-1 bg-surface-container rounded-2xl border border-outline-variant/10 shadow-inner">`;
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === currentPage) {
+        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold shadow-md">${i}</button>`;
+      } else {
+        html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl text-on-surface-variant hover:bg-white transition-all" onclick="window.goToPage(${i})">${i}</button>`;
+      }
+    }
+    html += `</div>`;
+    html += `<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all disabled:opacity-30" ${currentPage === totalPages ? 'disabled' : ''} onclick="window.goToPage(${currentPage + 1})"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>`;
+    
+    pageContainer.innerHTML = html;
+  }
+
+  // 5. Filter logic (client-side)
+  let priceFilter = 30000;
+  let amenityFilter = '';
+  let genderFilter = 'all';
+  let activeTypes = []; // Array of active property types
+
+  // Parse type from URL
+  const initialType = urlParams.get('type');
+  if (initialType) {
+    activeTypes.push(initialType);
+    document.querySelectorAll('.type-filter').forEach(cb => {
+      if (cb.value.toLowerCase() === initialType.toLowerCase() || initialType.toLowerCase().includes(cb.value.toLowerCase())) {
+        cb.checked = true;
+      }
+    });
+  }
+
+  function applyFilters() {
+    let filtered = allListings.filter(l => l.price <= priceFilter);
+    if (amenityFilter) {
+      filtered = filtered.filter(l =>
+        l.amenities && l.amenities.toLowerCase().includes(amenityFilter.toLowerCase())
+      );
+    }
+    if (genderFilter === 'female') {
+      filtered = filtered.filter(l => (l.description||'').toLowerCase().includes('female') || (l.description||'').toLowerCase().includes('girl'));
+    } else if (genderFilter === 'male') {
+      filtered = filtered.filter(l => (l.description||'').toLowerCase().includes('male') || (l.description||'').toLowerCase().includes('boy'));
+    }
+    if (activeTypes.length > 0) {
+      filtered = filtered.filter(l => {
+        const text = ((l.title || '') + ' ' + (l.description || '')).toLowerCase();
+        return activeTypes.some(type => text.includes(type.toLowerCase()));
+      });
+    }
+    renderListings(filtered);
+  }
+
+  // Price Slider
+  const priceSlider = document.getElementById('price-slider');
+  const priceMaxDisplay = document.getElementById('price-max-display');
+  if (priceSlider && priceMaxDisplay) {
+    priceSlider.addEventListener('input', (e) => {
+      priceFilter = parseInt(e.target.value);
+      priceMaxDisplay.textContent = '₹' + priceFilter.toLocaleString('en-IN');
+      applyFilters();
+    });
+  }
+
+  // Gender Buttons
+  const genderBtns = document.querySelectorAll('.gender-btn');
+  genderBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      genderBtns.forEach(b => {
+        b.className = "gender-btn px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary/50 text-body-sm";
+      });
+      btn.className = "gender-btn px-sm py-xs rounded-lg border border-primary bg-primary text-white text-body-sm font-bold";
+      genderFilter = btn.dataset.val;
+      applyFilters();
+    });
+  });
+
+  // Wire up amenity and type checkboxes
+  document.querySelectorAll('.custom-check').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+      if (e.target.classList.contains('type-filter')) {
+        activeTypes = Array.from(document.querySelectorAll('.type-filter:checked')).map(cb => cb.value);
+      } else {
+        const label = cb.closest('label');
+        const text = label ? label.querySelector('span')?.textContent || '' : '';
+        if (e.target.checked) amenityFilter = text.replace('High-speed ', '').replace('Air ', '');
+        else amenityFilter = '';
+      }
+      applyFilters();
+    });
+  });
+
+  // Wire up Apply button
+  const applyBtn = document.querySelector('button.w-full.py-sm.bg-primary');
+  if (applyBtn) applyBtn.addEventListener('click', applyFilters);
+
+  // Wire up Clear All
+  const clearBtn = document.querySelector('button.text-primary.font-button');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      priceFilter = 30000;
+      if (priceSlider) priceSlider.value = 30000;
+      if (priceMaxDisplay) priceMaxDisplay.textContent = '₹30,000';
+      amenityFilter = '';
+      genderFilter = 'all';
+      genderBtns.forEach((b, idx) => {
+        if (idx === 0) b.className = "gender-btn px-sm py-xs rounded-lg border border-primary bg-primary text-white text-body-sm font-bold";
+        else b.className = "gender-btn px-sm py-xs rounded-lg border border-outline-variant text-on-surface-variant hover:border-primary/50 text-body-sm";
+      });
+      document.querySelectorAll('.custom-check').forEach(cb => cb.checked = false);
+      renderListings(allListings);
+    });
+  }
+
+  // Wire up Sort
+  const sortSelect = document.querySelector('select');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      let sorted = [...window.currentFilteredListings];
+      if (sortSelect.value.includes('Low'))  sorted.sort((a, b) => a.price - b.price);
+      if (sortSelect.value.includes('High')) sorted.sort((a, b) => b.price - a.price);
+      renderListings(sorted);
+    });
+  }
+
+  // Initial load
+  renderListings(allListings);
+})();
+</script>
+</body></html>

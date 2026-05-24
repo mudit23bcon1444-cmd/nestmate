@@ -1,0 +1,6 @@
+.env
+nestmate.db
+node_modules/
+uploads/
+*.log
+.DS_Store

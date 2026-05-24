@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Details — NestMate</title>
+<link rel="stylesheet" href="/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .badge { display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#fff1ed;border:1px solid #e1bfb5;border-radius:8px;font-size:12px;font-weight:600;color:#594139; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased">
+
+<!-- Nav -->
+<nav class="sticky top-0 w-full z-50 bg-surface/90 backdrop-blur-lg border-b border-outline-variant/20 shadow-sm">
+  <div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+    <a href="/nestmate_home_refined/code.html" class="text-2xl font-bold text-primary" style="font-family:Poppins,sans-serif;">NestMate<span style="color:#ff6b35">.</span></a>
+    <div class="flex items-center gap-4">
+      <a href="/browse_listings_nestmate_refined/code.html" class="text-on-surface-variant hover:text-primary transition-colors font-medium">← Browse All</a>
+      <div id="nav-auth"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- Loading state -->
+<div id="loading" class="max-w-4xl mx-auto px-6 py-20 text-center">
+  <span class="material-symbols-outlined" style="font-size:3rem;color:#e1bfb5;">hourglass_empty</span>
+  <p class="text-on-surface-variant mt-4">Loading property details...</p>
+</div>
+
+<!-- Error state -->
+<div id="error-state" class="max-w-4xl mx-auto px-6 py-20 text-center hidden">
+  <span class="material-symbols-outlined" style="font-size:3rem;color:#ba1a1a;">error_outline</span>
+  <h2 class="text-2xl font-bold mt-4 mb-2" style="font-family:Poppins,sans-serif;">Listing Not Found</h2>
+  <p class="text-on-surface-variant mb-6">This property may have been removed or is no longer available.</p>
+  <a href="/browse_listings_nestmate_refined/code.html" class="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">Browse Other Listings</a>
+</div>
+
+<!-- Main content (hidden until data loads) -->
+<main id="listing-content" class="max-w-5xl mx-auto px-6 py-10 hidden">
+  <!-- Hero Image -->
+  <div class="rounded-2xl overflow-hidden aspect-[16/7] mb-8 bg-surface-container" id="listing-hero-wrap">
+    <img id="listing-image" class="w-full h-full object-cover" src="" alt="Property"/>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left: Details -->
+    <div class="lg:col-span-2 space-y-6">
+      <div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h1 id="listing-title" class="text-3xl font-bold text-on-background mb-2" style="font-family:Poppins,sans-serif;"></h1>
+            <p id="listing-location" class="flex items-center gap-1 text-on-surface-variant text-base"></p>
+          </div>
+          <div class="text-right shrink-0">
+            <p id="listing-price" class="text-3xl font-bold text-primary"></p>
+            <p class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">Per Month</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status badge -->
+      <div id="listing-status-badge"></div>
+
+      <!-- Description -->
+      <div>
+        <h3 class="font-semibold text-on-surface mb-3" style="font-family:Poppins,sans-serif;font-size:1.1rem;">About this property</h3>
+        <p id="listing-description" class="text-on-surface-variant leading-relaxed"></p>
+      </div>
+
+      <!-- Amenities -->
+      <div>
+        <h3 class="font-semibold text-on-surface mb-3" style="font-family:Poppins,sans-serif;font-size:1.1rem;">Amenities</h3>
+        <div id="listing-amenities" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Owner info -->
+      <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/30">
+        <h3 class="font-semibold text-on-surface mb-3" style="font-family:Poppins,sans-serif;font-size:1.1rem;">Listed by</h3>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg" id="owner-avatar"></div>
+          <div>
+            <p id="owner-name" class="font-semibold text-on-surface"></p>
+            <p id="owner-email" class="text-sm text-on-surface-variant"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Booking card -->
+    <div class="lg:col-span-1">
+      <div class="bg-surface rounded-2xl border border-outline-variant/30 p-6 sticky top-24 shadow-sm" style="box-shadow:0 4px 20px rgba(171,53,0,0.1);">
+        <h3 class="font-bold text-on-surface mb-1" style="font-family:Poppins,sans-serif;font-size:1.1rem;">Book this property</h3>
+        <p class="text-on-surface-variant text-sm mb-5">Send a booking request to the owner.</p>
+
+        <div id="booking-error" class="hidden bg-error-container text-error rounded-xl p-3 mb-4 text-sm"></div>
+        <div id="booking-success" class="hidden bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-xl p-3 mb-4 text-sm font-semibold"></div>
+
+        <form id="booking-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-on-surface mb-1">Move-in Date</label>
+            <input type="date" name="move_in_date" id="move-in-date" required
+              class="w-full px-4 py-3 border border-outline-variant rounded-xl bg-surface-container-low focus:ring-2 focus:ring-primary focus:border-primary outline-none text-on-surface"
+              style="min-width:0;"/>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-on-surface mb-1">Message (optional)</label>
+            <textarea name="message" id="booking-message" rows="3" placeholder="Introduce yourself..."
+              class="w-full px-4 py-3 border border-outline-variant rounded-xl bg-surface-container-low focus:ring-2 focus:ring-primary focus:border-primary outline-none text-on-surface resize-none"></textarea>
+          </div>
+          <button type="submit" id="book-btn"
+            class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-sm">
+            Send Booking Request
+          </button>
+        </form>
+        <p id="login-prompt" class="hidden text-center text-sm text-on-surface-variant mt-4">
+          <a href="/nestmate_home_refined/code.html" class="text-primary font-semibold">Login or sign up</a> to book this property.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="mt-20 bg-on-background text-white py-8 border-t border-white/5">
+  <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
+    <span class="font-bold text-primary-fixed" style="font-family:Poppins,sans-serif;">NestMate.</span>
+    <p class="text-sm opacity-40">© 2024 NestMate. Finding your home-coming.</p>
+  </div>
+</footer>
+
+<script>
+// ─── Listing Detail Page ──────────────────────────────────────────────────────
+(async function() {
+  const amenityIcons = {
+    'wifi': 'wifi', 'ac': 'ac_unit', 'gym': 'fitness_center',
+    'parking': 'local_parking', 'laundry': 'local_laundry_service',
+    'food': 'local_dining', 'furnished': 'chair', 'security': 'security',
+    'cleaning': 'cleaning_services'
+  };
+  function getIcon(a) {
+    const k = a.toLowerCase();
+    for (const [key, icon] of Object.entries(amenityIcons)) {
+      if (k.includes(key)) return icon;
+    }
+    return 'check_circle';
+  }
+
+  // Get listing ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const listingId = params.get('id');
+
+  const loadingEl = document.getElementById('loading');
+  const errorEl   = document.getElementById('error-state');
+  const contentEl = document.getElementById('listing-content');
+
+  if (!listingId) {
+    loadingEl.classList.add('hidden');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  // 1. Check auth
+  let currentUser = null;
+  try {
+    const authRes = await fetch('/api/auth/me');
+    if (authRes.ok) {
+      const { user } = await authRes.json();
+      currentUser = user;
+      document.getElementById('nav-auth').innerHTML = `
+        <span class="text-on-surface font-medium">Hi, ${user.name.split(' ')[0]}</span>
+        <button onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>window.location.reload())"
+          class="ml-4 bg-primary-container text-on-primary-container font-semibold px-4 py-2 rounded-lg text-sm hover:opacity-90">Logout</button>
+      `;
+    } else {
+      document.getElementById('nav-auth').innerHTML = `
+        <a href="/nestmate_home_refined/code.html" class="bg-primary text-white font-semibold px-4 py-2 rounded-lg text-sm hover:opacity-90">Login / Sign Up</a>
+      `;
+    }
+  } catch (_) {}
+
+  // 2. Fetch listing data
+  let listing;
+  try {
+    const res = await fetch(`/api/listings/${listingId}`);
+    if (!res.ok) throw new Error('Not found');
+    const data = await res.json();
+    listing = data.listing;
+  } catch (err) {
+    loadingEl.classList.add('hidden');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  // 3. Populate the page
+  document.title = `${listing.title} — NestMate`;
+
+  const img = document.getElementById('listing-image');
+  img.src = listing.image_path
+    ? `/${listing.image_path}`
+    : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDDZgnswiSNeeGS-FrfkYFqatyXLl7UDmWVKE3qA6vgn425XgCC33WNhQYWgxM218AZHNJHQv8Ha9u0gatDZLF66XCXkNezPr6sW5LMvuM5I1UqY2LzjxhHlJdDoVvZkozkruZ1ZvcMTapIz-UIhMu9vV7M7N7IlRvj7U1IWlzTA3Yt3FHuXK2XldkjR8VOvSXtMRzJC3WgaBu-jYU8SwYAW216lRQiCRzQipUQ_xkxMVaU07XppSMulHtddbgmyzvkJF6ELYtoI7Cu';
+  img.alt = listing.title;
+
+  document.getElementById('listing-title').textContent = listing.title;
+  document.getElementById('listing-location').innerHTML = `<span class="material-symbols-outlined text-primary" style="font-size:18px;">location_on</span> ${listing.location}`;
+  document.getElementById('listing-price').textContent = `₹${Number(listing.price).toLocaleString('en-IN')}`;
+  document.getElementById('listing-description').textContent = listing.description || 'No description provided.';
+  document.getElementById('owner-name').textContent = listing.owner_name || 'Property Owner';
+  document.getElementById('owner-email').textContent = listing.owner_email || '';
+  document.getElementById('owner-avatar').textContent = (listing.owner_name || 'O').charAt(0).toUpperCase();
+
+  // Availability status
+  const statusBadge = document.getElementById('listing-status-badge');
+  if (listing.is_available) {
+    statusBadge.innerHTML = `<span class="badge" style="background:#b5ebff;color:#004e60;border-color:#59d5fb;"><span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> Available Now</span>`;
+  } else {
+    statusBadge.innerHTML = `<span class="badge" style="background:#ffdad6;color:#93000a;border-color:#ba1a1a;"><span class="material-symbols-outlined" style="font-size:16px;">block</span> Currently Unavailable</span>`;
+  }
+
+  // Amenities
+  const amenitiesEl = document.getElementById('listing-amenities');
+  if (listing.amenities) {
+    listing.amenities.split(',').forEach(a => {
+      a = a.trim();
+      amenitiesEl.innerHTML += `
+        <span class="badge">
+          <span class="material-symbols-outlined" style="font-size:16px;">${getIcon(a)}</span> ${a}
+        </span>`;
+    });
+  } else {
+    amenitiesEl.innerHTML = '<p class="text-on-surface-variant text-sm">No amenities listed.</p>';
+  }
+
+  // Show content
+  loadingEl.classList.add('hidden');
+  contentEl.classList.remove('hidden');
+
+  // 4. Booking form logic
+  const bookingForm = document.getElementById('booking-form');
+  const loginPrompt = document.getElementById('login-prompt');
+  const bookBtn     = document.getElementById('book-btn');
+  const errDiv      = document.getElementById('booking-error');
+  const successDiv  = document.getElementById('booking-success');
+
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('move-in-date').min = today;
+
+  if (!currentUser) {
+    bookingForm.classList.add('hidden');
+    loginPrompt.classList.remove('hidden');
+    return;
+  }
+
+  // Owner can't book their own listing
+  if (listing.owner_id === currentUser.id) {
+    bookBtn.disabled = true;
+    bookBtn.textContent = 'Your Listing';
+    bookBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    return;
+  }
+
+  if (!listing.is_available) {
+    bookBtn.disabled = true;
+    bookBtn.textContent = 'Not Available';
+    bookBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+
+  bookingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errDiv.classList.add('hidden');
+    successDiv.classList.add('hidden');
+    bookBtn.disabled = true;
+    bookBtn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listing_id: listing.id,
+          move_in_date: document.getElementById('move-in-date').value,
+          message: document.getElementById('booking-message').value
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errDiv.textContent = data.error || 'Something went wrong.';
+        errDiv.classList.remove('hidden');
+        bookBtn.disabled = false;
+        bookBtn.textContent = 'Send Booking Request';
+      } else {
+        successDiv.textContent = '✓ Booking request sent! The owner will contact you soon.';
+        successDiv.classList.remove('hidden');
+        bookBtn.textContent = 'Request Sent ✓';
+        bookBtn.classList.add('opacity-70');
+      }
+    } catch (err) {
+      errDiv.textContent = 'Network error. Please try again.';
+      errDiv.classList.remove('hidden');
+      bookBtn.disabled = false;
+      bookBtn.textContent = 'Send Booking Request';
+    }
+  });
+})();
+</script>
+</body></html>

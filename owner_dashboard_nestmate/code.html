@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#261814",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary-fixed": "#2e1500",
+                    "secondary": "#7c5638",
+                    "on-primary-fixed-variant": "#832600",
+                    "surface-tint": "#ab3500",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#003744",
+                    "secondary-fixed-dim": "#eebd97",
+                    "outline": "#8d7168",
+                    "error-container": "#ffdad6",
+                    "primary": "#ab3500",
+                    "surface-container-low": "#fff1ed",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#ffdcc3",
+                    "outline-variant": "#e1bfb5",
+                    "surface-dim": "#eed5cd",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#390c00",
+                    "primary-fixed": "#ffdbd0",
+                    "tertiary-container": "#00a7cb",
+                    "on-tertiary-fixed-variant": "#004e60",
+                    "inverse-primary": "#ffb59d",
+                    "error": "#ba1a1a",
+                    "inverse-surface": "#3c2d28",
+                    "on-primary-container": "#5f1900",
+                    "on-surface-variant": "#594139",
+                    "surface-bright": "#fff8f6",
+                    "surface-container-high": "#fde3db",
+                    "primary-fixed-dim": "#ffb59d",
+                    "surface-variant": "#f7ddd5",
+                    "on-secondary-fixed-variant": "#613f23",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#b5ebff",
+                    "surface": "#fff8f6",
+                    "on-secondary-container": "#785335",
+                    "background": "#fff8f6",
+                    "secondary-container": "#fdcaa4",
+                    "on-tertiary-fixed": "#001f28",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#261814",
+                    "primary-container": "#ff6b35",
+                    "tertiary-fixed-dim": "#59d5fb",
+                    "surface-container-highest": "#f7ddd5",
+                    "inverse-on-surface": "#ffede8",
+                    "tertiary": "#00677e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "xxxl": "64px",
+                    "md": "16px",
+                    "xxl": "48px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "h2": ["Poppins"],
+                    "body-md": ["Inter"],
+                    "h3": ["Poppins"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h1": ["Poppins"],
+                    "label-md": ["Inter"],
+                    "button": ["Inter"]
+            },
+            "fontSize": {
+                    "h2": ["36px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .warm-shadow {
+            box-shadow: 0px 4px 20px rgba(255, 107, 53, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/30 flex flex-col p-md gap-lg shadow-md z-50">
+<div class="flex items-center gap-sm px-sm">
+<span class="font-h3 text-h3 font-bold text-primary">NestMate</span>
+</div>
+<div class="flex flex-col gap-xs mt-md">
+<div class="px-md mb-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest opacity-60">Main Menu</p>
+</div>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Active Navigation Item -->
+<a class="bg-secondary-container text-on-secondary-container font-bold rounded-xl flex items-center gap-md px-md py-sm translate-x-1 active:translate-x-0 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home_work</span>
+<span class="font-body-md text-body-md">My Listings</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-body-md text-body-md">Enquiries</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md text-body-md">Profile</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto space-y-md">
+<button class="w-full bg-primary-container text-on-primary-container font-button text-button py-md rounded-xl hover:opacity-90 transition-all scale-95 active:scale-90 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">add_circle</span>
+                List New Property
+            </button>
+<div class="border-t border-outline-variant/30 pt-md">
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-xl flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen p-xl max-w-7xl">
+<!-- Header -->
+<header class="mb-xxl flex justify-between items-end">
+<div>
+<h1 class="font-h2 text-h2 text-on-background mb-xs">Owner Overview</h1>
+<p class="text-on-surface-variant font-body-md">Welcome back to your property management dashboard.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="text-right">
+<p class="font-button text-button text-on-surface">Alex Johnson</p>
+<p class="text-body-sm text-on-surface-variant">Student Account</p>
+</div>
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly young man with a warm smile, wearing a casual linen shirt. The background is a soft-focus modern student apartment with warm morning sunlight streaming through the windows, creating a bright and approachable professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm7xH9LeajI1Y5ykwpUJ_qp2xVFob_u0w5Rd9YKlb2jn4kOEjyiwxE7zJ0TICwc34VSkt5IQGfq-U-M9qzWNEMQYmf572lTbShOPrjGQ-AJ8zWy5VvAyREmcBJKMd2c2L3aiYZzN6hMwvKt0jZqsVdmdy9ebKzLQienNoxrvSmdH_Zd0oKs1tslZiCobC2pa-ZgrHDnykYLjx0SIfGs36XVQrcGJu-m3GQ7Wg3OnGxCuFxufTd5hflqAEM5a44B9CQ0w_UxHrdUKUv"/>
+</div>
+</div>
+</header>
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xxl">
+<!-- Stat Card 1 -->
+<div class="bg-surface rounded-xl p-lg warm-shadow border border-outline-variant/20 flex items-center gap-lg">
+<div class="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">apartment</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-body-sm uppercase tracking-wider">Active Listings</p>
+<h3 class="text-h1 font-h1 text-on-background">12</h3>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface rounded-xl p-lg warm-shadow border border-outline-variant/20 flex items-center gap-lg">
+<div class="w-16 h-16 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-body-sm uppercase tracking-wider">Total Views</p>
+<h3 class="text-h1 font-h1 text-on-background">2.4k</h3>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface rounded-xl p-lg warm-shadow border border-outline-variant/20 flex items-center gap-lg">
+<div class="w-16 h-16 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-body-sm uppercase tracking-wider">Enquiries Received</p>
+<h3 class="text-h1 font-h1 text-on-background">84</h3>
+</div>
+</div>
+</section>
+<!-- Listings Section -->
+<section class="bg-surface rounded-[16px] warm-shadow border border-outline-variant/20 overflow-hidden">
+<div class="px-lg py-lg border-b border-outline-variant/20 flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Recent Listings</h3>
+<div class="flex gap-sm">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg font-body-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Search properties..." type="text"/>
+</div>
+<button class="px-md py-sm border border-outline-variant rounded-lg flex items-center gap-xs font-button text-button hover:bg-surface-container-low">
+<span class="material-symbols-outlined">filter_list</span>
+                        Filter
+                    </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Property Photo</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Title</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Price</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md">
+<div class="w-24 h-16 rounded-lg overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="A bright, airy modern student studio apartment with floor-to-ceiling windows showing a urban sunset view. The room features a minimalist workspace, a comfortable bed with neutral-toned linens, and warm ambient lighting. The aesthetic is clean and contemporary with sunset orange and deep navy accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZgnswiSNeeGS-FrfkYFqatyXLl7UDmWVKE3qA6vgn425XgCC33WNhQYWgxM218AZHNJHQv8Ha9u0gatDZLF66XCXkNezPr6sW5LMvuM5I1UqY2LzjxhHlJdDoVvZkozkruZ1ZvcMTapIz-UIhMu9vV7M7N7IlRvj7U1IWlzTA3Yt3FHuXK2XldkjR8VOvSXtMRzJC3WgaBu-jYU8SwYAW216lRQiCRzQipUQ_xkxMVaU07XppSMulHtddbgmyzvkJF6ELYtoI7Cu"/>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-button text-button text-on-surface">Sunset Loft Studio</p>
+<p class="text-body-sm text-on-surface-variant">124 University Ave, Campus North</p>
+</td>
+<td class="px-lg py-md">
+<p class="font-h3 text-h3 text-primary">$1,200<span class="text-body-sm text-on-surface-variant font-normal">/mo</span></p>
+</td>
+<td class="px-lg py-md">
+<span class="px-md py-xs bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-label-md font-label-md uppercase">Active</span>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm">
+<button class="w-10 h-10 rounded-full hover:bg-primary/5 text-on-surface-variant hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-error/5 text-on-surface-variant hover:text-error transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md">
+<div class="w-24 h-16 rounded-lg overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="A cozy shared student apartment living room with a large plush orange sofa and warm wooden furniture. The lighting is soft and golden from a designer floor lamp, creating a welcoming and safe atmosphere. Minimalist art in navy frames decorates the cream-colored walls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-M0OMYnDFqFf9wF-LqklUsWzrHXnVGd-NOuC0lEeNas1OpMSTDqg2pgzcs83-UyUDUvzsf62XCv9u7Knz0WL9WpcSCDSNvcvmE9iqG8XFyOJM6HJuUlpxo1FqYBhzFrPZuWYd1cxWcvpkVN2U8fzYJskHZo03_MWwHkhYdYeW-9MDw7fzUFyLDoE9wmIsBA_1VMEN_HIYEggeTc9FhwTLDRyOcY-XyqrgE8o_47T5bY1TAB8iV4dGLgNf6L3OIdtE6OuXMH4hsmF1"/>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-button text-button text-on-surface">Riverside Shared Suite</p>
+<p class="text-body-sm text-on-surface-variant">88 Bridge St, West Side</p>
+</td>
+<td class="px-lg py-md">
+<p class="font-h3 text-h3 text-primary">$850<span class="text-body-sm text-on-surface-variant font-normal">/mo</span></p>
+</td>
+<td class="px-lg py-md">
+<span class="px-md py-xs bg-secondary-fixed text-on-secondary-fixed-variant rounded-full text-label-md font-label-md uppercase">Pending</span>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm">
+<button class="w-10 h-10 rounded-full hover:bg-primary/5 text-on-surface-variant hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-error/5 text-on-surface-variant hover:text-error transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-md">
+<div class="w-24 h-16 rounded-lg overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="Interior of a luxury penthouse for students featuring high ceilings, brick walls, and industrial-chic furniture. Large potted plants add a touch of nature to the space. The color palette emphasizes rich oranges and deep wood tones against a backdrop of sophisticated grey and navy blue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeRcWoBRD7yNonlpfiRm_PdwthbXboUgdKD6c2XO7mFR1l4eD6_82dHUuoJFUlPci2icmnNdLRAXGgnZdJWcNXaC0wtoc6-DmstmXD3BkZHfkNozVOVA0xp7JNG-7TCapmMyeGlSXks53JOyeBGvkDQM451-_iG4NvipLfHWIvTOVqAJtxxX33tEwkwTfOMslDtJtCFcr6R_pQ7IqrkMPCRDeLfDJk4xrnMU2B7JZaTx6AU-jzfE5XIrZxVrye4UXiKiyQ-s7TywFC"/>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-button text-button text-on-surface">The Brick House Penthouse</p>
+<p class="text-body-sm text-on-surface-variant">10 Industrial Way</p>
+</td>
+<td class="px-lg py-md">
+<p class="font-h3 text-h3 text-primary">$2,400<span class="text-body-sm text-on-surface-variant font-normal">/mo</span></p>
+</td>
+<td class="px-lg py-md">
+<span class="px-md py-xs bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-label-md font-label-md uppercase">Active</span>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex justify-end gap-sm">
+<button class="w-10 h-10 rounded-full hover:bg-primary/5 text-on-surface-variant hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-error/5 text-on-surface-variant hover:text-error transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md bg-surface-container-low flex justify-between items-center border-t border-outline-variant/20">
+<p class="text-body-sm text-on-surface-variant">Showing 1-3 of 12 listings</p>
+<div class="flex gap-xs">
+<button class="w-8 h-8 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-button text-button">1</button>
+<button class="w-8 h-8 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container hover:text-primary transition-all">2</button>
+<button class="w-8 h-8 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container hover:text-primary transition-all">3</button>
+<button class="w-8 h-8 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Amenity Preview Chips (Brand specific detail) -->
+<section class="mt-xl flex flex-wrap gap-md items-center">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest">Quick Filters:</span>
+<button class="px-md py-sm bg-surface-container border border-primary/20 text-on-secondary-container rounded-full font-button text-button warm-shadow flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">wifi</span>
+                High-Speed WiFi
+            </button>
+<button class="px-md py-sm bg-surface-container border border-primary/20 text-on-secondary-container rounded-full font-button text-button warm-shadow flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">local_laundry_service</span>
+                In-unit Laundry
+            </button>
+<button class="px-md py-sm bg-surface-container border border-primary/20 text-on-secondary-container rounded-full font-button text-button warm-shadow flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">ac_unit</span>
+                Air Conditioning
+            </button>
+<button class="px-md py-sm bg-secondary-fixed/50 text-on-secondary-fixed-variant rounded-full font-button text-button flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                More
+            </button>
+</section>
+</main>
+<!-- Footer - Positioned relative to the main container -->
+<footer class="ml-64 w-[calc(100%-16rem)] bg-on-background text-surface border-t border-outline/20">
+<div class="flex flex-col md:flex-row justify-between items-center px-xl py-xxl max-w-7xl mx-auto">
+<div class="mb-md md:mb-0">
+<h3 class="text-h3 font-h3 font-bold text-primary-fixed">NestMate</h3>
+<p class="font-body-sm text-body-sm opacity-70">© 2024 NestMate. Finding your home-coming.</p>
+</div>
+<div class="flex gap-xl">
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm" href="#">Terms of Service</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm" href="#">FAQ</a>
+<a class="text-surface-variant hover:text-surface transition-colors font-body-sm" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+</body></html>

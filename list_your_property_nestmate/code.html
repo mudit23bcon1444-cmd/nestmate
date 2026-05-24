@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#261814",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#ffe9e3",
+                    "on-secondary-fixed": "#2e1500",
+                    "secondary": "#7c5638",
+                    "on-primary-fixed-variant": "#832600",
+                    "surface-tint": "#ab3500",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#003744",
+                    "secondary-fixed-dim": "#eebd97",
+                    "outline": "#8d7168",
+                    "error-container": "#ffdad6",
+                    "primary": "#ab3500",
+                    "surface-container-low": "#fff1ed",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#ffdcc3",
+                    "outline-variant": "#e1bfb5",
+                    "surface-dim": "#eed5cd",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#390c00",
+                    "primary-fixed": "#ffdbd0",
+                    "tertiary-container": "#00a7cb",
+                    "on-tertiary-fixed-variant": "#004e60",
+                    "inverse-primary": "#ffb59d",
+                    "error": "#ba1a1a",
+                    "inverse-surface": "#3c2d28",
+                    "on-primary-container": "#5f1900",
+                    "on-surface-variant": "#594139",
+                    "surface-bright": "#fff8f6",
+                    "surface-container-high": "#fde3db",
+                    "primary-fixed-dim": "#ffb59d",
+                    "surface-variant": "#f7ddd5",
+                    "on-secondary-fixed-variant": "#613f23",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#b5ebff",
+                    "surface": "#fff8f6",
+                    "on-secondary-container": "#785335",
+                    "background": "#fff8f6",
+                    "secondary-container": "#fdcaa4",
+                    "on-tertiary-fixed": "#001f28",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#261814",
+                    "primary-container": "#ff6b35",
+                    "tertiary-fixed-dim": "#59d5fb",
+                    "surface-container-highest": "#f7ddd5",
+                    "inverse-on-surface": "#ffede8",
+                    "tertiary": "#00677e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "xxxl": "64px",
+                    "md": "16px",
+                    "xxl": "48px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "h2": ["Poppins"],
+                    "body-md": ["Inter"],
+                    "h3": ["Poppins"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h1": ["Poppins"],
+                    "label-md": ["Inter"],
+                    "button": ["Inter"]
+            },
+            "fontSize": {
+                    "h2": ["36px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-floating-group:focus-within label {
+            transform: translateY(-20px) scale(0.85);
+            color: #ab3500;
+        }
+        .form-floating-label {
+            transition: all 0.2s ease-out;
+            pointer-events: none;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(255, 107, 53, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<div class="text-h3 font-h3 font-bold text-primary">NestMate</div>
+<div class="hidden md:flex items-center gap-xl font-button text-button">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Browse</a>
+<a class="text-primary border-b-2 border-primary font-bold pb-1" href="#">List Property</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-sm rounded-lg text-on-surface-variant font-button hover:bg-primary/5 transition-all active:scale-95">Login</button>
+<button class="px-md py-sm rounded-lg bg-primary text-on-primary font-button shadow-sm hover:opacity-90 transition-all active:scale-95">Sign Up</button>
+</div>
+</div>
+</nav>
+<main class="min-h-screen py-xxl px-md">
+<div class="max-w-3xl mx-auto">
+<!-- Visual Step Indicator -->
+<div class="mb-xxl">
+<div class="flex justify-between mb-sm px-xs">
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-primary">1. Basic Info</span>
+</div>
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-on-surface-variant">2. Photos &amp; Amenities</span>
+</div>
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-on-surface-variant">3. Rules &amp; Pricing</span>
+</div>
+</div>
+<!-- Warm Orange Progress Bar -->
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-1/3 transition-all duration-500"></div>
+</div>
+</div>
+<!-- Form Container -->
+<div class="bg-surface-container-lowest rounded-xl custom-shadow p-xl border border-[#F7C59F]/20">
+<div class="mb-lg">
+<h1 class="font-h2 text-h3 text-on-background mb-xs">Basic Information</h1>
+<p class="text-body-sm text-on-surface-variant">Let's start with the core details of your student property.</p>
+</div>
+<form class="space-y-lg">
+<!-- Property Title -->
+<div class="relative form-floating-group">
+<input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="title" placeholder=" " type="text"/>
+<label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="title">Property Title (e.g., Cozy Studio near Campus)</label>
+</div>
+<!-- Property Type & Capacity -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="relative form-floating-group">
+<select class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all appearance-none" id="type">
+<option disabled="" selected="" value=""></option>
+<option value="apartment">Studio Apartment</option>
+<option value="room">Private Room in Shared House</option>
+<option value="dorm">Shared Dormitory</option>
+</select>
+<label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 origin-left" for="type">Property Type</label>
+<div class="absolute right-md top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="relative form-floating-group">
+<input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="capacity" placeholder=" " type="number"/>
+<label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="capacity">Student Capacity</label>
+</div>
+</div>
+<!-- Address -->
+<div class="relative form-floating-group">
+<textarea class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="address" placeholder=" " rows="3"></textarea>
+<label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="address">Full Address &amp; Proximity to University</label>
+</div>
+<!-- Visual Context Image -->
+<div class="rounded-xl overflow-hidden h-48 bg-surface-container relative">
+<img alt="Student Living Space Preview" class="w-full h-full object-cover opacity-80" data-alt="A warm and inviting student bedroom filled with soft morning sunlight streaming through a large window. The room features a clean, white minimalist desk with a glowing lamp, comfortable bedding in earthy tones, and a small bookshelf. The overall aesthetic is cozy and modern, utilizing a soft orange and cream color palette to evoke a sense of home-coming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmwYQuKrCDyE7uZHe6F4wHiJszWGtMtJ6gW41VbWHFBC2ii8A7pCzRzxPqAN7QeScW4FjbYBJ4SGqj0vH6X6oc2fXqiPx0jq4WwsvKwF06MV8l9EOY3WhT1qdH4hkMhM6AN4wGJnIHQFoFcL9T_hjZYxPC85ZmVRNJviupVtN8d9SdarEEXwHaGXV4x2SHNy8ECb3qyjJ9D4mwJ6WT-YtGKX3Xcg1p8t4etWhGfukac9d_Z2Ot2n5iDiKhJYzQkZidCyFaeXD898jI"/>
+<div class="absolute inset-0 flex items-center justify-center bg-on-background/20 backdrop-blur-[2px]">
+<p class="text-white font-button text-center px-lg">Listing a space that feels like home starts with clear details.</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-between items-center pt-lg border-t border-outline-variant/30 mt-xl">
+<button class="flex items-center gap-sm px-lg py-sm rounded-lg border border-primary text-primary font-button hover:bg-primary/5 transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                            Back
+                        </button>
+<button class="flex items-center gap-sm px-xl py-sm rounded-lg bg-primary text-on-primary font-button shadow-sm hover:opacity-90 transition-all active:scale-95" type="button">
+                            Next Step
+                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-on-background text-surface border-t border-outline/20 mt-xxl">
+<div class="flex flex-col md:flex-row justify-between items-center px-xl py-xxl max-w-7xl mx-auto gap-lg">
+<div class="flex flex-col gap-sm">
+<span class="text-h3 font-h3 font-bold text-primary-fixed">NestMate</span>
+<p class="font-body-sm text-body-sm text-surface-variant">© 2024 NestMate. Finding your home-coming.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg font-body-sm text-body-sm">
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Terms of Service</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">FAQ</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Contact Us</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Careers</a>
+</div>
+</div>
+</footer>
+</body></html>

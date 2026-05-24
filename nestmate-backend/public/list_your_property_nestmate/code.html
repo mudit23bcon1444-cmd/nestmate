@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="stylesheet" href="/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-floating-group:focus-within label {
+            transform: translateY(-20px) scale(0.85);
+            color: #ab3500;
+        }
+        .form-floating-label {
+            transition: all 0.2s ease-out;
+            pointer-events: none;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(255, 107, 53, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<a href="/nestmate_home_refined/code.html" class="text-h3 font-h3 font-bold text-primary">NestMate</a>
+<div class="hidden md:flex items-center gap-xl font-button text-button">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Browse</a>
+<a class="text-primary border-b-2 border-primary font-bold pb-1" href="#">List Property</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-sm rounded-lg text-on-surface-variant font-button hover:bg-primary/5 transition-all active:scale-95">Login</button>
+<button class="px-md py-sm rounded-lg bg-primary text-on-primary font-button shadow-sm hover:opacity-90 transition-all active:scale-95">Sign Up</button>
+</div>
+</div>
+</nav>
+<main class="min-h-screen py-xxl px-md">
+<div class="max-w-3xl mx-auto">
+<!-- Visual Step Indicator -->
+<div class="mb-xxl">
+<div class="flex justify-between mb-sm px-xs">
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-primary">1. Basic Info</span>
+</div>
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-on-surface-variant">2. Photos &amp; Amenities</span>
+</div>
+<div class="flex flex-col items-center gap-xs">
+<span class="text-label-md font-label-md text-on-surface-variant">3. Rules &amp; Pricing</span>
+</div>
+</div>
+<!-- Warm Orange Progress Bar -->
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-1/3 transition-all duration-500"></div>
+</div>
+</div>
+<!-- Form Container -->
+<div class="bg-surface-container-lowest rounded-xl custom-shadow p-xl border border-[#F7C59F]/20">
+<div class="mb-lg">
+<h1 class="font-h2 text-h3 text-on-background mb-xs">Basic Information</h1>
+<p class="text-body-sm text-on-surface-variant">Let's start with the core details of your student property.</p>
+</div>
+<form class="space-y-lg">
+<!-- Property Title -->
+      <div class="relative form-floating-group">
+        <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="title" placeholder=" " type="text"/>
+        <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="title">Property Title (e.g., Cozy Studio near Campus)</label>
+      </div>
+<!-- Property Type & Capacity -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="relative form-floating-group">
+<select class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all appearance-none" id="type">
+<option disabled="" selected="" value=""></option>
+<option value="apartment">Studio Apartment</option>
+<option value="room">Private Room in Shared House</option>
+<option value="dorm">Shared Dormitory</option>
+</select>
+<label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 origin-left" for="type">Property Type</label>
+<div class="absolute right-md top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+        <div class="relative form-floating-group">
+          <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="capacity" placeholder=" " type="number"/>
+          <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="capacity">Student Capacity</label>
+        </div>
+</div>
+<!-- Address -->
+      <div class="relative form-floating-group">
+        <textarea class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all" id="address" placeholder=" " rows="3"></textarea>
+        <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="address">Full Address &amp; Proximity to University</label>
+      </div>
+<!-- Visual Context Image -->
+<div class="rounded-xl overflow-hidden h-48 bg-surface-container relative">
+<img alt="Student Living Space Preview" class="w-full h-full object-cover opacity-80" data-alt="A warm and inviting student bedroom filled with soft morning sunlight streaming through a large window. The room features a clean, white minimalist desk with a glowing lamp, comfortable bedding in earthy tones, and a small bookshelf. The overall aesthetic is cozy and modern, utilizing a soft orange and cream color palette to evoke a sense of home-coming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmwYQuKrCDyE7uZHe6F4wHiJszWGtMtJ6gW41VbWHFBC2ii8A7pCzRzxPqAN7QeScW4FjbYBJ4SGqj0vH6X6oc2fXqiPx0jq4WwsvKwF06MV8l9EOY3WhT1qdH4hkMhM6AN4wGJnIHQFoFcL9T_hjZYxPC85ZmVRNJviupVtN8d9SdarEEXwHaGXV4x2SHNy8ECb3qyjJ9D4mwJ6WT-YtGKX3Xcg1p8t4etWhGfukac9d_Z2Ot2n5iDiKhJYzQkZidCyFaeXD898jI"/>
+<div class="absolute inset-0 flex items-center justify-center bg-on-background/20 backdrop-blur-[2px]">
+<p class="text-white font-button text-center px-lg">Listing a space that feels like home starts with clear details.</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-between items-center pt-lg border-t border-outline-variant/30 mt-xl">
+<button class="flex items-center gap-sm px-lg py-sm rounded-lg border border-primary text-primary font-button hover:bg-primary/5 transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                            Back
+                        </button>
+<button class="flex items-center gap-sm px-xl py-sm rounded-lg bg-primary text-on-primary font-button shadow-sm hover:opacity-90 transition-all active:scale-95" type="button">
+                            Next Step
+                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-on-background text-surface border-t border-outline/20 mt-xxl">
+<div class="flex flex-col md:flex-row justify-between items-center px-xl py-xxl max-w-7xl mx-auto gap-lg">
+<div class="flex flex-col gap-sm">
+<a href="/nestmate_home_refined/code.html" class="text-h3 font-h3 font-bold text-primary-fixed">NestMate</a>
+<p class="font-body-sm text-body-sm text-surface-variant">© 2024 NestMate. Finding your home-coming.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg font-body-sm text-body-sm">
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Terms of Service</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">FAQ</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Contact Us</a>
+<a class="text-surface-variant hover:text-surface transition-colors" href="#">Careers</a>
+</div>
+</div>
+</footer>
+
+<script>
+// ─── NestMate List Your Property Page ────────────────────────────────────────
+(async function initListPropertyPage() {
+
+  // 1. Auth guard — must be logged in as owner
+  let currentUser = null;
+  try {
+    const res = await fetch('/api/auth/me');
+    if (res.ok) {
+      const { user } = await res.json();
+      currentUser = user;
+
+      // Update nav with user info
+      const navBtns = document.querySelectorAll('nav button');
+      navBtns.forEach(btn => {
+        if (btn.textContent.trim() === 'Login') {
+          btn.textContent = `Hi, ${user.name.split(' ')[0]}`;
+          btn.style.cursor = 'default';
+        }
+        if (btn.textContent.trim() === 'Sign Up') {
+          btn.textContent = 'Logout';
+          btn.addEventListener('click', async () => {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/nestmate_home_refined/code.html';
+          });
+        }
+      });
+
+      // If not an owner, prompt them
+      if (user.role === 'student') {
+        showBanner('warning',
+          '⚠️ You are logged in as a student. To list a property, you need an owner account. ' +
+          '<a href="/nestmate_home_refined/code.html" style="color:#ab3500;font-weight:600;">Switch account</a>'
+        );
+      }
+    } else {
+      // Not logged in — show login prompt over form
+      showBanner('info',
+        '🔒 Please <a href="/nestmate_home_refined/code.html" style="color:#ab3500;font-weight:600;">log in as a property owner</a> to list your property.'
+      );
+    }
+  } catch (_) {}
+
+  // Nav links
+  document.querySelectorAll('a[href="#"]').forEach(link => {
+    const text = link.textContent.trim().toLowerCase();
+    if (text === 'browse')        link.href = '/browse_listings_nestmate_refined/code.html';
+    if (text === 'list property') link.href = '/list_your_property_nestmate/code.html';
+  });
+
+  // 2. Replace the static form with a working one
+  const formContainer = document.querySelector('.bg-surface-container-lowest');
+  if (!formContainer) return;
+
+  formContainer.innerHTML = `
+    <div class="mb-lg">
+      <h1 class="font-h2 text-h3 text-on-background mb-xs">List Your Property</h1>
+      <p class="text-body-sm text-on-surface-variant">Fill in the details below. Your listing will be visible after admin approval.</p>
+    </div>
+
+    <div id="form-error" style="display:none;background:#ffdad6;color:#93000a;padding:0.75rem 1rem;border-radius:0.5rem;margin-bottom:1rem;font-size:0.875rem;"></div>
+    <div id="form-success" style="display:none;background:#b5ebff;color:#004e60;padding:0.75rem 1rem;border-radius:0.5rem;margin-bottom:1rem;font-size:0.875rem;font-weight:600;"></div>
+
+    <form id="listing-form" class="space-y-lg" enctype="multipart/form-data">
+
+      <div class="relative form-floating-group">
+                <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+          id="title" name="title" placeholder=" " type="text" required/>
+        <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="title">
+          Property Title (e.g., Cozy Studio near Campus)
+        </label>
+      </div>
+
+      <div class="relative form-floating-group">
+                <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+          id="location" name="location" placeholder=" " type="text" required/>
+        <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="location">
+          Full Address / Location (e.g., Koramangala, Bangalore)
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+        <div class="relative form-floating-group">
+                    <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+            id="price" name="price" placeholder=" " type="number" min="1" required/>
+          <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="price">
+            Monthly Rent (₹)
+          </label>
+        </div>
+        <div class="relative form-floating-group">
+                    <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+            id="amenities" name="amenities" placeholder=" " type="text"/>
+          <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="amenities">
+            Amenities (e.g., WiFi, AC, Gym, Laundry)
+          </label>
+        </div>
+      </div>
+
+      <div class="relative form-floating-group">
+                <textarea class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+          id="description" name="description" placeholder=" " rows="4"></textarea>
+        <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="description">
+          Description (tell students what makes this place special)
+        </label>
+      </div>
+
+      <div>
+        <label class="block text-body-sm font-semibold text-on-surface mb-sm">Property Photo (optional, max 5MB)</label>
+        <input type="file" name="image" id="image-input" accept="image/jpeg,image/jpg,image/png,image/webp"
+          class="block w-full text-body-sm text-on-surface-variant border border-outline-variant rounded-lg cursor-pointer bg-surface-bright focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:opacity-90"/>
+        <div id="image-preview-wrap" class="mt-sm hidden">
+          <img id="image-preview" class="h-32 rounded-lg object-cover border border-outline-variant" src="" alt="Preview"/>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-lg border-t border-outline-variant/30 mt-xl">
+        <a href="/nestmate_home_refined/code.html"
+          class="flex items-center gap-sm px-lg py-sm rounded-lg border border-primary text-primary font-button hover:bg-primary/5 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-[20px]">arrow_back</span> Back
+        </a>
+        <button type="submit" id="submit-btn"
+          class="flex items-center gap-sm px-xl py-sm rounded-lg bg-primary text-on-primary font-button shadow-sm hover:opacity-90 transition-all active:scale-95">
+          Submit Listing
+          <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+        </button>
+      </div>
+    </form>
+  `;
+
+  // Image preview
+  document.getElementById('image-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        document.getElementById('image-preview').src = ev.target.result;
+        document.getElementById('image-preview-wrap').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // 3. Form submission
+  document.getElementById('listing-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!currentUser) {
+      window.location.href = '/nestmate_home_refined/code.html';
+      return;
+    }
+
+    const errDiv     = document.getElementById('form-error');
+    const successDiv = document.getElementById('form-success');
+    const submitBtn  = document.getElementById('submit-btn');
+
+    errDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">hourglass_empty</span> Submitting...';
+
+    const formData = new FormData(e.target);
+
+    try {
+      const res = await fetch('/api/listings', {
+        method: 'POST',
+        body: formData
+        // Note: do NOT set Content-Type header — browser sets it with boundary for multipart
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errDiv.textContent = data.error || 'Something went wrong.';
+        errDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Listing <span class="material-symbols-outlined text-[20px]">arrow_forward</span>';
+      } else {
+        successDiv.textContent = '✓ ' + data.message;
+        successDiv.style.display = 'block';
+        submitBtn.textContent = 'Submitted ✓';
+        submitBtn.classList.add('opacity-70');
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/owner_dashboard_nestmate/code.html';
+        }, 2000);
+      }
+    } catch (err) {
+      errDiv.textContent = 'Network error. Please try again.';
+      errDiv.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Submit Listing <span class="material-symbols-outlined text-[20px]">arrow_forward</span>';
+    }
+  });
+
+  // Utility: show top banner
+  function showBanner(type, html) {
+    const banner = document.createElement('div');
+    const colors = {
+      warning: 'background:#ffdcc3;color:#2e1500;border:1px solid #eebd97;',
+      info: 'background:#b5ebff;color:#001f28;border:1px solid #59d5fb;'
+    };
+    banner.style.cssText = `${colors[type] || colors.info}padding:0.75rem 1rem;border-radius:0.5rem;margin-bottom:1rem;font-size:0.875rem;`;
+    banner.innerHTML = html;
+    const main = document.querySelector('main');
+    if (main) main.prepend(banner);
+  }
+})();
+</script>
+</body></html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@300,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#261814",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#ffe9e3",
+                        "on-secondary-fixed": "#2e1500",
+                        "secondary": "#7c5638",
+                        "on-primary-fixed-variant": "#832600",
+                        "surface-tint": "#ab3500",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#003744",
+                        "secondary-fixed-dim": "#eebd97",
+                        "outline": "#8d7168",
+                        "error-container": "#ffdad6",
+                        "primary": "#ab3500",
+                        "surface-container-low": "#fff1ed",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#ffdcc3",
+                        "outline-variant": "#e1bfb5",
+                        "surface-dim": "#eed5cd",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#390c00",
+                        "primary-fixed": "#ffdbd0",
+                        "tertiary-container": "#00a7cb",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "inverse-primary": "#ffb59d",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#3c2d28",
+                        "on-primary-container": "#5f1900",
+                        "on-surface-variant": "#594139",
+                        "surface-bright": "#fff8f6",
+                        "surface-container-high": "#fde3db",
+                        "primary-fixed-dim": "#ffb59d",
+                        "surface-variant": "#f7ddd5",
+                        "on-secondary-fixed-variant": "#613f23",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#b5ebff",
+                        "surface": "#fff8f6",
+                        "on-secondary-container": "#785335",
+                        "background": "#fff8f6",
+                        "secondary-container": "#fdcaa4",
+                        "on-tertiary-fixed": "#001f28",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#261814",
+                        "primary-container": "#ff6b35",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "surface-container-highest": "#f7ddd5",
+                        "inverse-on-surface": "#ffede8",
+                        "tertiary": "#00677e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "2xl": "16px",
+                        "3xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xxxl": "64px",
+                        "md": "16px",
+                        "xxl": "48px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "h3": ["Poppins"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Poppins"],
+                        "label-md": ["Inter"],
+                        "button": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["36px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        .listing-shadow {
+            box-shadow: 0px 8px 32px rgba(38, 24, 20, 0.04);
+        }
+        .contact-card-shadow {
+            box-shadow: 0px 12px 48px rgba(38, 24, 20, 0.08);
+        }
+        .premium-gap {
+            gap: 12px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed-dim">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<div class="text-h3 font-h3 font-bold text-primary tracking-tight">NestMate</div>
+<nav class="hidden md:flex items-center gap-xl font-button text-button">
+<a class="text-primary border-b-2 border-primary pb-1" href="#">Browse</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">List Property</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="px-md py-sm text-on-surface-variant hover:text-primary transition-colors font-button text-button">Login</button>
+<button class="px-lg py-sm bg-primary text-white rounded-full font-button text-button hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm">Sign Up</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-lg py-xl">
+<!-- Image Gallery: Precise Modern Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 premium-gap h-[300px] md:h-[520px] mb-xl overflow-hidden rounded-2xl">
+<div class="md:col-span-2 md:row-span-2 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700 ease-out" data-alt="Main studio view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf01fWfA6HdMbtOZWKioUfcojWiYJcNn6KWs6AibXHxQxgzVkC260WFa6tRxJ-jIoQQ_rY5ySXL9M7MJI8cfVc4N5JLZib6jSKQGF4YeJmaT4J6cf-Dq5Qvudgl6UJTMw3pKC53uVubq_S1oELV_fTcPFJU1lTGBzeMyzsb3e15B2leIMpXMQUMZ6g7Lv-XEo833Qf9r-L84wZJdjgtlppBwtdG25oh7sGwKSwf1YAsWeypiChy_3O0A4kNwj2hRRbkiwkJzsCCZmD"/>
+</div>
+<div class="hidden md:block overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700 ease-out" data-alt="Kitchen detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4tklerYFfuJRt04K3aSkDIljbUeagzjQ0tIgc9NFPgJ9krCcvziS0FChAWeB6gJ7OpstCHxD2KcxrT9SUUUZTBD_1gVTK-yP3d2bWtWyqOYvuIWtwt_jakd0ujTehhJKP8UOuaf_NaiY-MAn31T7u3sMMv_evF_OtaD-ndFum_CxBWqHQn-BlQPOF4ZNNdryHQrJskJStnzKNPw2VefRUTk4CsKum_HejAIficfNM2haZXJpvRXdxb4N-3E15CYxSOvFxFO3BTsfK"/>
+</div>
+<div class="hidden md:block overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700 ease-out" data-alt="Study area" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4eTuIg_fAx_YvuX_qbRE5LPt2m6PwNRLUDDPdfgYhJRo6TSLmmXK-1s10icxh7u_91rxy7Q3tZ3KMftHoKr-BX61PVDlc3cBjVsxfxAMKzXVAarzW3S2Fe7JV7963gAJoMjQDInwIAjT5LUakXNcvqVDCsMSHsDt2d-vZpN6XyrG3M2oB97lVv9Afhk7FYz00SUtu8PSxLAYQWGRMYUJIT7Q3mmCx1J61r8iJC9hx3Jr9vd6OqmPwffoFL-cQPN9cX7xkCymWvvbU"/>
+</div>
+<div class="hidden md:block overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700 ease-out" data-alt="Bathroom detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADAiHeqo6Ww4OF7T7FddbQjANa4uJ6rv63o2oYTIVgK0-1lpnpcIXcguwnaejxthLEokZviyvnZcBsxbENhiDYJQWoM-rknZsFqbwMDnIs6agMb6kLnI40ZvqysSct4mBXSBCRMX-KbulIQt_vCM648xiNBVrYfsTl1T3CE9flGZtkmgKMVftmx9q4vxODv1RnarTymQCHlqEAevaxXBDe3Ve1rPoI8P3E_BeQ1EkI92WcQIgI8-NAFKN_3cfFN6Mr6rOSHhOSM9r1"/>
+</div>
+<div class="hidden md:block overflow-hidden relative bg-surface-container">
+<img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700 ease-out" data-alt="Bedroom area" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAPk34xQgNnhMPdUEtSDTKnASjkZWySI5NAhSDmTqeTb2gSFa1K3kcSUo9vn-sQCacMmPud0Dd2K2Wd7fwH3W6q1lh1CcB7qoM4yARVVa4PpoE4sbdD1vjZE3YYhTTpo6dDFUAjCjeT9ba5jDT27xvRy1iVmW5y3HHTLUqO6IfbF49-9LLobeKjKkuzxfAgkkTLcazcWRwlIbpKp0mdnK-v5h7jMr0M6uUQzKwoHSwZqoOyX1m6Fqjpfs-KMCL3_ZVF59jSytq4F-j"/>
+<button class="absolute bottom-md right-md bg-white/90 backdrop-blur px-md py-sm rounded-lg border border-outline-variant/30 flex items-center gap-xs font-button text-body-sm shadow-sm hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">grid_view</span> View all photos
+                </button>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-xl items-start">
+<!-- Left Column: Details (2/3) -->
+<div class="md:w-2/3 flex flex-col gap-xl">
+<!-- Title & Location -->
+<div>
+<div class="flex items-center gap-sm mb-md">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-md text-[11px] uppercase tracking-wider">Featured</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded-full font-label-md text-[11px] uppercase tracking-wider">Studio</span>
+</div>
+<h1 class="font-h1 text-h1 text-on-background mb-sm leading-tight tracking-tight">The Heritage Loft by NestMate</h1>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+<span class="font-body-lg text-body-lg">124 Baker Street, London NW1 6XE</span>
+</div>
+</div>
+<!-- Description -->
+<section class="border-t border-outline-variant/10 pt-lg">
+<h2 class="font-h3 text-h3 mb-md text-on-background">About this property</h2>
+<p class="text-on-surface-variant font-body-md leading-relaxed max-w-3xl">
+                        Experience the perfect blend of historical charm and modern student living at The Heritage Loft. Recently renovated with the student lifestyle in mind, this studio offers high ceilings, exposed brickwork, and state-of-the-art facilities. Located just minutes from major university campuses, it provides a sanctuary of peace in the heart of the city.
+                    </p>
+</section>
+<!-- Amenities Grid -->
+<section class="border-t border-outline-variant/10 pt-lg">
+<h2 class="font-h3 text-h3 mb-md text-on-background">Amenities</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">wifi</span>
+<span class="font-body-md text-on-surface">High-speed WiFi</span>
+</div>
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">ac_unit</span>
+<span class="font-body-md text-on-surface">Air Conditioning</span>
+</div>
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">local_laundry_service</span>
+<span class="font-body-md text-on-surface">In-unit Laundry</span>
+</div>
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">kitchen</span>
+<span class="font-body-md text-on-surface">Modern Kitchen</span>
+</div>
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+<span class="font-body-md text-on-surface">On-site Gym</span>
+</div>
+<div class="flex items-center gap-md p-lg bg-white rounded-2xl border border-outline-variant/10 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="font-body-md text-on-surface">24/7 Security</span>
+</div>
+</div>
+</section>
+<!-- House Rules -->
+<section class="border-t border-outline-variant/10 pt-lg">
+<h2 class="font-h3 text-h3 mb-md text-on-background">House Rules</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+<div class="flex items-center gap-md p-md rounded-xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary/70">schedule</span>
+<span class="font-body-md text-on-surface">Check-in after 2:00 PM</span>
+</div>
+<div class="flex items-center gap-md p-md rounded-xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary/70">smoke_free</span>
+<span class="font-body-md text-on-surface">No smoking allowed</span>
+</div>
+<div class="flex items-center gap-md p-md rounded-xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary/70">group</span>
+<span class="font-body-md text-on-surface">Maximum 2 residents</span>
+</div>
+<div class="flex items-center gap-md p-md rounded-xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary/70">pets</span>
+<span class="font-body-md text-on-surface">No pets allowed</span>
+</div>
+</div>
+</section>
+<!-- Location Map -->
+<section class="border-t border-outline-variant/10 pt-lg">
+<h2 class="font-h3 text-h3 mb-md text-on-background">Location</h2>
+<div class="w-full h-[400px] bg-surface-container rounded-3xl overflow-hidden relative border border-outline-variant/10 group">
+<img class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="Map location" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCanVn8zRYtx1eH1r0RY52zGQT5sUKHkhfxFs3C0SU0ykwaGdhf4HnVftcqhFs-PzDd2XXzUKoVKVOq9B6DLRwGyfGKhiMxgZeTF04WiYQPt8KClPpiqQ8fpi2jTIq_9YuANQRIlpOYtO0MSSsI8Di2FJ-yWw9pKC-1omRTKNvW5iTS70i6c1UZTHSqLY1lKkwZBsyFQ9CvSOZ0isIDzCWlnsbYjbXh1-1Yu7UH7SkzjedQNuug2QoT13dFwNN5HlkOv-7NyMs4nQYL"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white p-lg rounded-2xl shadow-xl border border-outline-variant/20 flex flex-col items-center text-center gap-2">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[32px] fill-1">location_on</span>
+</div>
+<div>
+<p class="font-h3 text-on-surface text-[18px]">The Heritage Loft</p>
+<p class="font-body-sm text-on-surface-variant">Click to open Google Maps</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Premium Contact Card (1/3) -->
+<aside class="md:w-1/3 w-full sticky top-[100px]">
+<div class="p-xl bg-white border border-outline-variant/20 rounded-3xl contact-card-shadow flex flex-col gap-lg">
+<div class="space-y-1">
+<div class="flex items-baseline gap-2">
+<span class="font-h1 text-[40px] text-on-background font-bold tracking-tight">£1,450</span>
+<span class="font-body-md text-on-surface-variant">/ month</span>
+</div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px] fill-1">verified</span>
+<span class="font-label-md text-[13px] font-medium">Utilities &amp; High-speed WiFi included</span>
+</div>
+</div>
+<div class="flex items-center gap-md py-lg border-y border-outline-variant/10">
+<div class="relative">
+<img class="w-14 h-14 rounded-full object-cover" data-alt="Marcus Thorne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnCSnbLaLXkuRiFjv6rEy9F0Kxpea-b36tHFjhzBqUNjp-UDp2DQDULVZCJOG87-_LFf2249lM9Z8NdR7kZLslPrZTGL0W7aR_bLDRSD7i7I01IAF1AteaCquKZsB8tKuU792puVCawsXrxgE19DYiaOaYiw5V8aQ7lEyZxkeUZqJlzmf_VwXt8J4NtS4px4nM6rXnG5pZ4xo3A3ckdsqMJBZ1HqxXhf6qcbpqgMombWAXMuc8nsilADMxxsOPi38jG_fIwFl-RKD4"/>
+<div class="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-4 border-white"></div>
+</div>
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase font-semibold tracking-widest mb-1">Managed By</p>
+<h4 class="font-h3 text-[20px] text-on-surface font-bold leading-tight">Marcus Thorne</h4>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[14px] text-amber-500 fill-1">star</span>
+<span class="font-body-sm text-[13px]">4.9 (12 properties)</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-md">
+<button class="w-full py-4 bg-primary text-white rounded-2xl font-button text-button shadow-lg shadow-primary/20 hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200">
+                            Request Viewing
+                        </button>
+<button class="w-full py-4 bg-white border border-outline-variant text-on-surface rounded-2xl font-button text-button flex items-center justify-center gap-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">chat</span>
+                            Message Owner
+                        </button>
+</div>
+<div class="flex gap-md items-start p-lg bg-surface-container-low/40 rounded-2xl border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+<p class="font-body-sm text-on-surface-variant leading-relaxed text-[13px]">
+                            Secure your room today. No payments are processed until after a successful viewing and contract signing.
+                        </p>
+</div>
+<p class="text-center text-[12px] text-on-surface-variant">Typically responds within 2 hours</p>
+</div>
+</aside>
+</div>
+<!-- Reviews Section -->
+<section class="mt-xxxl pt-xxxl border-t border-outline-variant/10">
+<div class="flex flex-col md:flex-row justify-between items-end gap-md mb-xl">
+<div>
+<h2 class="font-h2 text-h2 text-on-background mb-2">Tenant Reviews</h2>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-h3 text-h3">4.8</span>
+</div>
+<span class="text-on-surface-variant font-body-md">• 24 Verified Residents</span>
+</div>
+</div>
+<button class="px-lg py-md border border-outline text-on-surface hover:bg-white rounded-xl font-button text-button transition-all">
+                    Write a Review
+                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Review Card 1 -->
+<div class="p-lg bg-white border border-outline-variant/10 rounded-3xl hover:border-primary/20 transition-all duration-300">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container text-[14px]">JS</div>
+<div>
+<h4 class="font-h3 text-on-surface text-[18px]">Jordan Smith</h4>
+<p class="font-body-sm text-on-surface-variant">Resident for 2 years</p>
+</div>
+</div>
+<div class="flex gap-0.5 text-amber-500">
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md italic leading-relaxed">
+                        "NestMate made the transition to university living so seamless. This loft is incredible—bright, quiet for studying, and Marcus is a fantastic landlord who responds instantly."
+                    </p>
+</div>
+<!-- Review Card 2 -->
+<div class="p-lg bg-white border border-outline-variant/10 rounded-3xl hover:border-primary/20 transition-all duration-300">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-on-primary-fixed text-[14px]">LC</div>
+<div>
+<h4 class="font-h3 text-on-surface text-[18px]">Leah Chen</h4>
+<p class="font-body-sm text-on-surface-variant">Resident for 6 months</p>
+</div>
+</div>
+<div class="flex gap-0.5 text-amber-500">
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md italic leading-relaxed">
+                        "The kitchen facilities are top-notch and the location can't be beaten. It's a bit pricey, but worth every penny for the peace of mind and comfort you get as a student."
+                    </p>
+</div>
+</div>
+<div class="mt-xl flex justify-center">
+<button class="flex items-center gap-sm text-primary font-button text-button hover:underline transition-all group">
+                    Show all 24 reviews
+                    <span class="material-symbols-outlined group-hover:translate-y-1 transition-transform">expand_more</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-on-background text-white mt-xxxl">
+<div class="flex flex-col md:flex-row justify-between items-center px-xl py-xxl max-w-7xl mx-auto gap-xl">
+<div class="flex flex-col gap-md text-center md:text-left">
+<div class="text-h3 font-h3 font-bold text-primary-fixed tracking-tight">NestMate</div>
+<p class="font-body-sm text-surface-variant/80">© 2024 NestMate. Finding your home-coming.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg font-body-sm text-body-sm">
+<a class="text-surface-variant/80 hover:text-white transition-colors" href="#">Privacy</a>
+<a class="text-surface-variant/80 hover:text-white transition-colors" href="#">Terms</a>
+<a class="text-surface-variant/80 hover:text-white transition-colors" href="#">FAQ</a>
+<a class="text-surface-variant/80 hover:text-white transition-colors" href="#">Support</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">language</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="stylesheet" href="/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.02;
+            z-index: 9999;
+            pointer-events: none;
+            background-image: var(--noise);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .bg-hero-gradient {
+            background: radial-gradient(circle at top right, #ffdbd0 0%, #fff8f6 60%);
+        }
+
+        /* Sharper, multi-layered shadows */
+        .sharp-shadow {
+            box-shadow: 
+                0 1px 2px rgba(171, 53, 0, 0.05),
+                0 4px 12px rgba(171, 53, 0, 0.08);
+        }
+        
+        .sharp-shadow-lg {
+            box-shadow: 
+                0 2px 4px rgba(171, 53, 0, 0.06),
+                0 12px 24px rgba(171, 53, 0, 0.12);
+        }
+
+        .hover-lift {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(171, 53, 0, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff8f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e1bfb5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ab3500;
+        }
+
+        .border-subtle {
+            border: 1px solid rgba(141, 113, 104, 0.15);
+        }
+    </style>
+
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden antialiased">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/90 backdrop-blur-lg border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-lg py-4 max-w-7xl mx-auto">
+<a href="/nestmate_home_refined/code.html" class="text-2xl font-h3 font-bold tracking-tight text-primary">NestMate<span class="text-primary-container">.</span></a>
+<!-- Desktop Links -->
+<div class="hidden md:flex items-center gap-xl font-button">
+<a class="text-primary font-semibold border-b-2 border-primary pb-1" href="#">Browse</a>
+<a class="text-on-surface-variant/80 hover:text-primary transition-colors duration-200" href="#">List Property</a>
+<a class="text-on-surface-variant/80 hover:text-primary transition-colors duration-200" href="#">About</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-md">
+<button class="hidden sm:block text-on-surface-variant font-medium hover:bg-primary/5 rounded-lg px-md py-2 transition-all">Login</button>
+<button class="bg-primary-container text-on-primary-container font-semibold px-6 py-2.5 rounded-lg active:scale-95 transition-transform shadow-sm">Sign Up</button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative px-md overflow-hidden bg-surface-bright pt-xxxl pb-[160px]"><div class="absolute inset-0 z-0">
+<img alt="Modern student apartment interior" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uiR0DHh_g0bzs_Uw2QN2fO_I6DIPQS4XfQ1CmQFqBzsCGPtMGybcHMjCS6oJ9E4JNfsb8a-B-qC6KGWa3BqWYIvhW0XNSb720Jjea6DzV3PRD9Hb4MYnf7q4EtIIdYWYcyY33H8YxA5xR6pQ_qhk6HTo3cewXWfh16NDrAlbXrkZ72M1ZkyjS4OkGeg6xnne2cpYKU6QZNqRcsr8pGrg42Cj_QR_XSqiSn7V8DjhW5z7Hu7RpXIwyRNkswhPt7Na-80vvz78I8n37M"/>
+<div class="absolute inset-0 bg-gradient-to-b from-white/95 via-white/80 to-white/20"></div>
+<div class="absolute inset-0 bg-radial-gradient(circle at top right, #ffdbd0 0%, transparent 70%) opacity-50"></div>
+</div>
+<div class="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+<h1 class="font-h1 text-h1 text-on-primary-container mb-6 max-w-4xl tracking-tight leading-tight">
+                Find Your Perfect PG or <br class="hidden md:block"/> Flat Near College
+            </h1>
+<p class="font-body-lg text-on-primary-container/70 mb-12 max-w-2xl leading-relaxed">
+                Secure, verified, and student-friendly housing solutions designed for your comfort and academic success.
+            </p>
+<!-- Large Search Bar -->
+<div class="w-full max-w-4xl bg-surface p-2.5 rounded-2xl border-subtle sharp-shadow-lg flex flex-col md:flex-row gap-2">
+<div class="flex-1 relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-focus-within:text-primary transition-colors" data-icon="location_on">location_on</span>
+<input class="w-full pl-12 pr-4 py-3.5 border-none rounded-xl bg-surface-container-low/50 focus:bg-surface-container-low focus:ring-1 focus:ring-primary/20 text-on-surface placeholder:text-outline/50 transition-all" placeholder="Enter college or city" type="text"/>
+</div>
+<div class="flex-1 relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-focus-within:text-primary transition-colors" data-icon="payments">payments</span>
+<select class="w-full pl-12 pr-4 py-3.5 border-none rounded-xl bg-surface-container-low/50 focus:bg-surface-container-low focus:ring-1 focus:ring-primary/20 text-on-surface appearance-none transition-all">
+<option>Budget (Any)</option>
+<option>Under ₹5,000</option>
+<option>₹5,000 - ₹10,000</option>
+<option>₹10,000+</option>
+</select>
+</div>
+<div class="flex-1 relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-focus-within:text-primary transition-colors" data-icon="home">home</span>
+<select class="w-full pl-12 pr-4 py-3.5 border-none rounded-xl bg-surface-container-low/50 focus:bg-surface-container-low focus:ring-1 focus:ring-primary/20 text-on-surface appearance-none transition-all">
+<option>Property Type</option>
+<option>PG</option>
+<option>Flat</option>
+<option>Hostel</option>
+</select>
+</div>
+<button class="bg-primary text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-container hover:text-on-primary-container transition-all flex items-center justify-center gap-2 active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+                    Search
+                </button>
+</div>
+</div>
+<!-- Abstract background elements -->
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-container/10 rounded-full blur-[100px]"></div>
+<div class="absolute top-12 -right-24 w-80 h-80 bg-primary-fixed/30 rounded-full blur-[120px]"></div>
+</section>
+<!-- Stats Row -->
+<section class="max-w-7xl mx-auto -mt-10 px-md relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+<div class="bg-surface rounded-xl p-6 border-subtle sharp-shadow hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group">
+<div class="w-12 h-12 rounded-lg bg-primary/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="apartment">apartment</span>
+</div>
+<div class="font-h3 text-2xl text-on-surface">2400+</div>
+<div class="font-body-sm text-on-surface-variant font-medium">Listings</div>
+</div>
+<div class="bg-surface rounded-xl p-6 border-subtle sharp-shadow hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group">
+<div class="w-12 h-12 rounded-lg bg-primary/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="verified_user">verified_user</span>
+</div>
+<div class="font-h3 text-2xl text-on-surface">800+</div>
+<div class="font-body-sm text-on-surface-variant font-medium">Verified Owners</div>
+</div>
+<div class="bg-surface rounded-xl p-6 border-subtle sharp-shadow hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group">
+<div class="w-12 h-12 rounded-lg bg-primary/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="location_city">location_city</span>
+</div>
+<div class="font-h3 text-2xl text-on-surface">12</div>
+<div class="font-body-sm text-on-surface-variant font-medium">Cities</div>
+</div>
+<div class="bg-surface rounded-xl p-6 border-subtle sharp-shadow hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group">
+<div class="flex items-center gap-1.5 mb-4">
+<span class="material-symbols-outlined text-[#FFBE0B]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-h3 text-2xl text-on-surface">4.8</span>
+</div>
+<div class="font-body-sm text-on-surface-variant font-medium">User Rating</div>
+</div>
+</section>
+<!-- Browse by Category -->
+<section class="max-w-7xl mx-auto px-md py-xxxl">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-xl gap-6">
+<div class="space-y-2">
+<h2 class="font-h2 text-on-surface">Browse by Category</h2>
+<p class="text-on-surface-variant/70 max-w-md">Find the perfect living arrangement that suits your lifestyle and budget preferences.</p>
+</div>
+<a class="text-primary font-semibold flex items-center gap-1.5 group hover:underline decoration-2 underline-offset-4" href="#">
+                View all categories
+                <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Category Cards -->
+<a href="/browse_listings_nestmate_refined/code.html?type=PG" class="group bg-surface border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/40 hover:-translate-y-2 hover:shadow-xl active:shadow-inner active:scale-95 transition-all duration-300 ease-out block text-center">
+<div class="w-14 h-14 bg-surface-container-low rounded-full border border-outline-variant/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-[24px]" data-icon="bed">bed</span>
+</div>
+<h3 class="font-h3 text-base text-on-surface mb-1">PG</h3>
+<p class="text-sm text-on-surface-variant">Fully managed stays</p>
+</a>
+<a href="/browse_listings_nestmate_refined/code.html?type=Flat" class="group bg-surface border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/40 hover:-translate-y-2 hover:shadow-xl active:shadow-inner active:scale-95 transition-all duration-300 ease-out block text-center">
+<div class="w-14 h-14 bg-surface-container-low rounded-full border border-outline-variant/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-[24px]" data-icon="domain">domain</span>
+</div>
+<h3 class="font-h3 text-base text-on-surface mb-1">Flat</h3>
+<p class="text-sm text-on-surface-variant">Independent apartments</p>
+</a>
+<a href="/browse_listings_nestmate_refined/code.html?type=Hostel" class="group bg-surface border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/40 hover:-translate-y-2 hover:shadow-xl active:shadow-inner active:scale-95 transition-all duration-300 ease-out block text-center">
+<div class="w-14 h-14 bg-surface-container-low rounded-full border border-outline-variant/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-[24px]" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<h3 class="font-h3 text-base text-on-surface mb-1">Hostel</h3>
+<p class="text-sm text-on-surface-variant">Social student living</p>
+</a>
+<a href="/browse_listings_nestmate_refined/code.html?type=Shared" class="group bg-surface border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/40 hover:-translate-y-2 hover:shadow-xl active:shadow-inner active:scale-95 transition-all duration-300 ease-out block text-center">
+<div class="w-14 h-14 bg-surface-container-low rounded-full border border-outline-variant/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-[24px]" data-icon="group">group</span>
+</div>
+<h3 class="font-h3 text-base text-on-surface mb-1">Shared Room</h3>
+<p class="text-sm text-on-surface-variant">Budget friendly choice</p>
+</a>
+</div>
+</section>
+<!-- Featured Listings -->
+<section class="bg-surface-container-lowest/50 py-xxxl px-md border-y border-outline-variant/10">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-center mb-xl">
+<h2 class="font-h2 text-on-surface">Featured Listings</h2>
+<div class="flex gap-3">
+<button class="w-11 h-11 rounded-full border-subtle flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all bg-surface">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-11 h-11 rounded-full border-subtle flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all bg-surface">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Listing Card 1 -->
+<div class="bg-surface rounded-2xl overflow-hidden border-subtle sharp-shadow hover-lift group cursor-pointer" onclick="window.location.href='/premium_studio_nestmate_detail/code.html?id=1'">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Sunset Residency Room" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLqCxR2XAGKsqTEbE5Ar1_ofHSVQsT7eHj6MsGmHAi-6gIliEQqjBkrOtXZQRYbPLeijmTyfpGNoplQQgYA56a7smr1rhpJVgPOYy46472cJWfj4aEgO0giflFSwNqBKdc9YemApoFv1hwPGdE8VCCqm21ZD5rAxvLO2th2wHqs5UjYY_HP4L9W6CLEmFuPFey3McFBB4OATjKQwiudHvzitF9jhRVLRmDuyWndgMwj229VHmrruPT1hhmt-6eNMPFaKExyHS5xnjh"/>
+<div class="absolute top-4 left-4 bg-[#FFBE0B] text-on-secondary-fixed font-bold text-[10px] tracking-widest px-3 py-1 rounded-full">
+                            FEATURED
+                        </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center text-primary transition-colors hover:text-red-500 shadow-sm">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<h4 class="font-h3 text-xl text-on-surface">Sunset Residency</h4>
+<p class="flex items-center gap-1.5 text-on-surface-variant/70 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                                    IIT Delhi Campus
+                                </p>
+</div>
+<div class="text-right">
+<div class="text-primary font-bold text-xl">₹12,500</div>
+<div class="text-on-surface-variant/60 text-[12px] font-medium uppercase tracking-wider">Per Month</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="wifi">wifi</span> WiFi
+                            </span>
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="ac_unit">ac_unit</span> AC
+                            </span>
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="chair">chair</span> Furnished
+                            </span>
+</div>
+</div>
+</div>
+<!-- Listing Card 2 -->
+<div class="bg-surface rounded-2xl overflow-hidden border-subtle sharp-shadow hover-lift group cursor-pointer" onclick="window.location.href='/premium_studio_nestmate_detail/code.html?id=2'">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Urban Heights Room" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEWIcROBrjqbwohJohWRtWvAyfwPSUWCGQTI1-k3_yoREnJhHht1cUfHYn67Be_n1kf_vkMd1TAp2eyjPEABG0_IhXbGf4jnl072QBM_Cw3MMeBlDnThtY34RpAjD0H94DyqVGgKIsyIIlX0_DNAW-JhsZx_MRN5Y0ZUg4QSISWY8eOAkd0rS4Wy6OxZtaKfJoT7Ij0kDGjrTFAS92AcC9HvQpe8bK6_ZApJIc5WYfythX_7J0M7Mycp-GK5keFKok0MDySCrmtb7F"/>
+<div class="absolute top-4 left-4 bg-primary text-white font-bold text-[10px] tracking-widest px-3 py-1 rounded-full">
+                            NEW
+                        </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center text-primary transition-colors hover:text-red-500 shadow-sm">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<h4 class="font-h3 text-xl text-on-surface">Urban Heights PG</h4>
+<p class="flex items-center gap-1.5 text-on-surface-variant/70 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                                    Koramangala, Bangalore
+                                </p>
+</div>
+<div class="text-right">
+<div class="text-primary font-bold text-xl">₹8,000</div>
+<div class="text-on-surface-variant/60 text-[12px] font-medium uppercase tracking-wider">Per Month</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="local_dining">local_dining</span> Food Incl.
+                            </span>
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="cleaning_services">cleaning_services</span> Cleaning
+                            </span>
+</div>
+</div>
+</div>
+<!-- Listing Card 3 -->
+<div class="bg-surface rounded-2xl overflow-hidden border-subtle sharp-shadow hover-lift group cursor-pointer" onclick="window.location.href='/premium_studio_nestmate_detail/code.html?id=3'">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img alt="Scholars Hub Room" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuB3KMHtbCK-BvZQ9IQFUexjQizBZnPwsxawWBP23tOGiX2Dl9pRN_kuxJiiQbDMw2GmZcZelE6jnx90SLKvNr7Brkck_mAHgtE9dQh9a0Xk9j5MpW37mvwgMgrcOPfI9IZkWmi7-C7oncNCmxELUDn9iYJgBS7c5B-NP_anOYjXXaNc6SjzaLjNxvP9DMbCH5nfTY6gKG9o5I_DG1fZn-NkBTF-IpM4owBnUHK8MoYoPPe9LgNxni-mqe2iKS03UIe8xmQX79b7WL"/>
+<div class="absolute top-4 left-4 bg-tertiary text-white font-bold text-[10px] tracking-widest px-3 py-1 rounded-full">
+                            POPULAR
+                        </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center text-primary transition-colors hover:text-red-500 shadow-sm">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<h4 class="font-h3 text-xl text-on-surface">The Scholars Hub</h4>
+<p class="flex items-center gap-1.5 text-on-surface-variant/70 text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                                    Vasant Vihar, Mumbai
+                                </p>
+</div>
+<div class="text-right">
+<div class="text-primary font-bold text-xl">₹15,000</div>
+<div class="text-on-surface-variant/60 text-[12px] font-medium uppercase tracking-wider">Per Month</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="security">security</span> Security
+                            </span>
+<span class="bg-surface-container-low border border-outline-variant/10 px-2.5 py-1 rounded-md text-on-secondary-container text-[12px] font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fitness_center">fitness_center</span> Gym
+                            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="max-w-7xl mx-auto px-md py-xxxl">
+<div class="text-center mb-xxl space-y-4">
+<h2 class="font-h2 text-on-surface">How It Works</h2>
+<p class="text-on-surface-variant/70 max-w-xl mx-auto">Your journey from searching to moving in, simplified into three easy steps.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
+<!-- Connecting lines -->
+<div class="hidden md:block absolute top-12 left-[15%] right-[15%] h-[1px] border-t-2 border-dotted border-primary/20 -z-10"></div>
+<div class="flex flex-col items-center text-center group">
+<div class="w-24 h-24 bg-primary text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg relative group-hover:rotate-3 transition-transform">
+<span class="material-symbols-outlined text-[42px]" data-icon="search">search</span>
+<div class="absolute -top-3 -right-3 w-9 h-9 bg-on-background text-white rounded-full flex items-center justify-center font-bold border-4 border-surface text-sm">1</div>
+</div>
+<h3 class="font-h3 text-xl text-on-surface mb-3">Search</h3>
+<p class="font-body-sm text-on-surface-variant/80 max-w-[240px]">Filter by location, budget, and amenities to find your ideal home.</p>
+</div>
+<div class="flex flex-col items-center text-center group">
+<div class="w-24 h-24 bg-primary text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg relative group-hover:-rotate-3 transition-transform">
+<span class="material-symbols-outlined text-[42px]" data-icon="fact_check">fact_check</span>
+<div class="absolute -top-3 -right-3 w-9 h-9 bg-on-background text-white rounded-full flex items-center justify-center font-bold border-4 border-surface text-sm">2</div>
+</div>
+<h3 class="font-h3 text-xl text-on-surface mb-3">Choose</h3>
+<p class="font-body-sm text-on-surface-variant/80 max-w-[240px]">Compare verified listings and select the one that feels like home.</p>
+</div>
+<div class="flex flex-col items-center text-center group">
+<div class="w-24 h-24 bg-primary text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg relative group-hover:rotate-3 transition-transform">
+<span class="material-symbols-outlined text-[42px]" data-icon="chat">chat</span>
+<div class="absolute -top-3 -right-3 w-9 h-9 bg-on-background text-white rounded-full flex items-center justify-center font-bold border-4 border-surface text-sm">3</div>
+</div>
+<h3 class="font-h3 text-xl text-on-surface mb-3">Contact</h3>
+<p class="font-body-sm text-on-surface-variant/80 max-w-[240px]">Message owners directly and schedule a visit to finalize your stay.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="max-w-7xl mx-auto px-md pb-xxxl">
+<div class="bg-on-background rounded-3xl p-xl md:p-xxl flex flex-col md:flex-row items-center justify-between gap-xl relative overflow-hidden">
+<div class="text-center md:text-left relative z-10 space-y-2">
+<h2 class="font-h2 text-surface">Are you a property owner?</h2>
+<p class="text-surface-variant/70 font-body-lg">Reach thousands of students searching for a place to stay.</p>
+</div>
+<button class="bg-primary text-white font-bold px-10 py-5 rounded-xl hover:bg-white hover:text-on-background transition-all sharp-shadow-lg active:scale-95 relative z-10 whitespace-nowrap">
+                List Your Property Now
+            </button>
+<!-- Decorative circle -->
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-primary/20 rounded-full blur-3xl"></div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background text-surface w-full border-t border-white/5 pt-xxxl pb-xl">
+<div class="max-w-7xl mx-auto px-lg">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="md:col-span-1 space-y-6">
+<a href="/nestmate_home_refined/code.html" class="text-2xl font-h3 font-bold text-primary-fixed">NestMate<span class="text-primary-container">.</span></a>
+<p class="font-body-sm text-surface-variant/60 leading-relaxed">
+                    Connecting students with the best living spaces near their educational institutions. Reliable, safe, and convenient.
+                </p>
+</div>
+<div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">
+<div class="space-y-4">
+<h5 class="font-bold text-sm tracking-widest uppercase text-white/40">Company</h5>
+<div class="flex flex-col gap-3">
+<a class="text-surface-variant hover:text-white transition-colors" href="#">About Us</a>
+<a class="text-surface-variant hover:text-white transition-colors" href="#">Careers</a>
+<a class="text-surface-variant hover:text-white transition-colors" href="#">Press</a>
+</div>
+</div>
+<div class="space-y-4">
+<h5 class="font-bold text-sm tracking-widest uppercase text-white/40">Support</h5>
+<div class="flex flex-col gap-3">
+<a class="text-surface-variant hover:text-white transition-colors" href="#">FAQ</a>
+<a class="text-surface-variant hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-surface-variant hover:text-white transition-colors" href="#">Privacy Policy</a>
+</div>
+</div>
+<div class="space-y-4">
+<h5 class="font-bold text-sm tracking-widest uppercase text-white/40">Social</h5>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="public">public</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-body-sm text-surface-variant/40">
+                © 2024 NestMate. Built for the modern student.
+            </p>
+<div class="flex items-center gap-2 text-surface-variant/40 text-xs">
+<span>Hand-coded with</span>
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span>in India</span>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// ─── NestMate Home Page API Wiring ───────────────────────────────────────────
+
+(async function initHomePage() {
+  // 1. Check auth state and update nav buttons
+  try {
+    const res = await fetch('/api/auth/me');
+    const nav = document.querySelector('nav');
+    const loginBtn  = nav ? nav.querySelector('button.hidden.sm\\:block, button:first-of-type') : null;
+    const signupBtn = nav ? nav.querySelector('button:last-of-type') : null;
+
+    if (res.ok) {
+      const { user } = await res.json();
+      // Replace Login/Sign Up with user name + logout
+      const actionDiv = nav ? nav.querySelector('.flex.items-center.gap-md') : null;
+      if (actionDiv) {
+        actionDiv.innerHTML = `
+          <span class="hidden sm:block text-on-surface font-medium px-md py-2">Hi, ${user.name.split(' ')[0]}</span>
+          ${user.role === 'owner' || user.role === 'admin'
+            ? `<a href="/owner_dashboard_nestmate/code.html" class="hidden sm:block text-on-surface-variant font-medium hover:bg-primary/5 rounded-lg px-md py-2 transition-all">Dashboard</a>`
+            : ''}
+          ${user.role === 'admin'
+            ? `<a href="/admin_panel_nestmate_refined/code.html" class="hidden sm:block text-on-surface-variant font-medium hover:bg-primary/5 rounded-lg px-md py-2 transition-all">Admin</a>`
+            : ''}
+          <button id="logout-btn" class="bg-primary-container text-on-primary-container font-semibold px-6 py-2.5 rounded-lg active:scale-95 transition-transform shadow-sm">Logout</button>
+        `;
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.reload();
+        });
+      }
+    }
+  } catch (_) {}
+
+  // 2. Wire up nav links to real pages
+  const browseLinks = document.querySelectorAll('a[href="#"]');
+  browseLinks.forEach(link => {
+    const text = link.textContent.trim().toLowerCase();
+    if (text === 'browse')        link.href = '/browse_listings_nestmate_refined/code.html';
+    if (text === 'list property') link.href = '/list_your_property_nestmate/code.html';
+    if (text.includes('view all')) link.href = '/browse_listings_nestmate_refined/code.html';
+  });
+
+  // 3. Wire up "Browse Listings" / "List Your Property Now" CTAs
+  document.querySelectorAll('button').forEach(btn => {
+    const text = btn.textContent.trim();
+    if (text === 'List Your Property Now') {
+      btn.addEventListener('click', () => {
+        window.location.href = '/list_your_property_nestmate/code.html';
+      });
+    }
+    if (text === 'Login') {
+      btn.addEventListener('click', () => showAuthModal('login'));
+    }
+    if (text === 'Sign Up') {
+      btn.addEventListener('click', () => showAuthModal('register'));
+    }
+  });
+
+  // 4. Wire up search bar
+  const searchBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Search'));
+  const locationInput = document.querySelector('input[placeholder="Enter college or city"]');
+  if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
+      const loc = locationInput ? locationInput.value.trim() : '';
+      window.location.href = `/browse_listings_nestmate_refined/code.html${loc ? '?location=' + encodeURIComponent(loc) : ''}`;
+    });
+  }
+  if (locationInput) {
+    locationInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const loc = locationInput.value.trim();
+        window.location.href = `/browse_listings_nestmate_refined/code.html${loc ? '?location=' + encodeURIComponent(loc) : ''}`;
+      }
+    });
+  }
+
+  // 5. Auth modal (login/register)
+  function showAuthModal(mode) {
+    const existing = document.getElementById('nm-auth-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'nm-auth-modal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = `
+      <div style="background:#fff8f6;border-radius:1.5rem;padding:2rem;width:100%;max-width:420px;position:relative;box-shadow:0 20px 60px rgba(171,53,0,0.2);">
+        <button onclick="document.getElementById('nm-auth-modal').remove()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#594139;">×</button>
+        <h2 style="font-family:Poppins,sans-serif;font-size:1.5rem;font-weight:700;color:#261814;margin-bottom:0.25rem;">
+          ${mode === 'login' ? 'Welcome back' : 'Create account'}
+        </h2>
+        <p style="color:#594139;font-size:0.875rem;margin-bottom:1.5rem;">
+          ${mode === 'login' ? 'Sign in to your NestMate account' : 'Join thousands of students finding homes'}
+        </p>
+        <div id="nm-auth-error" style="display:none;background:#ffdad6;color:#93000a;padding:0.75rem 1rem;border-radius:0.5rem;margin-bottom:1rem;font-size:0.875rem;"></div>
+        <form id="nm-auth-form" style="display:flex;flex-direction:column;gap:1rem;">
+          ${mode === 'register' ? `
+            <input name="name" placeholder="Full Name" required style="padding:0.75rem 1rem;border:1px solid #e1bfb5;border-radius:0.5rem;font-size:1rem;outline:none;background:#fff;"/>
+          ` : ''}
+          <input name="email" type="email" placeholder="Email address" required style="padding:0.75rem 1rem;border:1px solid #e1bfb5;border-radius:0.5rem;font-size:1rem;outline:none;background:#fff;"/>
+          <input name="password" type="password" placeholder="Password" required style="padding:0.75rem 1rem;border:1px solid #e1bfb5;border-radius:0.5rem;font-size:1rem;outline:none;background:#fff;"/>
+          ${mode === 'register' ? `
+            <select name="role" style="padding:0.75rem 1rem;border:1px solid #e1bfb5;border-radius:0.5rem;font-size:1rem;outline:none;background:#fff;">
+              <option value="student">I'm a student (looking for housing)</option>
+              <option value="owner">I'm a property owner</option>
+            </select>
+          ` : ''}
+          <button type="submit" style="background:#ab3500;color:#fff;padding:0.875rem;border:none;border-radius:0.5rem;font-size:1rem;font-weight:600;cursor:pointer;">
+            ${mode === 'login' ? 'Sign In' : 'Create Account'}
+          </button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;font-size:0.875rem;color:#594139;">
+          ${mode === 'login'
+            ? `Don't have an account? <a href="#" onclick="document.getElementById('nm-auth-modal').remove();showAuthModal('register');" style="color:#ab3500;font-weight:600;">Sign Up</a>`
+            : `Already have an account? <a href="#" onclick="document.getElementById('nm-auth-modal').remove();showAuthModal('login');" style="color:#ab3500;font-weight:600;">Sign In</a>`
+          }
+        </p>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    document.getElementById('nm-auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const errDiv = document.getElementById('nm-auth-error');
+      const submitBtn = form.querySelector('button[type=submit]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Please wait...';
+
+      const body = { email: form.email.value, password: form.password.value };
+      if (mode === 'register') { body.name = form.name.value; body.role = form.role.value; }
+
+      try {
+        const res = await fetch(`/api/auth/${mode}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errDiv.textContent = data.error || 'Something went wrong.';
+          errDiv.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+        } else {
+          overlay.remove();
+          window.location.reload();
+        }
+      } catch (err) {
+        errDiv.textContent = 'Network error. Please try again.';
+        errDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+      }
+    });
+  }
+
+  // Expose for inline onclick (modal switch links)
+  window.showAuthModal = showAuthModal;
+})();
+</script>
+</body></html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NestMate Admin Dashboard</title>
+<link rel="stylesheet" href="/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+        }
+                .bg-admin-sidebar {
+            background-color: #261814;
+        }
+        .nav-item-active {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .nav-item-active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 4px;
+            background-color: #ff6b35;
+            border-radius: 0 4px 4px 0;
+        }
+        .chart-bar {
+            transition: height 0.3s ease, opacity 0.2s ease;
+        }
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+</head>
+<body class="bg-background text-on-surface min-h-screen flex">
+<!-- SideNavBar Component -->
+<aside class="h-screen w-60 fixed left-0 top-0 bg-admin-sidebar text-white shadow-xl flex flex-col p-sm gap-md z-50">
+<div class="px-md py-lg mb-sm">
+<a href="/nestmate_home_refined/code.html" class="font-h3 text-h3 font-bold text-primary-container">NestMate</a>
+<div class="mt-xs">
+<p class="text-xs text-white/50 uppercase tracking-widest font-bold">Admin Portal</p>
+</div>
+</div>
+<nav class="flex-grow flex flex-col gap-1">
+<!-- Active indicator used here -->
+<a class="nav-item-active text-white font-semibold flex items-center gap-md px-md py-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="text-white/60 hover:text-white hover:bg-white/10 flex items-center gap-md px-md py-sm transition-all rounded-lg mx-1" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="home_work">home_work</span>
+<span class="text-sm">Listings</span>
+</a>
+<a class="text-white/60 hover:text-white hover:bg-white/10 flex items-center gap-md px-md py-sm transition-all rounded-lg mx-1" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
+<span class="text-sm">Messages</span>
+</a>
+<a class="text-white/60 hover:text-white hover:bg-white/10 flex items-center gap-md px-md py-sm transition-all rounded-lg mx-1" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+<span class="text-sm">Users</span>
+</a>
+<a class="text-white/60 hover:text-white hover:bg-white/10 flex items-center gap-md px-md py-sm transition-all rounded-lg mx-1" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="text-sm">Reports</span>
+</a>
+<a class="text-white/60 hover:text-white hover:bg-white/10 flex items-center gap-md px-md py-sm transition-all rounded-lg mx-1" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-xs border-t border-white/10 pt-md pb-md">
+<a class="text-white/50 hover:text-white flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="text-xs">Help &amp; Support</span>
+</a>
+<a class="text-white/50 hover:text-white flex items-center gap-md px-md py-sm transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="text-xs">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-60 min-h-screen flex flex-col">
+<!-- TopAppBar Component -->
+<header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-lg py-md">
+<div class="flex-1 max-w-xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px]" data-icon="search">search</span>
+<input class="w-full pl-xxl pr-md py-2 bg-surface-container-low/50 border border-outline-variant/50 rounded-lg text-sm font-body-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50" placeholder="Search data, properties, or users..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md ml-lg">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold text-on-surface">Alex Mercer</p>
+<p class="text-[11px] uppercase tracking-wider text-on-surface-variant font-bold">Administrator</p>
+</div>
+<div class="relative">
+<button id="admin-profile-btn" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container/20 shadow-sm hover:border-primary transition-colors focus:outline-none block">
+<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a young adult male with a friendly expression, styled in a minimalist digital avatar format. The background is a soft warm peach, matching the corporate identity of the NestMate platform. He is wearing modern business casual attire against a clean, high-key lighting environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT-NKJm34bH2AAQLQMnkI8Jtmt3LVAkIp4peJCpjFnT3KjaJ7R-XVEQKy8iTAryJ4iYWoENWjCYHVfReXcoi-9G-OnPCzn1xBYFm70OHxD_Stou3YmNsWjEWqIPC6CxK1gxoN4rOyirvu_0lXkUwG8ydH0jVzmbmios4PR4HbSpINSQYVBnlmb8C0JrilZ-ALOeNGbRlpprG2_xM9aRqLlw-3VSuTskLEOfsYWIaeOa81uYk1Z-DrlxpW5cClBAs92jT62y5kB8aI6"/>
+</button>
+<!-- Profile Dropdown Menu -->
+<div id="admin-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-outline-variant/20 py-2 z-50 origin-top-right">
+<div class="px-4 py-2 border-b border-outline-variant/10 mb-2">
+<p class="text-sm font-semibold text-on-surface admin-name-display">Alex Mercer</p>
+<p class="text-xs text-on-surface-variant">Admin</p>
+</div>
+<button id="admin-dropdown-logout" class="w-full text-left px-4 py-2 text-sm text-error hover:bg-error-container/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">logout</span> Sign Out
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-lg max-w-7xl mx-auto w-full flex flex-col gap-lg">
+<!-- Overview Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<div class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Total Users</p>
+<span class="text-tertiary font-bold text-[12px] flex items-center bg-tertiary-fixed/30 px-2 py-0.5 rounded-full">+12%</span>
+</div>
+<div class="flex items-center justify-between mt-xs">
+<h3 class="text-h3 font-bold text-on-surface">12,482</h3>
+<span class="material-symbols-outlined text-primary/70" data-icon="group">group</span>
+</div>
+</div>
+<div class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Total Listings</p>
+<span class="text-tertiary font-bold text-[12px] flex items-center bg-tertiary-fixed/30 px-2 py-0.5 rounded-full">+5.2%</span>
+</div>
+<div class="flex items-center justify-between mt-xs">
+<h3 class="text-h3 font-bold text-on-surface">3,105</h3>
+<span class="material-symbols-outlined text-primary/70" data-icon="home">home</span>
+</div>
+</div>
+<div class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Pending Tasks</p>
+<span class="text-error font-bold text-[12px] flex items-center bg-error-container/30 px-2 py-0.5 rounded-full">-2%</span>
+</div>
+<div class="flex items-center justify-between mt-xs">
+<h3 class="text-h3 font-bold text-on-surface">42</h3>
+<span class="material-symbols-outlined text-tertiary/70" data-icon="pending_actions">pending_actions</span>
+</div>
+</div>
+<div class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant/30 flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Active Alerts</p>
+<span class="text-tertiary font-bold text-[12px] flex items-center bg-tertiary-fixed/30 px-2 py-0.5 rounded-full">+18%</span>
+</div>
+<div class="flex items-center justify-between mt-xs">
+<h3 class="text-h3 font-bold text-on-surface">14</h3>
+<span class="material-symbols-outlined text-error/70" data-icon="report">report</span>
+</div>
+</div>
+</div>
+<!-- Main Grid Area -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Listings Management Table -->
+<div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+<div class="p-lg border-b border-outline-variant/20 flex justify-between items-center bg-white">
+<h3 class="text-lg font-bold text-on-surface">Property Listings For Review</h3>
+<button class="text-primary text-sm font-semibold hover:underline flex items-center gap-xs">Manage All <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/30 border-b border-outline-variant/20">
+<th class="px-lg py-md text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">Listing Details</th>
+<th class="px-lg py-md text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">Ownership</th>
+<th class="px-lg py-md text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">Submission</th>
+<th class="px-lg py-md text-[11px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-sm font-semibold text-on-surface">Sunset Heights Studio</p>
+<p class="text-xs text-on-surface-variant">Urban District</p>
+</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Emily Johnson</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-lg py-md text-right space-x-2">
+<button class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">Approve</button>
+<button class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">Reject</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-sm font-semibold text-on-surface">Parkside Dorm Suite</p>
+<p class="text-xs text-on-surface-variant">Campus East</p>
+</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Mark Thompson</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-lg py-md text-right space-x-2">
+<button class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">Approve</button>
+<button class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">Reject</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-sm font-semibold text-on-surface">University Flat #402</p>
+<p class="text-xs text-on-surface-variant">Residential Zone</p>
+</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Sarah Williams</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-lg py-md text-right space-x-2">
+<button class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">Approve</button>
+<button class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">Reject</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-lg py-md">
+<p class="text-sm font-semibold text-on-surface">Modern Loft near Campus</p>
+<p class="text-xs text-on-surface-variant">Midtown</p>
+</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">David Chen</td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Oct 22, 2023</td>
+<td class="px-lg py-md text-right space-x-2">
+<button class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">Approve</button>
+<button class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">Reject</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- User Moderation Panel -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+<div class="p-lg border-b border-outline-variant/20 bg-white">
+<h3 class="text-lg font-bold text-on-surface">User Status</h3>
+</div>
+<div class="flex-grow overflow-y-auto max-h-[440px]">
+<ul class="divide-y divide-outline-variant/10">
+<li class="px-lg py-md flex items-center justify-between hover:bg-surface-container-low/30 transition-colors">
+<div class="flex items-center gap-md">
+<img alt="User Initial" class="w-9 h-9 rounded-full bg-primary-fixed/50 border border-outline-variant/20" data-alt="A clean, minimalist user profile icon with the initials JD on a warm sunset orange background. The design is modern and flat, fitting the NestMate UI theme for administrative monitoring tools." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT8ljG4elyIMWEV_BUucjEgWTe3c8z--6aRItF3W-qtHKyvW3ECCv5y8SPAFEIR0wvPnE4EeRe1Rjhv7rYl5QYemuUP5Rsdnxrh9GhADw9wHTO-V_QcrXLWsMaC1BveKDeMkvDBalCmcCrte56X3y09x7nQ7XHyUBOMzzCUORVWBgx4MhFTpAPQIn0_XYrVSVtYqdbp99BsUCm2_yaeBT3D4PSnqdB2B-zzAveX-GzpgMfzfK9gkQGkwmtbUj1ZPawCFatfH7YuJlF"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">John Doe</p>
+<p class="text-[11px] text-on-surface-variant">john.d@example.com</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error/70"></div>
+</label>
+</li>
+<li class="px-lg py-md flex items-center justify-between hover:bg-surface-container-low/30 transition-colors">
+<div class="flex items-center gap-md">
+<img alt="User Initial" class="w-9 h-9 rounded-full bg-primary-fixed/50 border border-outline-variant/20" data-alt="A clean, minimalist user profile icon with the initials AM on a warm sunset orange background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK7lb8oQ6pYTyoVk-2m9pAbhLEbNizuDpy5Hb0sVj3cW3y93S_3lgQMT6WV3dV1W7CqJ9ZYTC61L1LYGVFnJSlPN7EetncAy7JVDp_tTTrgdKRGcdbZEyAT_cuHI0pHqqI-4LwG4V_1grIAwuB_Pzv6y4lU1GP_5BRu4DDH4SLw-Nv3p3-XlYUqXzmLSJtB2T5w2j4ndObfI5gNrvj2T1_4DNrBKcWoKqrrRIHfzGUmOWWmveEmPQBHNDkoTnnQfMncXxD7gOZmDde"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Alice Miller</p>
+<p class="text-[11px] text-on-surface-variant">a.miller@university.edu</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error/70"></div>
+</label>
+</li>
+<li class="px-lg py-md flex items-center justify-between hover:bg-surface-container-low/30 transition-colors">
+<div class="flex items-center gap-md">
+<img alt="User Initial" class="w-9 h-9 rounded-full bg-primary-fixed/50 border border-outline-variant/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuxYwzZiWnubzAm7iQrHwe1D3Cy_V6cyrefhP9hvUTZcjDneys_goNayFPlJEHIepQPaD5GfJj3z8ZQLbOXgmNZiZjGyqaDmwkbtHemGZJBr9FFiFOTXKiDXlEeH2XhNoDrXGaHIP7yzgLyuOQnJT0lr5oFE08Na6utkc9d0ufUdz07Cf8AHqlxcfOvkaRqv9hNltV4PF_do2LhMj57GhgxF15LgZQOFwA7jtSjaI2GUW9VMPHvH1dSDmFfGph6yNKizKUDF_PStXK"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Robert King</p>
+<p class="text-[11px] text-on-surface-variant">king_rob@mail.com</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error/70"></div>
+</label>
+</li>
+<li class="px-lg py-md flex items-center justify-between hover:bg-surface-container-low/30 transition-colors">
+<div class="flex items-center gap-md">
+<img alt="User Initial" class="w-9 h-9 rounded-full bg-primary-fixed/50 border border-outline-variant/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAN2ngCcHQL5TCvTtDplwwbeAWcJ2WmeKDV4nUm71JH_QoKOsJ2bRyUqfcHeDBxVS0WaO6raA4bDg8r4eRhIzq8oU8slPdUD5N0jYbAG9upYJ6GBzGm1l_K1n3-1kWhaiFp7yzOk2rjzBI3xZnLVW9m5WUqJLRVqgXmWXRa4tO1Fu-OLJqwj3wV-fc_kNUZIyJ3a3uRhIN8Ov-YjIZCQXkq8W51zjv3SiZS9t6EUiMS1vciaQdjgu0_rI9Yg0nnRrtQ7Wtt-SY8mQ6"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Cassie Lee</p>
+<p class="text-[11px] text-on-surface-variant">clee@student.housing.org</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error/70"></div>
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Integrated Data Visualization -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg mb-xl">
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant/30">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Weekly Listing Growth</h3>
+<p class="text-xs text-on-surface-variant">Trends for the last 7 days</p>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-[11px] font-semibold text-on-surface-variant">Growth Index</span>
+</div>
+</div>
+<div class="h-56 flex items-end px-md py-sm gap-4 border-b border-outline-variant/10">
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[35%] chart-bar"></div>
+<div class="flex-1 bg-primary/25 rounded-t-sm h-[55%] chart-bar"></div>
+<div class="flex-1 bg-primary/15 rounded-t-sm h-[42%] chart-bar"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm h-[75%] chart-bar"></div>
+<div class="flex-1 bg-primary/30 rounded-t-sm h-[65%] chart-bar"></div>
+<div class="flex-1 bg-primary/70 rounded-t-sm h-[90%] chart-bar"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-[100%] chart-bar shadow-[0_-4px_12px_rgba(171,53,0,0.2)]"></div>
+</div>
+<div class="flex justify-between mt-3 text-[11px] font-bold text-on-surface-variant uppercase tracking-tighter px-2">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Server Health</h3>
+<p class="text-xs text-on-surface-variant">Real-time infrastructure monitoring</p>
+</div>
+<span class="text-[11px] font-bold text-tertiary bg-tertiary-fixed/40 px-2 py-0.5 rounded uppercase">Operational</span>
+</div>
+<div class="flex items-center justify-center py-4">
+<div class="w-40 h-40 rounded-full border-[10px] border-surface-container-high border-t-primary-container relative flex items-center justify-center shadow-inner">
+<div class="text-center">
+<span class="text-2xl font-bold text-on-surface">98.4%</span>
+<p class="text-[10px] text-on-surface-variant font-semibold">UPTIME</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low/50 p-md rounded-lg flex items-center gap-md">
+<span class="material-symbols-outlined text-primary/60" data-icon="speed">speed</span>
+<div>
+<p class="text-xs font-semibold text-on-surface">Average Response Latency</p>
+<p class="text-sm font-bold text-on-surface">142ms <span class="text-[10px] text-tertiary font-normal ml-1">Optimal</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Component -->
+<footer class="mt-auto w-full bg-admin-sidebar text-white/70 py-xl border-t border-white/5">
+<div class="max-w-7xl mx-auto px-xl flex flex-col sm:flex-row justify-between items-center gap-md">
+<div class="text-center sm:text-left">
+<a href="/nestmate_home_refined/code.html" class="text-lg font-bold text-primary-container">NestMate</a>
+<p class="text-[11px] mt-xs">© 2024 Administrative Control Panel. Confidential.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-md text-[12px] font-medium">
+<a class="hover:text-white transition-colors" href="#">System Logs</a>
+<a class="hover:text-white transition-colors" href="#">Security Policy</a>
+<a class="hover:text-white transition-colors" href="#">Audit Trail</a>
+<a class="hover:text-white transition-colors" href="#">API Docs</a>
+</div>
+</div>
+</footer>
+</main>
+
+<script>
+// ─── NestMate Admin Panel API Wiring ─────────────────────────────────────────
+(async function initAdminPanel() {
+
+  // 1. Auth guard — admin only
+  let currentUser = null;
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) { window.location.href = '/nestmate_home_refined/code.html'; return; }
+    const { user } = await res.json();
+    if (user.role !== 'admin') { window.location.href = '/nestmate_home_refined/code.html'; return; }
+    currentUser = user;
+  } catch (_) {
+    window.location.href = '/nestmate_home_refined/code.html';
+    return;
+  }
+
+  // 2. Update header with real name
+  const adminNameEl = document.querySelector('header p.font-semibold');
+  const dropdownNameEl = document.querySelector('.admin-name-display');
+  if (adminNameEl) adminNameEl.textContent = currentUser.name;
+  if (dropdownNameEl) dropdownNameEl.textContent = currentUser.name;
+
+  // 3. Wire sidebar and dropdown logout
+  const performLogout = async (e) => {
+    e.preventDefault();
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/nestmate_home_refined/code.html';
+  };
+
+  document.querySelectorAll('aside a').forEach(link => {
+    const text = link.textContent.trim().toLowerCase();
+    if (text.includes('sign out') || text.includes('logout')) {
+      link.addEventListener('click', performLogout);
+    }
+  });
+
+  const dropdownLogoutBtn = document.getElementById('admin-dropdown-logout');
+  if (dropdownLogoutBtn) {
+    dropdownLogoutBtn.addEventListener('click', performLogout);
+  }
+
+  // Profile Dropdown Toggle Logic
+  const profileBtn = document.getElementById('admin-profile-btn');
+  const dropdown = document.getElementById('admin-dropdown');
+  
+  if (profileBtn && dropdown) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target) && e.target !== profileBtn) {
+        dropdown.classList.add('hidden');
+      }
+    });
+  }
+
+  // 4. Fetch all listings
+  let allListings = [];
+  try {
+    const res = await fetch('/api/admin/listings');
+    const data = await res.json();
+    allListings = data.listings || [];
+  } catch (err) { console.error('Error fetching admin listings:', err); }
+
+  // 5. Fetch all users
+  let allUsers = [];
+  try {
+    const res = await fetch('/api/admin/users');
+    const data = await res.json();
+    allUsers = data.users || [];
+  } catch (err) { console.error('Error fetching users:', err); }
+
+  // 6. Update stat cards with real numbers
+  const statCards = document.querySelectorAll('.grid.grid-cols-1.sm\\:grid-cols-2 h3');
+  const pending = allListings.filter(l => l.is_approved === 0).length;
+  if (statCards[0]) statCards[0].textContent = allUsers.length.toLocaleString();
+  if (statCards[1]) statCards[1].textContent = allListings.length.toLocaleString();
+  if (statCards[2]) statCards[2].textContent = pending;
+
+  // 7. Render listings table for review
+  const listingsTbody = document.querySelector('table tbody');
+  if (listingsTbody) {
+    const pendingListings = allListings.filter(l => l.is_approved === 0);
+
+    if (pendingListings.length === 0) {
+      listingsTbody.innerHTML = `
+        <tr><td colspan="4" class="px-lg py-xl text-center text-on-surface-variant">
+          ✓ No pending listings. All caught up!
+        </td></tr>`;
+    } else {
+      listingsTbody.innerHTML = pendingListings.map(listing => `
+        <tr class="hover:bg-surface-container-low/40 transition-colors group" id="listing-row-${listing.id}">
+          <td class="px-lg py-md">
+            <p class="text-sm font-semibold text-on-surface">${listing.title}</p>
+            <p class="text-xs text-on-surface-variant">${listing.location}</p>
+            <p class="text-xs text-primary font-semibold mt-0.5">₹${Number(listing.price).toLocaleString('en-IN')}/mo</p>
+          </td>
+          <td class="px-lg py-md text-sm text-on-surface-variant">${listing.owner_name}</td>
+          <td class="px-lg py-md text-sm text-on-surface-variant">${listing.created_at ? listing.created_at.split('T')[0] : '—'}</td>
+          <td class="px-lg py-md text-right space-x-2">
+            <button onclick="adminAction(${listing.id}, 1)"
+              class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">
+              Approve
+            </button>
+            <button onclick="adminAction(${listing.id}, 2)"
+              class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">
+              Reject
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // 8. Render users list
+  const usersList = document.querySelector('ul.divide-y.divide-outline-variant\\/10');
+  if (usersList && allUsers.length > 0) {
+    usersList.innerHTML = allUsers.map(user => `
+      <li class="px-lg py-md flex items-center justify-between hover:bg-surface-container-low/30 transition-colors">
+        <div class="flex items-center gap-md">
+          <div class="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-sm border border-outline-variant/20">
+            ${user.name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-on-surface">${user.name}</p>
+            <p class="text-[11px] text-on-surface-variant">${user.email}</p>
+          </div>
+        </div>
+        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full
+          ${user.role === 'admin' ? 'bg-primary/10 text-primary' :
+            user.role === 'owner' ? 'bg-secondary-fixed text-on-secondary-fixed-variant' :
+            'bg-tertiary-fixed/40 text-on-tertiary-fixed-variant'}">
+          ${user.role}
+        </span>
+      </li>
+    `).join('');
+  }
+
+  // 9. Approve / Reject handler
+  window.adminAction = async (listingId, approvalStatus) => {
+    const action = approvalStatus === 1 ? 'approve' : 'reject';
+    if (!confirm(`Are you sure you want to ${action} this listing?`)) return;
+
+    try {
+      const res = await fetch(`/api/admin/listings/${listingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_approved: approvalStatus })
+      });
+      if (res.ok) {
+        // Remove row with animation
+        const row = document.getElementById(`listing-row-${listingId}`);
+        if (row) {
+          row.style.transition = 'opacity 0.3s';
+          row.style.opacity = '0';
+          setTimeout(() => { row.remove(); location.reload(); }, 300);
+        }
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Action failed.');
+      }
+    } catch (err) {
+      alert('Network error. Please try again.');
+    }
+  };
+
+})();
+</script>
+</body></html>
