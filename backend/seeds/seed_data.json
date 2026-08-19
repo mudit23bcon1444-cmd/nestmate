@@ -1,0 +1,457 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin",
+      "email": "admin@nestmate.com",
+      "password": "$2b$10$vcYD9qx/F2Bcfce.epnpHe7n9g.WUsiSNcIuL76ltDEYJAp43WLym",
+      "role": "admin",
+      "phone": null
+    },
+    {
+      "id": 2,
+      "name": "Demo Owner",
+      "email": "owner@nestmate.com",
+      "password": "$2b$10$9LdVprK71YlExT1pSPrC0eCFrx6RMK70UL3RyrI.ArogqeUW9nU4S",
+      "role": "owner",
+      "phone": null
+    },
+    {
+      "id": 3,
+      "name": "Test Student",
+      "email": "student@test.com",
+      "password": "$2b$10$KNLq9rWyk/sQ8W1LRhpoe.1ZpSjVOaBPR2hN9P0RnrvKK1AfdBq2a",
+      "role": "student",
+      "phone": null
+    },
+    {
+      "id": 4,
+      "name": "Mudit Saraogi",
+      "email": "mudit.23bcon1444@jecrcu.edu.in",
+      "password": "$2b$10$Kw.Bw6Y/bgFJjitA6uhX2OWbMxheXrp6I1NKpHQII7m3riW4pE4su",
+      "role": "student",
+      "phone": null
+    },
+    {
+      "id": 5,
+      "name": "Mudit Saraogi",
+      "email": "mudit@123.com",
+      "password": "$2b$10$aNEUV.N8P3MJ3hOcXuP9NOI3fp/QjR/KDo.N5xcS2phyFnvWUavi2",
+      "role": "owner",
+      "phone": null
+    },
+    {
+      "id": 6,
+      "name": "mudit saraogi",
+      "email": "muditsaraogi21@gmail.com",
+      "password": "$2b$10$jZ9hVkkvkgtFDxh5XbqzL.RUNV9t3SUs.zkFu0TnbIp1mR8o.N7F2",
+      "role": "student",
+      "phone": null
+    },
+    {
+      "id": 7,
+      "name": "mudit saraogi",
+      "email": "mudit@1234.com",
+      "password": "$2b$10$UgoIJwFlUaka9ftqC4PaqujmD2AKknLNhk0iREGvhej.K5D0qF8Ri",
+      "role": "owner",
+      "phone": null
+    },
+    {
+      "id": 8,
+      "name": "Mudit Saraogi",
+      "email": "mudit@12345",
+      "password": "$2b$10$3iZcq5Mopt.MhFScPSQz7OGYU4AIw8YytsOhC3uZk21P/dnqGy0Ui",
+      "role": "owner",
+      "phone": null
+    },
+    {
+      "id": 9,
+      "name": "mmm",
+      "email": "mamam@123",
+      "password": "$2b$10$ykIdzTIrOPjqWlOnOI2icOuEVazDRBtJKue29xU5tQ8AoNzeFCqo6",
+      "role": "owner",
+      "phone": null
+    },
+    {
+      "id": 10,
+      "name": "New User",
+      "email": null,
+      "password": null,
+      "role": "student",
+      "phone": "+911234567890"
+    },
+    {
+      "id": 11,
+      "name": "mudit saraogi",
+      "email": "mudit@12345678",
+      "password": null,
+      "role": "student",
+      "phone": "+918905771631"
+    },
+    {
+      "id": 12,
+      "name": "Mudit Saraogi",
+      "email": "mudit@gamil.com",
+      "password": "$2b$10$CG4aECBrf0enUZ1kknkpm.SXhJw2ytCYMbEjMj87LMeYxMPtbUdXO",
+      "role": "student",
+      "phone": null
+    }
+  ],
+  "listings": [
+    {
+      "id": 1,
+      "owner_id": 2,
+      "title": "Sunset Residency PG",
+      "location": "IIT Delhi Campus, New Delhi",
+      "price": 12500,
+      "description": "A fully furnished PG near IIT Delhi campus with all modern amenities. Safe, secure and comfortable.",
+      "amenities": [
+        "WiFi",
+        "AC",
+        "Furnished",
+        "Security"
+      ],
+      "image_path": null,
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-08 16:59:45"
+    },
+    {
+      "id": 2,
+      "owner_id": 2,
+      "title": "Urban Heights PG",
+      "location": "Koramangala, Bangalore",
+      "price": 8000,
+      "description": "Budget-friendly PG in the heart of Koramangala. Food included. Walking distance from tech parks.",
+      "amenities": [
+        "WiFi",
+        "Food Included",
+        "Laundry",
+        "Cleaning"
+      ],
+      "image_path": null,
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-08 16:59:45"
+    },
+    {
+      "id": 3,
+      "owner_id": 2,
+      "title": "The Scholars Hub",
+      "location": "Vasant Vihar, Mumbai",
+      "price": 15000,
+      "description": "Premium student housing with gym, security and high-speed internet. Perfect for serious students.",
+      "amenities": [
+        "WiFi",
+        "AC",
+        "Gym",
+        "Security",
+        "Furnished"
+      ],
+      "image_path": null,
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-08 16:59:45"
+    },
+    {
+      "id": 4,
+      "owner_id": 2,
+      "title": "Heritage Loft Studio",
+      "location": "Banjara Hills, Hyderabad",
+      "price": 10000,
+      "description": "Independent studio apartment with modern interiors. Peaceful neighbourhood, great connectivity.",
+      "amenities": [
+        "WiFi",
+        "AC",
+        "Parking",
+        "Furnished"
+      ],
+      "image_path": null,
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-08 16:59:45"
+    },
+    {
+      "id": 5,
+      "owner_id": 7,
+      "title": "new house",
+      "location": "jaipur",
+      "price": 123456,
+      "description": "great place",
+      "amenities": [
+        "wifi gym"
+      ],
+      "image_path": "uploads/listing-1778300227660-182320590.jpg",
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-09 04:17:07"
+    },
+    {
+      "id": 6,
+      "owner_id": 8,
+      "title": "pg",
+      "location": "jaipur",
+      "price": 12000,
+      "description": "greate place",
+      "amenities": [
+        "wifi and ac"
+      ],
+      "image_path": "uploads/listing-1778303925690-448821206.png",
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-09 05:18:45"
+    },
+    {
+      "id": 7,
+      "owner_id": 8,
+      "title": "kataria boys pg",
+      "location": "near jecrc university",
+      "price": 10000,
+      "description": "hello world",
+      "amenities": [
+        "AC wifi"
+      ],
+      "image_path": "uploads/listing-1779167058167-358003602.jpeg",
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-19 05:04:18"
+    },
+    {
+      "id": 8,
+      "owner_id": 8,
+      "title": "mg girls pg",
+      "location": "near kataria boys pg near jecrc",
+      "price": 8000,
+      "description": "best for girls",
+      "amenities": [
+        "wifi AC laundry"
+      ],
+      "image_path": "uploads/listing-1779182246018-464880414.jpeg",
+      "is_approved": 1,
+      "is_available": 1,
+      "created_at": "2026-05-19 09:17:26"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "listing_id": 1,
+      "student_id": 3,
+      "move_in_date": "2026-06-01",
+      "status": "accepted",
+      "message": "Hi, I am interested in this PG!",
+      "created_at": "2026-05-08 17:13:41"
+    },
+    {
+      "id": 2,
+      "listing_id": 6,
+      "student_id": 4,
+      "move_in_date": "2026-05-19",
+      "status": "accepted",
+      "message": "hello i am interested",
+      "created_at": "2026-05-16 11:05:01"
+    },
+    {
+      "id": 3,
+      "listing_id": 7,
+      "student_id": 4,
+      "move_in_date": "2026-05-21",
+      "status": "accepted",
+      "message": "i want this pg",
+      "created_at": "2026-05-19 05:21:03"
+    },
+    {
+      "id": 4,
+      "listing_id": 8,
+      "student_id": 4,
+      "move_in_date": "2026-05-30",
+      "status": "accepted",
+      "message": "want this\n",
+      "created_at": "2026-05-28 09:35:20"
+    },
+    {
+      "id": 5,
+      "listing_id": 1,
+      "student_id": 4,
+      "move_in_date": "2026-06-30",
+      "status": "accepted",
+      "message": "i want this",
+      "created_at": "2026-06-19 05:29:47"
+    },
+    {
+      "id": 6,
+      "listing_id": 8,
+      "student_id": 12,
+      "move_in_date": "2026-08-14",
+      "status": "pending",
+      "message": "i want to move in on that date",
+      "created_at": "2026-08-05 19:22:50"
+    }
+  ],
+  "enquiries": [],
+  "admin_logs": [
+    {
+      "id": 1,
+      "action": "Approved listing #1",
+      "done_by": 1,
+      "created_at": "2026-05-08 17:13:41"
+    },
+    {
+      "id": 2,
+      "action": "Approved listing #6",
+      "done_by": 1,
+      "created_at": "2026-05-09 06:18:33"
+    },
+    {
+      "id": 3,
+      "action": "Approved listing #5",
+      "done_by": 1,
+      "created_at": "2026-05-18 07:13:19"
+    },
+    {
+      "id": 4,
+      "action": "Approved listing #7",
+      "done_by": 1,
+      "created_at": "2026-05-19 05:04:50"
+    },
+    {
+      "id": 5,
+      "action": "Approved listing #8",
+      "done_by": 1,
+      "created_at": "2026-05-19 09:20:50"
+    }
+  ],
+  "otp_store": [
+    {
+      "phone": "+919999999999",
+      "otp": "753585",
+      "expires_at": 1779605631749,
+      "last_sent_at": 1779605331749,
+      "attempt_count": 0,
+      "locked_until": 0
+    },
+    {
+      "phone": "+919876543210",
+      "otp": "675253",
+      "expires_at": 1780195201477,
+      "last_sent_at": 1780194901477,
+      "attempt_count": 0,
+      "locked_until": 0
+    },
+    {
+      "phone": "+918905771631",
+      "otp": "933991",
+      "expires_at": 1784896680525,
+      "last_sent_at": 1784896380526,
+      "attempt_count": 0,
+      "locked_until": 0
+    }
+  ],
+  "otp_logs": [
+    {
+      "id": 7,
+      "phone": "+918905771631",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:36:00"
+    },
+    {
+      "id": 8,
+      "phone": "+918905771631",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:46:23"
+    },
+    {
+      "id": 9,
+      "phone": "+918905771631",
+      "action": "failed",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:46:50"
+    },
+    {
+      "id": 10,
+      "phone": "+918905771631",
+      "action": "verified",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:48:38"
+    },
+    {
+      "id": 11,
+      "phone": "+919999999999",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:48:51"
+    },
+    {
+      "id": 12,
+      "phone": "+919876543210",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:50:04"
+    },
+    {
+      "id": 13,
+      "phone": "+911234567890",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:50:35"
+    },
+    {
+      "id": 14,
+      "phone": "+911234567890",
+      "action": "verified",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:50:44"
+    },
+    {
+      "id": 15,
+      "phone": "+911234567890",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:51:49"
+    },
+    {
+      "id": 16,
+      "phone": "+911234567890",
+      "action": "verified",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:51:49"
+    },
+    {
+      "id": 17,
+      "phone": "+911234567890",
+      "action": "verified",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:52:54"
+    },
+    {
+      "id": 18,
+      "phone": "+918905771631",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:53:46"
+    },
+    {
+      "id": 19,
+      "phone": "+918905771631",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:56:24"
+    },
+    {
+      "id": 20,
+      "phone": "+918905771631",
+      "action": "verified",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 06:57:52"
+    },
+    {
+      "id": 21,
+      "phone": "+918905771631",
+      "action": "sent",
+      "ip_address": "::1",
+      "created_at": "2026-05-24 07:39:05"
+    }
+  ]
+}

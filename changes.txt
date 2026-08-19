@@ -1,0 +1,21 @@
+NestMate Change Log
+===================
+
+[2026-08-13]
+- Created changes.txt to track all modifications going forward.
+- Initialized plan to set up MongoDB URI, assist with MongoDB seeding/migration, and transition backend off SQLite database.js.
+- Verified that Mongoose (^9.8.0)- Added explicit Express route handlers in backend/server.js for /browse, /register, /listing, /details, /dashboard, /admin, and /login so HTML pages serve immediately.
+- Removed unused screen.png design mockup image files from backend/public/ (including backend/public/browse/screen.png) so they never flash or preload when navigating routes.
+- Verified that Mongoose (^9.8.0) and all Mongoose Schema models (User, Listing, Booking, Enquiry, AdminLog, OtpStore, OtpLog) are already installed and configured in backend/models/ and backend/config/db.js.
+- Configured MONGODB_URI in backend/.env using Atlas username 'admin' and cluster 'nestmate.jkub5v0.mongodb.net'.
+- Successfully connected to MongoDB Atlas and executed data migration (migrated 12 users, 8 listings, 6 bookings, 5 admin logs, 3 OTP store records, 15 OTP logs).
+- Compressed backend/database.js to compressed/database.js.gz (2,326 bytes) and deleted backend/database.js.
+- Created backend/models/RefreshToken.js model for MongoDB refresh token rotation.
+- Updated backend/server.js to initialize database via connectDB() from config/db.js.
+- Refactored backend/controllers/authController.js, listingsController.js, bookingsController.js, and adminController.js to use Mongoose schemas exclusively.
+- Verified backend server startup and clean MongoDB Atlas connection on http://localhost:5300.
+
+
+
+
+
