@@ -75,6 +75,7 @@ exports.getMyBookings = asyncHandler(async (req, res) => {
     return {
       ...b,
       id: b._id,
+      listing_id: l._id ? String(l._id) : (b.listing_id ? String(b.listing_id) : null),
       listing_title: l.title,
       listing_location: l.location,
       listing_price: l.price,

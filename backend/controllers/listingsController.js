@@ -1,11 +1,23 @@
 // controllers/listingsController.js — property listings business logic using Mongoose
 
+const mongoose = require('mongoose');
 const Listing = require('../models/Listing');
 const User = require('../models/User');
 const Enquiry = require('../models/Enquiry');
 const Booking = require('../models/Booking');
 const { sendEnquiryEmail } = require('../utils/email');
 const asyncHandler = require('../utils/asyncHandler');
+
+/**
+ * Safely converts a string to a mongoose ObjectId.
+ * Returns null if the string is not a valid 24-hex ObjectId.
+ */
+function toObjectId(id) {
+  if (id && mongoose.Types.ObjectId.isValid(String(id)) && String(id).match(/^[0-9a-fA-F]{24}$/)) {
+    return new mongoose.Types.ObjectId(String(id));
+  }
+  return null;
+}
 
 async function findModelById(Model, id) {
   if (id && String(id).match(/^[0-9a-fA-F]{24}$/)) {
@@ -130,8 +142,10 @@ exports.getAllListings = asyncHandler(async (req, res) => {
 
 // GET /api/listings/owner/mine
 exports.getOwnerListings = asyncHandler(async (req, res) => {
-  const ownerUser = await findModelById(User, req.user.id);
-  const ownerId = ownerUser ? ownerUser._id : req.user.id;
+  const ownerId = toObjectId(req.user.id);
+  if (!ownerId) {
+    return res.status(400).json({ error: 'Invalid user ID in token.' });
+  }
 
   const rawListings = await Listing.find({ owner_id: ownerId })
     .sort({ created_at: -1 })
@@ -169,7 +183,7 @@ exports.getListingById = asyncHandler(async (req, res) => {
 
 // POST /api/listings
 exports.createListing = asyncHandler(async (req, res) => {
-  const { title, location, price, description, amenities } = req.body;
+  const { title, location, price, description, amenities, latitude, longitude } = req.body;
 
   if (!title || !location || !price) {
     return res.status(400).json({ error: 'Title, location, and price are required.' });
@@ -180,8 +194,20 @@ exports.createListing = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'Price must be a positive number.' });
   }
 
-  const ownerUser = await findModelById(User, req.user.id);
-  const ownerId = ownerUser ? ownerUser._id : req.user.id;
+  let parsedLat = (latitude !== undefined && latitude !== null && latitude !== '') ? parseFloat(latitude) : null;
+  let parsedLng = (longitude !== undefined && longitude !== null && longitude !== '') ? parseFloat(longitude) : null;
+
+  if (parsedLat !== null && (isNaN(parsedLat) || parsedLat < -90 || parsedLat > 90)) {
+    return res.status(400).json({ error: 'Latitude must be a valid number between -90 and 90.' });
+  }
+  if (parsedLng !== null && (isNaN(parsedLng) || parsedLng < -180 || parsedLng > 180)) {
+    return res.status(400).json({ error: 'Longitude must be a valid number between -180 and 180.' });
+  }
+
+  const ownerId = toObjectId(req.user.id);
+  if (!ownerId) {
+    return res.status(400).json({ error: 'Invalid user ID in token.' });
+  }
 
   const imagePath = req.file ? 'uploads/' + req.file.filename : null;
 
@@ -200,12 +226,14 @@ exports.createListing = asyncHandler(async (req, res) => {
     description: description ? description.trim() : null,
     amenities: parsedAmenities,
     image_path: imagePath,
+    latitude: parsedLat,
+    longitude: parsedLng,
     is_approved: 0,
     is_available: 1
   });
 
   return res.status(201).json({
-    message: 'Listing submitted for review. It will be visible once approved by admin.',
+    message: 'Listing submitted for physical verification by admin. GPS coordinates and photos recorded.',
     listingId: listing._id
   });
 });
@@ -218,8 +246,7 @@ exports.toggleAvailability = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'Listing not found.' });
   }
 
-  const userDoc = await findModelById(User, req.user.id);
-  const currentUserId = userDoc ? String(userDoc._id) : String(req.user.id);
+  const currentUserId = String(req.user.id);
 
   if (String(listing.owner_id) !== currentUserId && req.user.role !== 'admin') {
     return res.status(403).json({ error: 'You do not have permission to modify this listing.' });
@@ -243,8 +270,7 @@ exports.deleteListing = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'Listing not found.' });
   }
 
-  const userDoc = await findModelById(User, req.user.id);
-  const currentUserId = userDoc ? String(userDoc._id) : String(req.user.id);
+  const currentUserId = String(req.user.id);
 
   if (String(listing.owner_id) !== currentUserId && req.user.role !== 'admin') {
     return res.status(403).json({ error: 'You do not have permission to delete this listing.' });

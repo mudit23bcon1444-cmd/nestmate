@@ -465,27 +465,45 @@
           ✓ No pending listings. All caught up!
         </td></tr>`;
     } else {
-      listingsTbody.innerHTML = pendingListings.map(listing => `
-        <tr class="hover:bg-surface-container-low/40 transition-colors group" id="listing-row-${listing.id}">
-          <td class="px-lg py-md">
-            <p class="text-sm font-semibold text-on-surface">${listing.title}</p>
-            <p class="text-xs text-on-surface-variant">${listing.location}</p>
-            <p class="text-xs text-primary font-semibold mt-0.5">₹${Number(listing.price).toLocaleString('en-IN')}/mo</p>
-          </td>
-          <td class="px-lg py-md text-sm text-on-surface-variant">${listing.owner_name}</td>
-          <td class="px-lg py-md text-sm text-on-surface-variant">${listing.created_at ? listing.created_at.split('T')[0] : '—'}</td>
-          <td class="px-lg py-md text-right space-x-2">
-            <button onclick="adminAction(${listing.id}, 1)"
-              class="px-3 py-1.5 bg-surface-container text-on-secondary-container hover:bg-secondary-container text-[12px] font-semibold rounded transition-colors">
-              Approve
-            </button>
-            <button onclick="adminAction(${listing.id}, 2)"
-              class="px-3 py-1.5 bg-surface-container-highest/30 text-outline hover:bg-surface-container-highest/60 text-[12px] font-semibold rounded transition-colors">
-              Reject
-            </button>
-          </td>
-        </tr>
-      `).join('');
+      listingsTbody.innerHTML = pendingListings.map(listing => {
+        const mapLink = (listing.latitude && listing.longitude)
+          ? `<a href="https://maps.google.com/?q=${listing.latitude},${listing.longitude}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2 py-0.5 rounded transition-all mt-1">
+               <span class="material-symbols-outlined text-[14px]">map</span> View on Google Maps (${listing.latitude}, ${listing.longitude})
+             </a>`
+          : `<span class="text-[11px] text-on-surface-variant/60 italic block mt-1">No GPS coordinates attached</span>`;
+
+        const imagePreview = listing.image_path
+          ? `<img src="/${listing.image_path}" class="w-12 h-12 rounded object-cover border border-outline-variant/30 flex-shrink-0" alt="Preview"/>`
+          : `<div class="w-12 h-12 rounded bg-surface-container-high flex items-center justify-center text-on-surface-variant text-xs flex-shrink-0"><span class="material-symbols-outlined text-sm">no_photography</span></div>`;
+
+        return `
+          <tr class="hover:bg-surface-container-low/40 transition-colors group" id="listing-row-${listing.id}">
+            <td class="px-lg py-md">
+              <div class="flex items-start gap-md">
+                ${imagePreview}
+                <div>
+                  <p class="text-sm font-semibold text-on-surface">${listing.title}</p>
+                  <p class="text-xs text-on-surface-variant">${listing.location}</p>
+                  <p class="text-xs text-primary font-semibold mt-0.5">₹${Number(listing.price).toLocaleString('en-IN')}/mo</p>
+                  ${mapLink}
+                </div>
+              </div>
+            </td>
+            <td class="px-lg py-md text-sm text-on-surface-variant">${listing.owner_name || 'Owner'}</td>
+            <td class="px-lg py-md text-sm text-on-surface-variant">${listing.created_at ? listing.created_at.split('T')[0] : '—'}</td>
+            <td class="px-lg py-md text-right space-x-2">
+              <button onclick="adminAction('${listing.id}', 1)"
+                class="px-3 py-1.5 bg-primary text-on-primary hover:opacity-90 text-[12px] font-semibold rounded shadow-sm transition-all">
+                Approve & Verify
+              </button>
+              <button onclick="adminAction('${listing.id}', 2)"
+                class="px-3 py-1.5 bg-surface-container-highest/50 text-outline hover:bg-surface-container-highest/80 text-[12px] font-semibold rounded transition-colors">
+                Reject
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
   }
 
@@ -515,17 +533,20 @@
 
   // 9. Approve / Reject handler
   window.adminAction = async (listingId, approvalStatus) => {
-    const action = approvalStatus === 1 ? 'approve' : 'reject';
-    if (!confirm(`Are you sure you want to ${action} this listing?`)) return;
+    const action = approvalStatus === 1 ? 'approve and physically verify' : 'reject';
+    const notesPrompt = approvalStatus === 1
+      ? 'Verification Notes (Optional):'
+      : 'Reason for rejection (Optional):';
+    const verificationNotes = prompt(`Are you sure you want to ${action} this listing?\n\n${notesPrompt}`, approvalStatus === 1 ? 'Physical photos & GPS coordinates verified.' : '');
+    if (verificationNotes === null) return;
 
     try {
       const res = await authFetch(`/api/admin/listings/${listingId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ is_approved: approvalStatus })
+        body: JSON.stringify({ is_approved: approvalStatus, verification_notes: verificationNotes })
       });
       if (res.ok) {
-        // Remove row with animation
         const row = document.getElementById(`listing-row-${listingId}`);
         if (row) {
           row.style.transition = 'opacity 0.3s';

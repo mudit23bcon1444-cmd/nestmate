@@ -28,7 +28,7 @@ exports.getAllListings = asyncHandler(async (req, res) => {
 
 // PATCH /api/admin/listings/:id
 exports.updateListingApproval = asyncHandler(async (req, res) => {
-  const { is_approved } = req.body;
+  const { is_approved, verification_notes } = req.body;
 
   if (![1, 2].includes(Number(is_approved))) {
     return res.status(400).json({ error: 'is_approved must be 1 (approve) or 2 (reject).' });
@@ -40,18 +40,25 @@ exports.updateListingApproval = asyncHandler(async (req, res) => {
   }
 
   listing.is_approved = Number(is_approved);
+  if (Number(is_approved) === 1) {
+    listing.verified_at = new Date();
+    listing.verification_notes = verification_notes ? String(verification_notes).trim() : 'Physical photos & GPS coordinates verified by Admin.';
+  } else if (Number(is_approved) === 2 && verification_notes) {
+    listing.verification_notes = String(verification_notes).trim();
+  }
   await listing.save();
 
+  const gpsInfo = (listing.latitude && listing.longitude) ? ` [GPS: ${listing.latitude}, ${listing.longitude}]` : '';
   const action = Number(is_approved) === 1
-    ? `Approved listing #${req.params.id}`
-    : `Rejected listing #${req.params.id}`;
+    ? `Approved & Verified listing #${req.params.id}${gpsInfo}`
+    : `Rejected listing #${req.params.id}${gpsInfo}`;
 
   await AdminLog.create({
     action,
     done_by: req.user.id
   });
 
-  const status = Number(is_approved) === 1 ? 'approved' : 'rejected';
+  const status = Number(is_approved) === 1 ? 'approved & verified' : 'rejected';
   return res.status(200).json({ message: `Listing ${status} successfully.`, is_approved: Number(is_approved) });
 });
 

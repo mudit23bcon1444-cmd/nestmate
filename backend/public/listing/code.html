@@ -248,8 +248,40 @@
         </label>
       </div>
 
+      <!-- Property Photo & Physical GPS Verification -->
+      <div class="p-md bg-surface-container rounded-lg border border-outline-variant/30 space-y-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-xs text-primary font-semibold">
+            <span class="material-symbols-outlined">verified</span>
+            <span>Physical Location & Photo Verification</span>
+          </div>
+          <button type="button" id="geo-btn" class="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold rounded-lg flex items-center gap-1 transition-all">
+            <span class="material-symbols-outlined text-[16px]">my_location</span> Capture Current GPS
+          </button>
+        </div>
+        <p class="text-xs text-on-surface-variant">Provide property photos and exact GPS coordinates to allow administrators to physically verify your property location.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+          <div class="relative form-floating-group">
+            <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+              id="latitude" name="latitude" placeholder=" " type="number" step="any" min="-90" max="90"/>
+            <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="latitude">
+              Latitude (e.g. 28.6139)
+            </label>
+          </div>
+          <div class="relative form-floating-group">
+            <input class="block w-full px-md pt-lg pb-sm text-body-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary peer outline-none transition-all"
+              id="longitude" name="longitude" placeholder=" " type="number" step="any" min="-180" max="180"/>
+            <label class="absolute left-md top-md text-on-surface-variant font-body-md form-floating-label -translate-y-5 scale-75 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-75 origin-left" for="longitude">
+              Longitude (e.g. 77.2090)
+            </label>
+          </div>
+        </div>
+        <div id="geo-status" class="hidden text-xs font-medium text-tertiary"></div>
+      </div>
+
       <div>
-        <label class="block text-body-sm font-semibold text-on-surface mb-sm">Property Photo (optional, max 5MB)</label>
+        <label class="block text-body-sm font-semibold text-on-surface mb-sm">Property Photo (max 5MB)</label>
         <input type="file" name="image" id="image-input" accept="image/jpeg,image/jpg,image/png,image/webp"
           class="block w-full text-body-sm text-on-surface-variant border border-outline-variant rounded-lg cursor-pointer bg-surface-bright focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:opacity-90"/>
         <div id="image-preview-wrap" class="mt-sm hidden">
@@ -270,6 +302,30 @@
       </div>
     </form>
   `;
+
+  // GPS Geolocation button listener
+  const geoBtn = document.getElementById('geo-btn');
+  if (geoBtn) {
+    geoBtn.addEventListener('click', () => {
+      const statusDiv = document.getElementById('geo-status');
+      statusDiv.classList.remove('hidden');
+      statusDiv.textContent = '📍 Capturing current GPS location...';
+      if (!navigator.geolocation) {
+        statusDiv.textContent = '❌ Geolocation is not supported by your browser.';
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          document.getElementById('latitude').value = pos.coords.latitude.toFixed(6);
+          document.getElementById('longitude').value = pos.coords.longitude.toFixed(6);
+          statusDiv.textContent = `✓ GPS Captured: ${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+        },
+        () => {
+          statusDiv.textContent = '⚠️ Could not fetch GPS location automatically. Please enter coordinates manually.';
+        }
+      );
+    });
+  }
 
   // Image preview
   document.getElementById('image-input').addEventListener('change', (e) => {

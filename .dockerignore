@@ -1,0 +1,13 @@
+node_modules
+backend/node_modules
+npm-debug.log
+.env
+backend/.env
+.git
+.gitignore
+.DS_Store
+*.log
+fall_back-1.zip
+nestmate_ppt.key
+compressed
+un_used ui

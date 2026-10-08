@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5700;
 
 // ─── Body & Cookie Parsers ───────────────────────────────────────────────────
 app.use(express.json({ limit: "16kb" }));
@@ -87,3 +87,12 @@ app.listen(PORT, () => {
   console.log(`\n   Admin login: admin@nestmate.com / admin123`);
   console.log(`   Demo owner:  owner@nestmate.com / owner123\n`);
 });
+
+
+
+
+// app.listen(PORT, () => {
+//   console.log(`\n NestMate running on http://localhost:${PORT}`);
+// });
+
+// connectDB();

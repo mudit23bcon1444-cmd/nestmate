@@ -519,8 +519,8 @@
                 <td class="px-lg py-md text-right">
                   ${b.status === 'pending' ? `
                     <div class="flex justify-end gap-sm">
-                      <button onclick="updateBooking(${b.id},'accepted')" class="px-md py-xs rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant text-label-md font-label-md hover:opacity-80 transition-opacity">Accept</button>
-                      <button onclick="updateBooking(${b.id},'rejected')" class="px-md py-xs rounded-lg bg-error-container text-error text-label-md font-label-md hover:opacity-80 transition-opacity">Reject</button>
+                      <button onclick="updateBooking('${b.id}','accepted')" class="px-md py-xs rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant text-label-md font-label-md hover:opacity-80 transition-opacity cursor-pointer">Accept</button>
+                      <button onclick="updateBooking('${b.id}','rejected')" class="px-md py-xs rounded-lg bg-error-container text-error text-label-md font-label-md hover:opacity-80 transition-opacity cursor-pointer">Reject</button>
                     </div>` : '<span class="text-on-surface-variant text-body-sm">—</span>'
                   }
                 </td>
@@ -541,8 +541,12 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      if (res.ok) location.reload();
-      else alert('Failed to update booking status.');
+      if (res.ok) {
+        location.reload();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to update booking status.');
+      }
     } catch (err) {
       alert('Network error. Please try again.');
     }

@@ -275,11 +275,18 @@
   }
 
   const statusBadge = document.getElementById('listing-status-badge');
-  if (listing.is_available) {
-    statusBadge.innerHTML = `<span class="bg-primary-fixed text-on-primary-fixed px-sm py-xs rounded-lg font-label-md text-label-md">AVAILABLE</span>`;
-  } else {
-    statusBadge.innerHTML = `<span class="bg-error-container text-error px-sm py-xs rounded-lg font-label-md text-label-md">UNAVAILABLE</span>`;
+  let statusHtml = listing.is_available
+    ? `<span class="bg-primary-fixed text-on-primary-fixed px-sm py-xs rounded-lg font-label-md text-label-md">AVAILABLE</span>`
+    : `<span class="bg-error-container text-error px-sm py-xs rounded-lg font-label-md text-label-md">UNAVAILABLE</span>`;
+
+  if (listing.latitude && listing.longitude) {
+    statusHtml += `
+      <a href="https://maps.google.com/?q=${listing.latitude},${listing.longitude}" target="_blank"
+        class="bg-primary-container text-on-primary-container px-sm py-xs rounded-lg font-label-md text-label-md inline-flex items-center gap-1 hover:opacity-90 transition-opacity shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">verified</span> Physical Location Verified (${listing.latitude}, ${listing.longitude})
+      </a>`;
   }
+  statusBadge.innerHTML = statusHtml;
 
   const amenitiesEl = document.getElementById('listing-amenities');
   const amenitiesArr = Array.isArray(listing.amenities)
@@ -407,11 +414,14 @@
     const bRes = await authFetch('/api/bookings/my');
     if (bRes.ok) {
       const bData = await bRes.json();
-      const myBooking = bData.bookings.find(b => b.listing_id == listingId);
+      const myBooking = bData.bookings.find(b => {
+        const bListingId = (b.listing_id && typeof b.listing_id === 'object') ? (b.listing_id._id || b.listing_id.id) : b.listing_id;
+        return String(bListingId) === String(listingId);
+      });
       if (myBooking) {
         if (myBooking.status === 'accepted') {
           bookingForm.classList.add('hidden');
-          successDiv.innerHTML = '<span class="material-symbols-outlined align-middle mr-1 text-[18px]">check_circle</span> You have been approved by the owner for this flat.';
+          successDiv.innerHTML = '<span class="material-symbols-outlined align-middle mr-1 text-[18px]">check_circle</span> You have been approved for this property by the owner!';
           successDiv.classList.remove('hidden');
           successDiv.classList.replace('bg-tertiary-fixed', 'bg-green-100'); 
           successDiv.classList.replace('text-on-tertiary-fixed-variant', 'text-green-800');

@@ -8,6 +8,10 @@ const listingSchema = new mongoose.Schema({
   description: { type: String },
   amenities: { type: [String], default: [] },
   image_path: { type: String, default: null },
+  latitude: { type: Number, default: null },
+  longitude: { type: Number, default: null },
+  verification_notes: { type: String, default: null },
+  verified_at: { type: Date, default: null },
   is_approved: { type: Number, default: 0, enum: [0, 1, 2] },
   is_available: { type: Number, default: 1, enum: [0, 1] }
 }, {
