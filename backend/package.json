@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "build:css": "tailwindcss -i ./input.css -o ./public/style.css --minify",
     "seed": "node scripts/seed.js",
-    "backup": "node ../scripts/create_backup.js"
+    "backup": "node ../scripts/create_backup.js",
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -30,8 +31,11 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.11",
     "autoprefixer": "^10.5.0",
+    "jest": "^30.5.2",
+    "mongodb-memory-server": "^11.3.0",
     "nodemon": "^3.1.14",
     "postcss": "^8.5.14",
+    "supertest": "^7.3.1",
     "tailwindcss": "^3.4.19"
   },
   "engines": {

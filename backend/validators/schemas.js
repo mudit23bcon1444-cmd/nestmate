@@ -27,10 +27,18 @@ const resetPasswordSchema = z.object({
 });
 
 const changePasswordSchema = z.object({
-  current_password: z.string().min(1, 'Current password is required.'),
+  current_password: z.string().min(1, 'Current password is required.').optional(),
+  currentPassword: z.string().min(1, 'Current password is required.').optional(),
   new_password: z.string()
     .min(10, 'New password must be at least 10 characters.')
     .refine(val => Buffer.byteLength(val, 'utf8') <= 72, 'Password cannot exceed 72 bytes.')
+    .optional(),
+  newPassword: z.string()
+    .min(10, 'New password must be at least 10 characters.')
+    .refine(val => Buffer.byteLength(val, 'utf8') <= 72, 'Password cannot exceed 72 bytes.')
+    .optional()
+}).refine(data => (data.current_password || data.currentPassword) && (data.new_password || data.newPassword), {
+  message: 'Current password and new password are required.'
 });
 
 const sendOtpSchema = z.object({

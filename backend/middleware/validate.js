@@ -14,8 +14,9 @@ function validate(schema, source = 'body') {
       return next();
     } catch (err) {
       if (err instanceof ZodError) {
-        const errors = err.errors.map(e => ({
-          field: e.path.join('.'),
+        const rawErrors = err.issues || err.errors || [];
+        const errors = rawErrors.map(e => ({
+          field: Array.isArray(e.path) ? e.path.join('.') : String(e.path || ''),
           message: e.message
         }));
         return res.status(400).json({

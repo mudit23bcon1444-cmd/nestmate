@@ -323,7 +323,8 @@ exports.resetPassword = asyncHandler(async (req, res) => {
 
 // POST /api/auth/change-password (authenticated)
 exports.changePassword = asyncHandler(async (req, res) => {
-  const { current_password, new_password } = req.body;
+  const current_password = req.body.current_password || req.body.currentPassword;
+  const new_password = req.body.new_password || req.body.newPassword;
   if (!current_password || !new_password) {
     return res.status(400).json({ error: 'Current password and new password are required.' });
   }
