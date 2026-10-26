@@ -14,8 +14,57 @@ const PORT = process.env.PORT || 5001;
 // Trust reverse proxy (Docker, Render, AWS ALB, Nginx)
 app.set('trust proxy', 1);
 
-// Security Headers
-app.use(helmet({ contentSecurityPolicy: false }));
+// ─── Security Headers & Helmet CSP ───────────────────────────────────────────
+// React bundle Content Security Policy + Referrer-Policy + HSTS in production
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: [
+        "'self'",
+        "data:",
+        "https://res.cloudinary.com",
+        "https://*.tile.openstreetmap.org",
+        "https://images.unsplash.com",
+        "https://lh3.googleusercontent.com"
+      ],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"]
+    }
+  },
+  referrerPolicy: { policy: 'no-referrer' },
+  hsts: process.env.NODE_ENV === 'production' ? {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  } : false
+}));
+
+// ─── CSRF / Origin Validation Middleware ──────────────────────────────────────
+// If an Origin header is present on mutating requests, verify it is in ALLOWED_ORIGINS
+const defaultAllowedOrigins = ['http://localhost:5173', 'http://localhost:5001'];
+const configuredOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim().replace(/\/+$/, ''))
+  : defaultAllowedOrigins;
+
+app.use((req, res, next) => {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    const origin = req.headers.origin;
+    if (origin) {
+      const cleanOrigin = origin.trim().replace(/\/+$/, '');
+      if (!configuredOrigins.includes(cleanOrigin)) {
+        return res.status(403).json({ error: 'Cross-origin request blocked by CSRF protection.' });
+      }
+    }
+  }
+  next();
+});
 
 // ─── Rate Limiters ────────────────────────────────────────────────────────────
 // Skip refresh endpoint (fires on page load/navigation)
@@ -127,12 +176,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ─── Start ────────────────────────────────────────────────────────────────────
-connectDB();
-app.listen(PORT, () => {
-  console.log(`\n NestMate running on http://localhost:${PORT}`);
-  console.log(`   Home page:       http://localhost:${PORT}/home/code.html`);
-  console.log(`   Browse listings: http://localhost:${PORT}/browse/code.html`);
-  console.log(`   Owner dashboard: http://localhost:${PORT}/dashboard/code.html`);
-  console.log(`   Admin panel:     http://localhost:${PORT}/admin/code.html\n`);
-});
+// ─── Start Server if executed directly ────────────────────────────────────────
+if (require.main === module) {
+  connectDB();
+  app.listen(PORT, () => {
+    console.log(`\n NestMate running on http://localhost:${PORT}`);
+    console.log(`   Home page:       http://localhost:${PORT}/home/code.html`);
+    console.log(`   Browse listings: http://localhost:${PORT}/browse/code.html`);
+    console.log(`   Owner dashboard: http://localhost:${PORT}/dashboard/code.html`);
+    console.log(`   Admin panel:     http://localhost:${PORT}/admin/code.html\n`);
+  });
+}
+
+module.exports = app;
