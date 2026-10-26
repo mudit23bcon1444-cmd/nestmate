@@ -74,8 +74,15 @@ exports.getAllListings = asyncHandler(async (req, res) => {
   }
 
   if (requestedAmenities.length > 0) {
+    const amenityRegexes = requestedAmenities.map(a => {
+      const trimmed = a.trim();
+      if (trimmed.toLowerCase() === 'air conditioning' || trimmed.toLowerCase() === 'ac') {
+        return /^(Air Conditioning|AC)$/i;
+      }
+      return new RegExp(`^${escapeRegex(trimmed)}$`, 'i');
+    });
     matchStage.amenities = {
-      $all: requestedAmenities
+      $all: amenityRegexes
     };
   }
 

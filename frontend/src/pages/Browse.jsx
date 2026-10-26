@@ -34,7 +34,7 @@ export default function Browse() {
   const [gender, setGender] = useState('All');
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
   const [selectedAmenities, setSelectedAmenities] = useState(
-    searchParams.get('amenities') ? searchParams.get('amenities').split(',') : ['WiFi', 'Air Conditioning']
+    searchParams.get('amenities') ? searchParams.get('amenities').split(',') : []
   );
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
