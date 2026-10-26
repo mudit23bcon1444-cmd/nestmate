@@ -1,13 +1,13 @@
 const express = require('express');
-const { isLoggedIn, isOwner } = require('../middleware/auth');
+const { isLoggedIn, isOwner, requireVerifiedEmail } = require('../middleware/auth');
 const bookingsController = require('../controllers/bookingsController');
 const validate = require('../middleware/validate');
 const { createBookingSchema, updateBookingStatusSchema } = require('../validators/schemas');
 
 const router = express.Router();
 
-// POST /api/bookings — create booking request
-router.post('/', isLoggedIn, validate(createBookingSchema), bookingsController.createBooking);
+// POST /api/bookings — create booking request (requires verified email)
+router.post('/', isLoggedIn, requireVerifiedEmail, validate(createBookingSchema), bookingsController.createBooking);
 
 // GET /api/bookings/my — student bookings
 router.get('/my', isLoggedIn, bookingsController.getMyBookings);

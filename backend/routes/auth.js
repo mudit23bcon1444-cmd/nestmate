@@ -15,6 +15,12 @@ const router = express.Router();
 // POST /api/auth/register
 router.post('/register', validate(registerSchema), authController.register);
 
+// POST /api/auth/verify-email
+router.post('/verify-email', authController.verifyEmail);
+
+// POST /api/auth/resend-verification (authenticated, max 3/hour)
+router.post('/resend-verification', isLoggedIn, authController.resendVerification);
+
 // POST /api/auth/login
 router.post('/login', validate(loginSchema), authController.login);
 

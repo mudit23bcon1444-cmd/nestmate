@@ -3,7 +3,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { isLoggedIn, isOwner } = require('../middleware/auth');
+const { isLoggedIn, isOwner, requireVerifiedEmail } = require('../middleware/auth');
 const listingsController = require('../controllers/listingsController');
 
 const router = express.Router();
@@ -45,8 +45,8 @@ router.get('/:id', listingsController.getListingById);
 const validate = require('../middleware/validate');
 const { createListingSchema, updateListingSchema } = require('../validators/schemas');
 
-// POST /api/listings — create listing
-router.post('/', isLoggedIn, isOwner, upload.single('image'), validate(createListingSchema), listingsController.createListing);
+// POST /api/listings — create listing (requires verified email)
+router.post('/', isLoggedIn, isOwner, requireVerifiedEmail, upload.single('image'), validate(createListingSchema), listingsController.createListing);
 
 // PUT /api/listings/:id — update listing
 router.put('/:id', isLoggedIn, isOwner, validate(updateListingSchema), listingsController.updateListing);

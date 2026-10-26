@@ -6,7 +6,10 @@ const User = require('../models/User');
 const OtpStore = require('../models/OtpStore');
 const OtpLog = require('../models/OtpLog');
 const RefreshToken = require('../models/RefreshToken');
+const EmailToken = require('../models/EmailToken');
+const SecurityEvent = require('../models/SecurityEvent');
 const { sendOTP } = require('../utils/sms');
+const { sendVerificationEmail } = require('../utils/mailer');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/tokens');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -27,7 +30,7 @@ async function findUserById(id) {
 /**
  * Helper to generate access & refresh token pair, persist refresh jti to MongoDB, and set HTTP-only cookie.
  */
-async function issueTokensAndSetCookie(user, res) {
+async function issueTokensAndSetCookie(user, res, req = null, inheritedLastUsedAt = null) {
   const userId = user.id || user._id || user.userId;
   const userPayload = { id: String(userId), role: user.role };
   const accessToken = generateAccessToken(userPayload);
@@ -36,7 +39,10 @@ async function issueTokensAndSetCookie(user, res) {
   await RefreshToken.create({
     user_id: userId,
     jti,
-    expires_at: new Date(expiresAt)
+    expires_at: new Date(expiresAt),
+    ip: req ? (req.ip || req.connection?.remoteAddress) : null,
+    user_agent: req ? req.headers['user-agent'] : null,
+    last_used_at: inheritedLastUsedAt || new Date()
   });
 
   res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
@@ -66,7 +72,23 @@ exports.register = asyncHandler(async (req, res) => {
     name: name.trim(),
     email: normalizedEmail,
     password: hashedPassword,
-    role: userRole
+    role: userRole,
+    email_verified: false
+  });
+
+  // Generate single-use verification token (valid 24h)
+  const rawToken = crypto.randomBytes(32).toString('base64url');
+  const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+  await EmailToken.create({
+    user_id: userDoc._id,
+    type: 'verify',
+    token_hash: tokenHash,
+    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000)
+  });
+
+  sendVerificationEmail(userDoc, rawToken).catch(err => {
+    console.error('[auth] Failed to send verification email on register:', err.message);
   });
 
   const newUser = {
@@ -74,12 +96,97 @@ exports.register = asyncHandler(async (req, res) => {
     _id: userDoc._id,
     name: userDoc.name,
     email: userDoc.email,
-    role: userDoc.role
+    role: userDoc.role,
+    email_verified: false
   };
 
-  const accessToken = await issueTokensAndSetCookie(newUser, res);
+  const accessToken = await issueTokensAndSetCookie(newUser, res, req);
 
-  return res.status(201).json({ message: 'Account created successfully.', user: newUser, accessToken });
+  return res.status(201).json({ message: 'Account created successfully. Please check your email to verify your account.', user: newUser, accessToken });
+});
+
+// POST /api/auth/verify-email
+exports.verifyEmail = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+  if (!token || typeof token !== 'string') {
+    return res.status(400).json({ error: 'Verification token is required.' });
+  }
+
+  const tokenHash = crypto.createHash('sha256').update(token.trim()).digest('hex');
+  const tokenDoc = await EmailToken.findOne({
+    token_hash: tokenHash,
+    type: 'verify',
+    used_at: null,
+    expires_at: { $gt: new Date() }
+  });
+
+  if (!tokenDoc) {
+    return res.status(400).json({ error: 'Invalid or expired verification token.' });
+  }
+
+  tokenDoc.used_at = new Date();
+  await tokenDoc.save();
+
+  const user = await User.findById(tokenDoc.user_id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' });
+  }
+
+  user.email_verified = true;
+  await user.save();
+
+  await SecurityEvent.create({
+    user_id: user._id,
+    type: 'email_verified',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  return res.status(200).json({ message: 'Email verified successfully.' });
+});
+
+// POST /api/auth/resend-verification (authenticated, max 3/hour)
+exports.resendVerification = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' });
+  }
+
+  if (user.email_verified) {
+    return res.status(400).json({ error: 'Email is already verified.' });
+  }
+
+  // Rate limit: max 3 per hour per user
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  const recentCount = await EmailToken.countDocuments({
+    user_id: user._id,
+    type: 'verify',
+    created_at: { $gt: oneHourAgo }
+  });
+
+  if (recentCount >= 3) {
+    return res.status(429).json({ error: 'Too many verification emails requested. Please try again in an hour.' });
+  }
+
+  // Invalidate older verify tokens for this user
+  await EmailToken.updateMany(
+    { user_id: user._id, type: 'verify', used_at: null },
+    { $set: { used_at: new Date() } }
+  );
+
+  const rawToken = crypto.randomBytes(32).toString('base64url');
+  const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+  await EmailToken.create({
+    user_id: user._id,
+    type: 'verify',
+    token_hash: tokenHash,
+    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+  });
+
+  await sendVerificationEmail(user, rawToken);
+
+  return res.status(200).json({ message: 'Verification email sent.' });
 });
 
 // POST /api/auth/login
@@ -111,10 +218,11 @@ exports.login = asyncHandler(async (req, res) => {
     _id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    email_verified: user.email_verified === true
   };
 
-  const accessToken = await issueTokensAndSetCookie(sessionUser, res);
+  const accessToken = await issueTokensAndSetCookie(sessionUser, res, req);
 
   return res.status(200).json({ message: 'Logged in successfully.', user: sessionUser, accessToken });
 });
@@ -160,7 +268,8 @@ exports.refresh = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: user.role
+            role: user.role,
+            email_verified: user.email_verified === true
           };
           return res.status(200).json({ accessToken: newAccessToken, user: userData });
         }
@@ -192,7 +301,10 @@ exports.refresh = asyncHandler(async (req, res) => {
   await RefreshToken.create({
     user_id: userId,
     jti: newJti,
-    expires_at: new Date(expiresAt)
+    expires_at: new Date(expiresAt),
+    ip: req.ip || req.connection?.remoteAddress || tokenRecord.ip,
+    user_agent: req.headers['user-agent'] || tokenRecord.user_agent,
+    last_used_at: new Date()
   });
 
   res.cookie('refreshToken', newRefreshToken, COOKIE_OPTIONS);
@@ -203,7 +315,8 @@ exports.refresh = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     phone: user.phone,
-    role: user.role
+    role: user.role,
+    email_verified: user.email_verified === true
   };
 
   return res.status(200).json({ accessToken: newAccessToken, user: userData });
@@ -243,7 +356,8 @@ exports.getMe = asyncHandler(async (req, res) => {
     name: userDoc.name,
     email: userDoc.email,
     phone: userDoc.phone,
-    role: userDoc.role
+    role: userDoc.role,
+    email_verified: userDoc.email_verified === true
   };
 
   return res.status(200).json({ user });
@@ -380,7 +494,8 @@ exports.verifyOtp = asyncHandler(async (req, res) => {
       name: 'New User',
       role: 'student',
       phone: cleanPhone,
-      is_active: true
+      is_active: true,
+      email_verified: false
     });
     isNewUser = true;
   } else if (user.is_active === false) {
@@ -393,10 +508,11 @@ exports.verifyOtp = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     phone: user.phone,
-    role: user.role
+    role: user.role,
+    email_verified: user.email_verified === true
   };
 
-  const accessToken = await issueTokensAndSetCookie(sessionUser, res);
+  const accessToken = await issueTokensAndSetCookie(sessionUser, res, req);
 
   return res.status(200).json({ 
     message: 'Logged in successfully.', 
@@ -444,7 +560,8 @@ exports.completeProfile = asyncHandler(async (req, res) => {
     name: currentUser.name,
     email: currentUser.email,
     phone: currentUser.phone,
-    role: currentUser.role
+    role: currentUser.role,
+    email_verified: currentUser.email_verified === true
   };
 
   return res.status(200).json({ message: 'Profile completed successfully.', user: updatedUser });
