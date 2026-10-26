@@ -8,7 +8,7 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(() => searchParams.get('token') || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function ResetPassword() {
       // Immediately strip sensitive token from URL query parameter
       window.history.replaceState({}, '', window.location.pathname);
     }
-  }, [searchParams]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,9 +72,9 @@ export default function ResetPassword() {
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-surface rounded-3xl p-8 border border-outline-variant/30 sharp-shadow-lg space-y-6">
         <div className="text-center space-y-2">
-          <div className="text-3xl font-bold tracking-tight text-primary mb-1">
+          <Link to="/" className="inline-block text-3xl font-bold tracking-tight text-primary mb-1 hover:opacity-90 transition-opacity">
             NestMate<span className="text-primary-container">.</span>
-          </div>
+          </Link>
           <h1 className="text-xl font-bold text-on-surface">Set New Password</h1>
           <p className="text-xs text-on-surface-variant">
             Create a strong, unique password for your account.

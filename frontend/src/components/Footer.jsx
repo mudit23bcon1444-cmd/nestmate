@@ -8,9 +8,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Col 1 */}
           <div className="md:col-span-1 space-y-4">
-            <div className="text-2xl font-bold text-primary-fixed">
+            <Link to="/" className="text-2xl font-bold text-primary-fixed inline-block hover:opacity-90 transition-opacity">
               NestMate<span className="text-primary-container">.</span>
-            </div>
+            </Link>
             <p className="text-xs text-surface-variant/60 leading-relaxed max-w-sm">
               Connecting students with the best living spaces near their educational institutions. Reliable, safe, and convenient.
             </p>

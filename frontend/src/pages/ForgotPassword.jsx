@@ -35,9 +35,9 @@ export default function ForgotPassword() {
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-surface rounded-3xl p-8 border border-outline-variant/30 sharp-shadow-lg space-y-6">
         <div className="text-center space-y-2">
-          <div className="text-3xl font-bold tracking-tight text-primary mb-1">
+          <Link to="/" className="inline-block text-3xl font-bold tracking-tight text-primary mb-1 hover:opacity-90 transition-opacity">
             NestMate<span className="text-primary-container">.</span>
-          </div>
+          </Link>
           <h1 className="text-xl font-bold text-on-surface">Reset Your Password</h1>
           <p className="text-xs text-on-surface-variant">
             Enter your registered university email to receive a secure recovery link.
@@ -62,6 +62,18 @@ export default function ForgotPassword() {
                 Please check your inbox and spam folder. The link is valid for 30 minutes.
               </p>
             </div>
+
+            {import.meta.env.DEV && (
+              <div className="p-3.5 rounded-xl bg-primary/10 border border-primary/20 text-[11px] text-on-surface text-left space-y-1">
+                <p className="font-bold text-primary flex items-center gap-1.5">
+                  <span>🛠️</span>
+                  <span>Local Development Mode</span>
+                </p>
+                <p className="text-on-surface-variant leading-relaxed">
+                  If an external email service (Resend API key) is not configured, reset links are printed directly to the backend terminal log.
+                </p>
+              </div>
+            )}
 
             <Link
               to="/login"

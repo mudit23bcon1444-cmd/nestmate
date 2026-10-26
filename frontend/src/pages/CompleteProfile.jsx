@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 import { User, Mail, GraduationCap, Building, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
@@ -48,9 +48,9 @@ export default function CompleteProfile() {
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-surface rounded-3xl p-8 border border-outline-variant/30 sharp-shadow-lg space-y-6">
         <div className="text-center space-y-2">
-          <div className="text-3xl font-bold tracking-tight text-primary mb-1">
+          <Link to="/" className="inline-block text-3xl font-bold tracking-tight text-primary mb-1 hover:opacity-90 transition-opacity">
             NestMate<span className="text-primary-container">.</span>
-          </div>
+          </Link>
           <h1 className="text-xl font-bold text-on-surface">Almost There!</h1>
           <p className="text-xs text-on-surface-variant">
             Please complete your profile to personalize your NestMate experience.

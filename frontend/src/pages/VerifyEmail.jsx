@@ -54,6 +54,12 @@ export default function VerifyEmail() {
   return (
     <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-surface rounded-3xl p-8 border border-outline-variant/30 sharp-shadow-lg text-center space-y-6">
+        <div>
+          <Link to="/" className="inline-block text-3xl font-bold tracking-tight text-primary mb-1 hover:opacity-90 transition-opacity">
+            NestMate<span className="text-primary-container">.</span>
+          </Link>
+        </div>
+
         <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-surface-container border border-outline-variant/50">
           <Mail className="h-8 w-8 text-primary" />
         </div>

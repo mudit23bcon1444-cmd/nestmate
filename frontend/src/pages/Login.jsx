@@ -148,9 +148,9 @@ export default function Login() {
       <div className="max-w-md w-full bg-surface rounded-3xl p-8 border border-outline-variant/30 sharp-shadow-lg space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="text-3xl font-bold tracking-tight text-primary mb-1">
+          <Link to="/" className="inline-block text-3xl font-bold tracking-tight text-primary mb-1 hover:opacity-90 transition-opacity">
             NestMate<span className="text-primary-container">.</span>
-          </div>
+          </Link>
           <h1 className="text-xl font-bold text-on-surface">Welcome Back</h1>
           <p className="text-xs text-on-surface-variant">
             Sign in to access your student bookings or landlord property console.
