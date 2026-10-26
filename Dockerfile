@@ -1,41 +1,27 @@
-# Base image using official Ubuntu
-FROM ubuntu:latest
+# Stage 1: Build React Frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install --legacy-peer-deps
+COPY frontend/ ./
+RUN npm run build
 
-# Avoid interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install prerequisites, curl, and certificates
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
-    gnupg \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js 20 LTS from NodeSource
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set working directory
+# Stage 2: Production Server
+FROM node:20-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production \
+    PORT=5000
 
-# Copy backend package manifests
-COPY backend/package*.json ./
+COPY backend/package*.json ./backend/
+RUN cd backend && npm install --omit=dev
 
-# Install production dependencies
-RUN npm install --omit=dev
+COPY backend/ ./backend/
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
-# Copy backend source code into container app root
-COPY backend/ .
+USER node
+EXPOSE 5000
 
-# Expose backend port
-EXPOSE 5700
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/api/health || exit 1
 
-# Environment variables
-ENV PORT=5700 \
-    NODE_ENV=production
-
-# Start the application
-CMD ["npm", "start"]
+CMD ["node", "backend/server.js"]

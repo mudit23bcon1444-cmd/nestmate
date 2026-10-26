@@ -29,7 +29,24 @@ const zipFilePath = path.join(compressedDir, zipFileName);
 
 console.log(`📦 Creating backup version v${nextVersion}: ${zipFileName}...`);
 
-const zipCmd = `zip -r -q "${zipFilePath}" . -x "node_modules/*" "backend/node_modules/*" ".git/*" "compressed/*" ".DS_Store" "*/.DS_Store" "backend/nestmate.db-shm" "backend/nestmate.db-wal"`;
+const zipCmd = `zip -9 -r -q "${zipFilePath}" . ` +
+  `-x "node_modules/*" ` +
+  `-x "backend/node_modules/*" ` +
+  `-x "frontend/node_modules/*" ` +
+  `-x ".git/*" ` +
+  `-x ".vscode/*" ` +
+  `-x "compressed/*" ` +
+  `-x "un_used ui/*" ` +
+  `-x "nestmate_ppt.key" ` +
+  `-x "VIDEO_WALKTHROUGH_SCRIPT.md" ` +
+  `-x ".DS_Store" ` +
+  `-x "*/.DS_Store" ` +
+  `-x ".env" ` +
+  `-x "backend/.env" ` +
+  `-x "*.env" ` +
+  `-x "*/.env" ` +
+  `-x "backend/nestmate.db*" ` +
+  `-x "*.tmp"`;
 
 try {
   execSync(zipCmd, { cwd: projectRoot, stdio: 'inherit' });

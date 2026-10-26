@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true, lowercase: true, trim: true },
   password: { type: String },
   role: { type: String, enum: ['student', 'owner', 'admin'], default: 'student' },
-  phone: { type: String, unique: true, sparse: true }
+  phone: { type: String, unique: true, sparse: true },
+  is_active: { type: Boolean, default: true }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: false },
   toJSON: { virtuals: true },

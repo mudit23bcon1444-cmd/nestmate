@@ -1,0 +1,44 @@
+name: NestMate CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package.json
+            frontend/package.json
+
+      - name: Install backend dependencies
+        run: npm --prefix backend ci
+
+      - name: Verify backend syntax & security
+        run: |
+          node -c backend/server.js
+          node -c backend/controllers/authController.js
+          node -c backend/controllers/listingsController.js
+          node -c backend/controllers/bookingsController.js
+          node -c backend/controllers/adminController.js
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci --legacy-peer-deps
+
+      - name: Lint frontend (enforces react/no-danger)
+        run: npm --prefix frontend run lint
+
+      - name: Build frontend SPA bundle
+        run: npm --prefix frontend run build

@@ -1,5 +1,6 @@
 // controllers/bookingsController.js — booking request management logic using Mongoose
 
+const mongoose = require('mongoose');
 const Booking = require('../models/Booking');
 const Listing = require('../models/Listing');
 const User = require('../models/User');
@@ -132,6 +133,10 @@ exports.updateBookingStatus = asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'Booking not found.' });
   }
 
+  if (booking.status !== 'pending') {
+    return res.status(400).json({ error: `Cannot update booking. Current status is already "${booking.status}".` });
+  }
+
   const listing = await findModelById(Listing, booking.listing_id);
   const ownerId = listing ? String(listing.owner_id) : null;
   
@@ -142,8 +147,51 @@ exports.updateBookingStatus = asyncHandler(async (req, res) => {
     return res.status(403).json({ error: 'You do not have permission to update this booking.' });
   }
 
-  booking.status = status;
-  await booking.save();
+  if (status === 'rejected') {
+    booking.status = 'rejected';
+    await booking.save();
+    return res.status(200).json({ message: 'Booking rejected successfully.', status: 'rejected' });
+  }
 
-  return res.status(200).json({ message: `Booking ${status} successfully.`, status });
+  // Handle 'accepted' atomically with a MongoDB session transaction
+  const session = await mongoose.startSession();
+  try {
+    let conflict = false;
+    await session.withTransaction(async () => {
+      // Atomic condition: listing must still have is_available: 1
+      const updatedListing = await Listing.findOneAndUpdate(
+        { _id: booking.listing_id, is_available: 1 },
+        { is_available: 0 },
+        { session, new: true }
+      );
+
+      if (!updatedListing) {
+        conflict = true;
+        throw new Error('CONFLICT_UNAVAILABLE');
+      }
+
+      booking.status = 'accepted';
+      await booking.save({ session });
+
+      // Auto-reject other pending bookings for this listing
+      await Booking.updateMany(
+        {
+          listing_id: booking.listing_id,
+          _id: { $ne: booking._id },
+          status: 'pending'
+        },
+        { status: 'rejected' },
+        { session }
+      );
+    });
+
+    return res.status(200).json({ message: 'Booking accepted successfully. Other pending requests rejected.', status: 'accepted' });
+  } catch (err) {
+    if (err.message === 'CONFLICT_UNAVAILABLE') {
+      return res.status(409).json({ error: 'Property is no longer available. Another booking was already accepted.' });
+    }
+    throw err;
+  } finally {
+    await session.endSession();
+  }
 });

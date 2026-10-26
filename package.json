@@ -5,7 +5,11 @@
   "private": true,
   "scripts": {
     "dev": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "lint": "npm --prefix frontend run lint",
     "start": "npm --prefix backend start",
-    "build:css": "npm --prefix backend run build:css"
+    "seed": "npm --prefix backend run seed",
+    "backup": "node scripts/create_backup.js"
   }
 }

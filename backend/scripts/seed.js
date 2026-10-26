@@ -58,11 +58,21 @@ async function seed() {
       userIdMap.set(u.id, existingUser._id);
       stats.users.skipped++;
     } else {
+      let userPassword = u.password;
+      if (u.role === 'admin' && process.env.SEED_ADMIN_PASSWORD) {
+        const bcrypt = require('bcrypt');
+        userPassword = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD, 10);
+      }
+      const userEmail = (u.role === 'admin' && process.env.SEED_ADMIN_EMAIL)
+        ? process.env.SEED_ADMIN_EMAIL.toLowerCase().trim()
+        : (u.email ? u.email.toLowerCase().trim() : undefined);
+
       const userData = {
         name: u.name,
-        email: u.email ? u.email.toLowerCase().trim() : undefined,
-        password: u.password,
-        role: u.role || 'student'
+        email: userEmail,
+        password: userPassword,
+        role: u.role || 'student',
+        is_active: true
       };
       if (u.phone) userData.phone = u.phone.trim();
 
@@ -97,8 +107,10 @@ async function seed() {
         location: l.location.trim(),
         price: l.price,
         description: l.description || null,
+        room_type: l.room_type || 'single',
         amenities: Array.isArray(l.amenities) ? l.amenities : (l.amenities ? l.amenities.split(',').map(a => a.trim()).filter(Boolean) : []),
         image_path: l.image_path || null,
+        images: l.image_path ? [l.image_path] : [],
         is_approved: l.is_approved !== undefined ? l.is_approved : 0,
         is_available: l.is_available !== undefined ? l.is_available : 1,
         created_at: l.created_at ? new Date(l.created_at) : new Date()

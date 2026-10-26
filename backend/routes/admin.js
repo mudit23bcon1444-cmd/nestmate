@@ -15,6 +15,9 @@ router.patch('/listings/:id', isLoggedIn, isAdmin, adminController.updateListing
 // GET /api/admin/users — all users
 router.get('/users', isLoggedIn, isAdmin, adminController.getAllUsers);
 
+// PATCH /api/admin/users/:id/status — toggle user active/suspended status
+router.patch('/users/:id/status', isLoggedIn, isAdmin, adminController.updateUserStatus);
+
 // GET /api/admin/logs — admin action logs
 router.get('/logs', isLoggedIn, isAdmin, adminController.getAdminLogs);
 

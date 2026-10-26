@@ -14,8 +14,38 @@ NestMate Change Log
 - Updated backend/server.js to initialize database via connectDB() from config/db.js.
 - Refactored backend/controllers/authController.js, listingsController.js, bookingsController.js, and adminController.js to use Mongoose schemas exclusively.
 - Verified backend server startup and clean MongoDB Atlas connection on http://localhost:5300.
+[2026-10-24]
+- Optimized backup script (scripts/create_backup.js) with max zip compression (-9) and clean exclusions.
+- Excluded all non-essential and heavy bloat files:
+  * .git/ (~61 MB repository history)
+  * node_modules/ & backend/node_modules/ (~12 MB reinstallable packages)
+  * compressed/ (~48 MB older zip backups)
+  * nestmate_ppt.key (~7.9 MB presentation file)
+  * un_used ui/ (~4.0 MB unused UI mocks and static previews)
+  * VIDEO_WALKTHROUGH_SCRIPT.md & .vscode/
+  * .DS_Store & temporary files
+- Retained 100% of functional code: backend server, routes, controllers, middleware, models, utils, config, seeds, uploads, public HTML/CSS web frontend, package configs, and env templates.
+- Generated lightweight production-ready compressed archives:
+  * compressed/nestmate_v4.zip (2.46 MB)
+  * compressed/nestmate_compressed.zip (2.46 MB)
+- Verified archive integrity and tested live runtime execution against MongoDB with 100% pass.
 
-
-
+[2026-10-26]
+- Executed Phase 0 of the React SPA Migration Blueprint (Backend Security Hardening, Data Integrity & API Core):
+  * Excluded .env, backend/.env, and *.env from zip backups in scripts/create_backup.js.
+  * Added helmet() security headers and express-rate-limit to backend/server.js (IP+email login limiter, per-phone/IP send-otp limiter with daily cap, refresh endpoint exempted).
+  * Eliminated hardcoded JWT secret fallbacks in backend/utils/tokens.js with bootstrap fatal error assertion for secrets < 32 chars.
+  * Removed startup plaintext credentials log; sanitized admin credentials in backend/server.js and backend/scripts/seed.js.
+  * Implemented cryptographic OTP generation (crypto.randomInt), HMAC-SHA256 hashing in OtpStore, and constant-time verification (crypto.timingSafeEqual).
+  * Upgraded RefreshToken schema with Date expires_at TTL index, replaced_by chain link, 15s grace window for multi-tab races, and complete family revocation upon reuse outside grace window.
+  * Implemented atomic booking concurrency in bookingsController.js under MongoDB transactions: atomic Listing.findOneAndUpdate({ is_available: 1 } -> 0) with 409 Conflict return and auto-rejection of competing pending bookings.
+  * Added is_active enforcement to User model, authController (login, refresh, verifyOtp), and middleware/auth.js (isLoggedIn); created PATCH /api/admin/users/:id/status which revokes all refresh tokens on deactivation.
+  * Upgraded adminController.getAllUsers to single MongoDB aggregation pipeline with .select('-password') and $lookup for listing_count.
+  * Secured listingsController.getAllListings against ReDoS by escaping metacharacters and capping query parameters at 50 chars; added pagination envelope (?page=&limit=), sort (?sort=), and room_type filter.
+  * Implemented GeoJSON Point location_geo on Listing schema with sparse 2dsphere index, created scripts/migrate_geo.js, and added capped GET /api/listings/map.
+  * Added room_type and images array to Listing schema with scripts/migrate_images_array.js and scripts/migrate_images.js for Cloudinary migration.
+  * Implemented PUT /api/listings/:id for property modification with ownership guard.
+  * Added server-side Zod request validation middleware (backend/middleware/validate.js, backend/validators/schemas.js) across all write routes (auth, bookings, listings).
+  * Upgraded Dockerfile to multi-stage node:20-alpine runner with non-root USER node, dynamic ${PORT} healthcheck, and added backend/uploads to .dockerignore.
 
 

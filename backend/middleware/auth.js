@@ -1,8 +1,9 @@
 // middleware/auth.js — JWT access token verification & role guard helpers
 
 const { verifyAccessToken } = require('../utils/tokens');
+const User = require('../models/User');
 
-function isLoggedIn(req, res, next) {
+async function isLoggedIn(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Authorization token missing. Please log in.' });
@@ -11,10 +12,14 @@ function isLoggedIn(req, res, next) {
   const token = authHeader.split(' ')[1];
   try {
     const decoded = verifyAccessToken(token);
+    const user = await User.findById(decoded.userId).select('is_active role');
+    if (!user || user.is_active === false) {
+      return res.status(403).json({ error: 'Account is suspended or deactivated.' });
+    }
     req.user = {
       userId: decoded.userId,
       id: decoded.userId,
-      role: decoded.role
+      role: user.role || decoded.role
     };
     return next();
   } catch (err) {

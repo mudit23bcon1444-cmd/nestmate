@@ -1,56 +1,103 @@
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 const connectDB = require('./config/db');
 
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
-const PORT = process.env.PORT || 5700;
+const PORT = process.env.PORT || 5001;
+
+// Trust reverse proxy (Docker, Render, AWS ALB, Nginx)
+app.set('trust proxy', 1);
+
+// Security Headers
+app.use(helmet({ contentSecurityPolicy: false }));
+
+// ─── Rate Limiters ────────────────────────────────────────────────────────────
+// Skip refresh endpoint (fires on page load/navigation)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.path === '/refresh' || req.originalUrl.includes('/refresh')
+});
+
+// Login limiter: compound key of IP + email to protect shared campus Wi-Fi
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  validate: { keyGeneratorIpFallback: false },
+  keyGenerator: (req) => {
+    const email = req.body && req.body.email ? String(req.body.email).toLowerCase().trim() : '';
+    return `${req.ip}_${email}`;
+  },
+  message: { error: 'Too many login attempts. Please try again after 15 minutes.' }
+});
+
+// Send-OTP limiter: per-IP rate protection
+const sendOtpLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  validate: { keyGeneratorIpFallback: false },
+  keyGenerator: (req) => req.ip,
+  message: { error: 'Too many OTP requests from this network. Try again later.' }
+});
 
 // ─── Body & Cookie Parsers ───────────────────────────────────────────────────
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 
-// ─── Frontend Page Routes ──────────────────────────────────────────────────
-app.get(['/browse', '/browse/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'browse', 'code.html'));
-});
-
-app.get(['/register', '/signup', '/register/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'register', 'code.html'));
-});
-
-app.get(['/listing', '/listing/code.html', '/list_your_property_nestmate'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'listing', 'code.html'));
-});
-
-app.get(['/details', '/details/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'details', 'code.html'));
-});
-
-app.get(['/dashboard', '/dashboard/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'code.html'));
-});
-
-app.get(['/admin', '/admin/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'code.html'));
-});
-
-app.get(['/complete-profile', '/complete_profile/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'complete_profile', 'code.html'));
-});
-
-app.get(['/login', '/otp-login', '/login/code.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login', 'code.html'));
-});
-
 // ─── Static Files & API Routes ───────────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.join(__dirname, 'public')));
+const frontendDist = path.join(__dirname, '../frontend/dist');
+const hasFrontendDist = fs.existsSync(frontendDist);
 
-app.use('/api/auth',     require('./routes/auth'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+if (hasFrontendDist) {
+  app.use(express.static(frontendDist));
+} else {
+  app.use(express.static(path.join(__dirname, 'public')));
+
+  // Legacy fallback routes for unbuilt state
+  app.get(['/browse', '/browse/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'browse', 'code.html'));
+  });
+  app.get(['/register', '/signup', '/register/code.html'], (req, res) => {
+    res.redirect('/login');
+  });
+  app.get(['/listing', '/listing/code.html', '/list_your_property_nestmate'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'listing', 'code.html'));
+  });
+  app.get(['/details', '/details/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'details', 'code.html'));
+  });
+  app.get(['/dashboard', '/dashboard/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard', 'code.html'));
+  });
+  app.get(['/admin', '/admin/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin', 'code.html'));
+  });
+  app.get(['/complete-profile', '/complete_profile/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'complete_profile', 'code.html'));
+  });
+  app.get(['/login', '/otp-login', '/login/code.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login', 'code.html'));
+  });
+}
+
+app.use('/api/auth/login', loginLimiter);
+app.use('/api/auth/send-otp', sendOtpLimiter);
+app.use('/api/auth',     authLimiter, require('./routes/auth'));
 app.use('/api/listings', require('./routes/listings'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/admin',    require('./routes/admin'));
@@ -59,12 +106,13 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-
-
-// ─── Fallback: serve home page for unknown routes ────────────────────────────
+// ─── Fallback: serve React SPA or legacy home page ────────────────────────────
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'API route not found.' });
+  }
+  if (hasFrontendDist) {
+    return res.sendFile(path.join(frontendDist, 'index.html'));
   }
   res.sendFile(path.join(__dirname, 'public', 'home', 'code.html'));
 });
@@ -72,27 +120,19 @@ app.get('*', (req, res) => {
 // ─── Error Handler ────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'An unexpected error occurred.' });
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({
+    error: err.message || 'An unexpected error occurred.',
+    status
+  });
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 connectDB();
 app.listen(PORT, () => {
-
   console.log(`\n NestMate running on http://localhost:${PORT}`);
   console.log(`   Home page:       http://localhost:${PORT}/home/code.html`);
   console.log(`   Browse listings: http://localhost:${PORT}/browse/code.html`);
   console.log(`   Owner dashboard: http://localhost:${PORT}/dashboard/code.html`);
-  console.log(`   Admin panel:     http://localhost:${PORT}/admin/code.html`);
-  console.log(`\n   Admin login: admin@nestmate.com / admin123`);
-  console.log(`   Demo owner:  owner@nestmate.com / owner123\n`);
+  console.log(`   Admin panel:     http://localhost:${PORT}/admin/code.html\n`);
 });
-
-
-
-
-// app.listen(PORT, () => {
-//   console.log(`\n NestMate running on http://localhost:${PORT}`);
-// });
-
-// connectDB();

@@ -1,8 +1,18 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
-const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET || 'dev_access_secret_nestmate_987654321';
-const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'dev_refresh_secret_nestmate_123456789';
+function getSecret(name) {
+  const secret = process.env[name];
+  if (!secret || secret.length < 32) {
+    throw new Error(`Fatal Configuration Error: ${name} must be set in environment and be at least 32 characters long.`);
+  }
+  return secret;
+}
+
+const ACCESS_SECRET = getSecret('ACCESS_TOKEN_SECRET');
+const REFRESH_SECRET = getSecret('REFRESH_TOKEN_SECRET');
 
 /**
  * Generates a short-lived JWT Access Token (15 min expiry).

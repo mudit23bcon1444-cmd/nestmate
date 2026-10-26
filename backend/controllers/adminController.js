@@ -62,20 +62,76 @@ exports.updateListingApproval = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: `Listing ${status} successfully.`, is_approved: Number(is_approved) });
 });
 
+const RefreshToken = require('../models/RefreshToken');
+
 // GET /api/admin/users
 exports.getAllUsers = asyncHandler(async (req, res) => {
-  const rawUsers = await User.find().sort({ created_at: 1 }).lean();
-
-  const users = await Promise.all(rawUsers.map(async (u) => {
-    const listingCount = await Listing.countDocuments({ owner_id: u._id });
-    return {
-      ...u,
-      id: u._id,
-      listing_count: listingCount
-    };
-  }));
+  const users = await User.aggregate([
+    { $sort: { created_at: 1 } },
+    {
+      $lookup: {
+        from: 'listings',
+        localField: '_id',
+        foreignField: 'owner_id',
+        as: 'user_listings'
+      }
+    },
+    {
+      $project: {
+        password: 0,
+        listing_count: { $size: '$user_listings' },
+        name: 1,
+        email: 1,
+        phone: 1,
+        role: 1,
+        is_active: 1,
+        created_at: 1
+      }
+    },
+    {
+      $addFields: {
+        id: '$_id'
+      }
+    }
+  ]);
 
   return res.status(200).json({ users });
+});
+
+// PATCH /api/admin/users/:id/status
+exports.updateUserStatus = asyncHandler(async (req, res) => {
+  const { is_active } = req.body;
+  if (typeof is_active !== 'boolean') {
+    return res.status(400).json({ error: 'is_active must be a boolean.' });
+  }
+
+  const user = await findByIdOrLegacyId(User, req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' });
+  }
+
+  user.is_active = is_active;
+  await user.save();
+
+  if (!is_active) {
+    // Revoke all active refresh sessions immediately upon deactivation
+    await RefreshToken.deleteMany({ user_id: user._id });
+  }
+
+  await AdminLog.create({
+    action: `${is_active ? 'Activated' : 'Suspended'} user ${user.email || user.phone || user._id}`,
+    done_by: req.user.id
+  });
+
+  return res.status(200).json({
+    message: `User ${is_active ? 'activated' : 'suspended'} successfully.`,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      is_active: user.is_active
+    }
+  });
 });
 
 // GET /api/admin/logs
