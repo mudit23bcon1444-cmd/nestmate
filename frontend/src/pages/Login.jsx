@@ -19,7 +19,7 @@ export default function Login() {
   const location = useLocation();
   const { login } = useAuth();
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || '/';
 
   // Tabs: 'password' | 'otp'
   const [authMode, setAuthMode] = useState('password');

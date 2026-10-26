@@ -34,11 +34,11 @@ export default function CompleteProfile() {
       });
 
       updateUser(res.data.user || { name, email, role });
-      navigate('/dashboard', { replace: true });
+      navigate('/', { replace: true });
     } catch {
       // If endpoint is not available, update local context and continue
       updateUser({ name, email, role });
-      navigate('/dashboard', { replace: true });
+      navigate('/', { replace: true });
     } finally {
       setLoading(false);
     }

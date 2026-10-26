@@ -59,7 +59,7 @@ export default function Register() {
 
       const { user, accessToken } = res.data;
       login(user, accessToken);
-      navigate('/dashboard', { replace: true });
+      navigate('/', { replace: true });
     } catch (err) {
       setError(
         err.response?.data?.message || err.response?.data?.error || 'Registration failed. Please check inputs.'
