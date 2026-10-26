@@ -9,7 +9,18 @@ const RefreshToken = require('../models/RefreshToken');
 const EmailToken = require('../models/EmailToken');
 const SecurityEvent = require('../models/SecurityEvent');
 const { sendOTP } = require('../utils/sms');
-const { sendVerificationEmail } = require('../utils/mailer');
+const {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+  sendPasswordChangedEmail,
+  sendNewSignInEmail
+} = require('../utils/mailer');
+const {
+  validatePassword,
+  hashPassword,
+  needsRehash
+} = require('../utils/passwordPolicy');
+const { parseDevice, maskIp } = require('../utils/sessionHelper');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/tokens');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -66,7 +77,14 @@ exports.register = asyncHandler(async (req, res) => {
     return res.status(409).json({ error: 'An account with this email already exists.' });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // Enforce shared password policy (min 10 chars, max 72 bytes, zxcvbn >= 3, HIBP range check)
+  const policyCheck = await validatePassword(password, [normalizedEmail, name]);
+  if (!policyCheck.valid) {
+    return res.status(400).json({ error: policyCheck.error });
+  }
+
+  // Hash with bcrypt cost 12
+  const hashedPassword = await hashPassword(password);
 
   const userDoc = await User.create({
     name: name.trim(),
@@ -102,7 +120,11 @@ exports.register = asyncHandler(async (req, res) => {
 
   const accessToken = await issueTokensAndSetCookie(newUser, res, req);
 
-  return res.status(201).json({ message: 'Account created successfully. Please check your email to verify your account.', user: newUser, accessToken });
+  return res.status(201).json({
+    message: 'Account created successfully. Please check your email to verify your account.',
+    user: newUser,
+    accessToken
+  });
 });
 
 // POST /api/auth/verify-email
@@ -181,12 +203,266 @@ exports.resendVerification = asyncHandler(async (req, res) => {
     user_id: user._id,
     type: 'verify',
     token_hash: tokenHash,
-    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000)
   });
 
   await sendVerificationEmail(user, rawToken);
 
   return res.status(200).json({ message: 'Verification email sent.' });
+});
+
+// POST /api/auth/forgot-password
+exports.forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const standardResponse = {
+    message: 'If an account exists with that email, a password reset link has been sent.'
+  };
+
+  // ALWAYS return the exact same 200 body whether or not account exists
+  res.status(200).json(standardResponse);
+
+  // Send the email asynchronously after responding
+  if (!email || typeof email !== 'string') return;
+  const normalizedEmail = email.toLowerCase().trim();
+
+  setImmediate(async () => {
+    try {
+      const user = await User.findOne({ email: normalizedEmail });
+      if (!user) return;
+
+      // Invalidate older reset tokens for this user
+      await EmailToken.updateMany(
+        { user_id: user._id, type: 'reset', used_at: null },
+        { $set: { used_at: new Date() } }
+      );
+
+      const rawToken = crypto.randomBytes(32).toString('base64url');
+      const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+      await EmailToken.create({
+        user_id: user._id,
+        type: 'reset',
+        token_hash: tokenHash,
+        expires_at: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes
+      });
+
+      await SecurityEvent.create({
+        user_id: user._id,
+        type: 'password_reset_requested',
+        ip: req.ip || null,
+        user_agent: req.headers['user-agent'] || null
+      });
+
+      await sendPasswordResetEmail(user, rawToken);
+    } catch (err) {
+      console.error('[auth] Background forgot-password error:', err.message);
+    }
+  });
+});
+
+// POST /api/auth/reset-password
+exports.resetPassword = asyncHandler(async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !password) {
+    return res.status(400).json({ error: 'Token and password are required.' });
+  }
+
+  const tokenHash = crypto.createHash('sha256').update(token.trim()).digest('hex');
+  const tokenDoc = await EmailToken.findOne({
+    token_hash: tokenHash,
+    type: 'reset',
+    used_at: null,
+    expires_at: { $gt: new Date() }
+  });
+
+  if (!tokenDoc) {
+    return res.status(400).json({ error: 'Invalid or expired password reset link.' });
+  }
+
+  const user = await User.findById(tokenDoc.user_id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' });
+  }
+
+  // Validate new password using shared policy
+  const policyCheck = await validatePassword(password, [user.email, user.name]);
+  if (!policyCheck.valid) {
+    return res.status(400).json({ error: policyCheck.error });
+  }
+
+  // Single-use: mark used
+  tokenDoc.used_at = new Date();
+  await tokenDoc.save();
+
+  // Set new hash using cost 12
+  user.password = await hashPassword(password);
+  user.password_changed_at = new Date();
+  await user.save();
+
+  // DELETE ALL of the user's refresh tokens
+  await RefreshToken.deleteMany({ user_id: user._id });
+
+  // Record SecurityEvent
+  await SecurityEvent.create({
+    user_id: user._id,
+    type: 'password_changed',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  // Send "your password was changed" email
+  sendPasswordChangedEmail(user).catch(err => {
+    console.error('[auth] Failed to send password changed notice:', err.message);
+  });
+
+  // Do not auto-login
+  return res.status(200).json({
+    message: 'Password has been reset successfully. Please log in with your new password.'
+  });
+});
+
+// POST /api/auth/change-password (authenticated)
+exports.changePassword = asyncHandler(async (req, res) => {
+  const { current_password, new_password } = req.body;
+  if (!current_password || !new_password) {
+    return res.status(400).json({ error: 'Current password and new password are required.' });
+  }
+
+  const user = await User.findById(req.user.id);
+  if (!user || !user.password) {
+    return res.status(400).json({ error: 'User password not set.' });
+  }
+
+  const isCurrentMatch = await bcrypt.compare(current_password, user.password);
+  if (!isCurrentMatch) {
+    return res.status(400).json({ error: 'Current password is incorrect.' });
+  }
+
+  // Shared password policy validation
+  const policyCheck = await validatePassword(new_password, [user.email, user.name]);
+  if (!policyCheck.valid) {
+    return res.status(400).json({ error: policyCheck.error });
+  }
+
+  user.password = await hashPassword(new_password);
+  user.password_changed_at = new Date();
+  await user.save();
+
+  // Revoke all OTHER sessions (keep current session)
+  let currentJti = null;
+  const refreshTokenCookie = req.cookies.refreshToken;
+  if (refreshTokenCookie) {
+    try {
+      const decoded = verifyRefreshToken(refreshTokenCookie);
+      currentJti = decoded.jti;
+    } catch (_) {}
+  }
+
+  if (currentJti) {
+    await RefreshToken.deleteMany({ user_id: user._id, jti: { $ne: currentJti } });
+  } else {
+    await RefreshToken.deleteMany({ user_id: user._id });
+  }
+
+  // Record SecurityEvent
+  await SecurityEvent.create({
+    user_id: user._id,
+    type: 'password_changed',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  sendPasswordChangedEmail(user).catch(err => {
+    console.error('[auth] Failed to send password changed notice:', err.message);
+  });
+
+  return res.status(200).json({
+    message: 'Password changed successfully. All other sessions have been signed out.'
+  });
+});
+
+// GET /api/auth/sessions (authenticated)
+exports.getSessions = asyncHandler(async (req, res) => {
+  let currentJti = null;
+  const refreshTokenCookie = req.cookies.refreshToken;
+  if (refreshTokenCookie) {
+    try {
+      const decoded = verifyRefreshToken(refreshTokenCookie);
+      currentJti = decoded.jti;
+    } catch (_) {}
+  }
+
+  const activeTokens = await RefreshToken.find({
+    user_id: req.user.id,
+    revoked_at: null,
+    expires_at: { $gt: new Date() }
+  }).sort({ last_used_at: -1, created_at: -1 }).lean();
+
+  const sessions = activeTokens.map(token => ({
+    id: token._id,
+    device: parseDevice(token.user_agent),
+    user_agent: token.user_agent,
+    ip: maskIp(token.ip),
+    created_at: token.created_at,
+    last_used_at: token.last_used_at || token.created_at,
+    current: Boolean(currentJti && token.jti === currentJti)
+  }));
+
+  return res.status(200).json({ sessions });
+});
+
+// DELETE /api/auth/sessions/:id (authenticated)
+exports.revokeSession = asyncHandler(async (req, res) => {
+  const token = await RefreshToken.findOne({
+    _id: req.params.id,
+    user_id: req.user.id
+  });
+
+  if (!token) {
+    return res.status(404).json({ error: 'Session not found or already revoked.' });
+  }
+
+  let isCurrent = false;
+  const refreshTokenCookie = req.cookies.refreshToken;
+  if (refreshTokenCookie) {
+    try {
+      const decoded = verifyRefreshToken(refreshTokenCookie);
+      if (decoded.jti === token.jti) isCurrent = true;
+    } catch (_) {}
+  }
+
+  await RefreshToken.deleteOne({ _id: token._id });
+
+  await SecurityEvent.create({
+    user_id: req.user.id,
+    type: 'session_revoked',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  if (isCurrent) {
+    res.clearCookie('refreshToken', COOKIE_OPTIONS);
+  }
+
+  return res.status(200).json({
+    message: 'Session revoked successfully.',
+    revokedCurrent: isCurrent
+  });
+});
+
+// POST /api/auth/logout-all (authenticated)
+exports.logoutAll = asyncHandler(async (req, res) => {
+  await RefreshToken.deleteMany({ user_id: req.user.id });
+  res.clearCookie('refreshToken', COOKIE_OPTIONS);
+
+  await SecurityEvent.create({
+    user_id: req.user.id,
+    type: 'logout_all',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  return res.status(200).json({ message: 'All active sessions have been signed out.' });
 });
 
 // POST /api/auth/login
@@ -206,11 +482,50 @@ exports.login = asyncHandler(async (req, res) => {
 
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!passwordMatch) {
+    await SecurityEvent.create({
+      user_id: user._id,
+      type: 'login_failed',
+      ip: req.ip || null,
+      user_agent: req.headers['user-agent'] || null
+    });
     return res.status(401).json({ error: 'Invalid email or password.' });
   }
 
   if (user.is_active === false) {
     return res.status(403).json({ error: 'Your account has been suspended. Please contact support.' });
+  }
+
+  // On successful login rehash if the stored cost is lower than 12
+  if (needsRehash(user.password)) {
+    user.password = await hashPassword(password);
+    await user.save();
+  }
+
+  // Security Event: login_success
+  await SecurityEvent.create({
+    user_id: user._id,
+    type: 'login_success',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null
+  });
+
+  // Check if IP + user-agent pair hasn't appeared in this user's events in the last 30 days
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const knownLogin = await SecurityEvent.findOne({
+    user_id: user._id,
+    type: 'login_success',
+    ip: req.ip || null,
+    user_agent: req.headers['user-agent'] || null,
+    created_at: { $gt: thirtyDaysAgo, $lt: new Date(Date.now() - 5000) } // exclude the event just created
+  });
+
+  if (!knownLogin && user.email) {
+    sendNewSignInEmail(user, {
+      ip: req.ip || req.connection?.remoteAddress,
+      user_agent: req.headers['user-agent']
+    }).catch(err => {
+      console.error('[auth] Failed to send new sign-in security notice:', err.message);
+    });
   }
 
   const sessionUser = {
