@@ -14,12 +14,15 @@ import {
   Check,
   X,
   Compass,
+  Shield,
 } from 'lucide-react';
+import SecuritySettings from '../components/SecuritySettings';
 
 export default function Dashboard() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [ownerTab, setOwnerTab] = useState('bookings'); // 'bookings' | 'properties'
+  const [ownerTab, setOwnerTab] = useState('bookings'); // 'bookings' | 'properties' | 'security'
+  const [studentTab, setStudentTab] = useState('bookings'); // 'bookings' | 'security'
   const [searchQuery, setSearchQuery] = useState('');
   const [actionSuccess, setActionSuccess] = useState('');
   const [actionError, setActionError] = useState('');
@@ -205,7 +208,38 @@ export default function Dashboard() {
       {/* ──────────────────────────────────────────────────────────────────────── */}
       {isStudent && (
         <div className="space-y-8">
-          {/* Student Overview Stat Cards */}
+          {/* Student Tabs & Switcher */}
+          <div className="flex p-1 bg-surface rounded-2xl border border-outline-variant/30 w-fit">
+            <button
+              type="button"
+              onClick={() => setStudentTab('bookings')}
+              className={`py-2 px-5 text-xs font-semibold rounded-xl transition-all ${
+                studentTab === 'bookings'
+                  ? 'bg-primary text-white shadow-xs'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              My Applications ({studentBookings.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudentTab('security')}
+              className={`py-2 px-5 text-xs font-semibold rounded-xl transition-all flex items-center gap-1.5 ${
+                studentTab === 'security'
+                  ? 'bg-primary text-white shadow-xs'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              <Shield className="h-3.5 w-3.5" />
+              <span>Security & Sessions</span>
+            </button>
+          </div>
+
+          {studentTab === 'security' ? (
+            <SecuritySettings />
+          ) : (
+            <>
+              {/* Student Overview Stat Cards */}
           <section className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div className="bg-surface rounded-2xl p-5 sharp-shadow border border-outline-variant/20 flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
@@ -352,6 +386,8 @@ export default function Dashboard() {
               </div>
             )}
           </section>
+            </>
+          )}
         </div>
       )}
 
@@ -423,6 +459,18 @@ export default function Dashboard() {
                 }`}
               >
                 My Properties ({properties.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setOwnerTab('security')}
+                className={`py-2 px-5 text-xs font-semibold rounded-xl transition-all flex items-center gap-1.5 ${
+                  ownerTab === 'security'
+                    ? 'bg-primary text-white shadow-xs'
+                    : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
+                <Shield className="h-3.5 w-3.5" />
+                <span>Security & Sessions</span>
               </button>
             </div>
 
@@ -619,6 +667,9 @@ export default function Dashboard() {
                 )}
               </section>
             )}
+
+            {/* Tab 3: Security & Sessions */}
+            {ownerTab === 'security' && <SecuritySettings />}
           </div>
         </div>
       )}

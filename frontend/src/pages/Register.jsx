@@ -12,6 +12,7 @@ import {
   AlertCircle,
   ShieldCheck,
 } from 'lucide-react';
+import PasswordInput from '../components/PasswordInput';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -35,8 +36,13 @@ export default function Register() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+    if (password.length < 10) {
+      setError('Password must be at least 10 characters long.');
+      return;
+    }
+
+    if (new TextEncoder().encode(password).length > 72) {
+      setError('Password exceeds maximum allowed size of 72 bytes.');
       return;
     }
 
@@ -123,6 +129,7 @@ export default function Register() {
               <input
                 type="text"
                 required
+                autoComplete="name"
                 placeholder="Aarav Sharma"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -138,6 +145,7 @@ export default function Register() {
               <input
                 type="email"
                 required
+                autoComplete="username"
                 placeholder="aarav@college.edu or email@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -155,6 +163,7 @@ export default function Register() {
               <input
                 type="tel"
                 required
+                autoComplete="tel"
                 placeholder="9876543210"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -166,17 +175,18 @@ export default function Register() {
 
           <div>
             <label className="block text-xs font-medium text-on-surface mb-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3.5 top-3 h-4 w-4 text-on-surface-variant/70" />
-              <input
-                type="password"
-                required
-                placeholder="Minimum 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-surface-container/60 rounded-xl text-xs text-on-surface border border-outline focus:border-primary focus:outline-none"
-              />
-            </div>
+            <PasswordInput
+              id="register-password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Minimum 10 characters"
+              autoComplete="new-password"
+              showStrengthMeter={true}
+              userInputs={[name, email].filter(Boolean)}
+              minLength={10}
+              required
+            />
           </div>
 
           <button

@@ -12,6 +12,7 @@ import {
   Clock,
   ShieldCheck,
 } from 'lucide-react';
+import PasswordInput from '../components/PasswordInput';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -62,9 +63,13 @@ export default function Login() {
       login(user, accessToken);
       navigate(from, { replace: true });
     } catch (err) {
-      setPasswordError(
-        err.response?.data?.message || err.response?.data?.error || 'Invalid email or password.'
-      );
+      if (err.response?.status === 429) {
+        setPasswordError('Too many sign-in attempts. Please wait 15 minutes before trying again.');
+      } else {
+        setPasswordError(
+          err.response?.data?.message || err.response?.data?.error || 'Invalid email or password.'
+        );
+      }
     } finally {
       setPasswordLoading(false);
     }
@@ -195,6 +200,7 @@ export default function Login() {
                 <input
                   type="email"
                   required
+                  autoComplete="username"
                   placeholder="student@university.edu or name@mail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -204,18 +210,25 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-on-surface mb-1">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-3 h-4 w-4 text-on-surface-variant/70" />
-                <input
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface-container/60 rounded-xl text-xs text-on-surface border border-outline focus:border-primary focus:outline-none"
-                />
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-medium text-on-surface">Password</label>
+                <Link
+                  to="/forgot-password"
+                  className="text-[11px] text-primary hover:underline font-medium"
+                >
+                  Forgot password?
+                </Link>
               </div>
+              <PasswordInput
+                id="login-password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                showStrengthMeter={false}
+                required
+              />
             </div>
 
             <button
@@ -254,6 +267,7 @@ export default function Login() {
                     <input
                       type="tel"
                       required
+                      autoComplete="tel"
                       placeholder="9876543210"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -304,6 +318,7 @@ export default function Login() {
                     <input
                       type="text"
                       required
+                      autoComplete="one-time-code"
                       placeholder="123456"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}

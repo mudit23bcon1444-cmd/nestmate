@@ -1,10 +1,12 @@
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Pages
+// Standard Pages
 import Home from './pages/Home';
 import Browse from './pages/Browse';
 import PropertyDetail from './pages/PropertyDetail';
@@ -16,6 +18,11 @@ import CreateListing from './pages/CreateListing';
 import EditListing from './pages/EditListing';
 import Admin from './pages/Admin';
 
+// Lazy-loaded Hardening & Recovery Pages
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -25,6 +32,15 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
+      <Loader2 className="h-8 w-8 text-primary animate-spin" />
+      <p className="text-xs text-on-surface-variant font-medium">Loading security page...</p>
+    </div>
+  );
+}
 
 function NotFound() {
   return (
@@ -54,6 +70,32 @@ export default function App() {
               <Route path="property/:id" element={<PropertyDetail />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+
+              {/* Lazy-loaded Auth Recovery & Verification Routes */}
+              <Route
+                path="verify-email"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <VerifyEmail />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="forgot-password"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <ForgotPassword />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="reset-password"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <ResetPassword />
+                  </Suspense>
+                }
+              />
 
               {/* Authenticated User Routes */}
               <Route
