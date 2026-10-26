@@ -4,13 +4,33 @@ const { z } = require('zod');
 const registerSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters.'),
   email: z.string().trim().email('Invalid email address.').toLowerCase(),
-  password: z.string().min(6, 'Password must be at least 6 characters.'),
+  password: z.string()
+    .min(10, 'Password must be at least 10 characters.')
+    .refine(val => Buffer.byteLength(val, 'utf8') <= 72, 'Password cannot exceed 72 bytes.'),
   role: z.enum(['student', 'owner']).optional().default('student')
 });
 
 const loginSchema = z.object({
   email: z.string().trim().email('Invalid email address.').toLowerCase(),
   password: z.string().min(1, 'Password is required.')
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().trim().email('Invalid email address.').toLowerCase()
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().trim().min(1, 'Reset token is required.'),
+  password: z.string()
+    .min(10, 'Password must be at least 10 characters.')
+    .refine(val => Buffer.byteLength(val, 'utf8') <= 72, 'Password cannot exceed 72 bytes.')
+});
+
+const changePasswordSchema = z.object({
+  current_password: z.string().min(1, 'Current password is required.'),
+  new_password: z.string()
+    .min(10, 'New password must be at least 10 characters.')
+    .refine(val => Buffer.byteLength(val, 'utf8') <= 72, 'Password cannot exceed 72 bytes.')
 });
 
 const sendOtpSchema = z.object({
@@ -65,6 +85,9 @@ const updateListingSchema = z.object({
 module.exports = {
   registerSchema,
   loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  changePasswordSchema,
   sendOtpSchema,
   verifyOtpSchema,
   completeProfileSchema,
