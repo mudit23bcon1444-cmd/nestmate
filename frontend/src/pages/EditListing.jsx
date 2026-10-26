@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../api/client';
 import { AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -242,13 +242,22 @@ export default function EditListing() {
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
       <div className="bg-surface rounded-2xl sharp-shadow-lg p-6 sm:p-8 border border-outline-variant/30">
-        <div className="mb-6">
-          <h1 className="font-heading text-2xl font-bold text-on-background mb-1">
-            Edit Property Details
-          </h1>
-          <p className="text-xs text-on-surface-variant">
-            Update pricing, amenities, or descriptions for {listing.title}
-          </p>
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-on-background mb-1">
+              Edit Property Details
+            </h1>
+            <p className="text-xs text-on-surface-variant">
+              Update pricing, amenities, or descriptions for {listing.title}
+            </p>
+          </div>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline bg-primary/10 px-3 py-1.5 rounded-xl self-start sm:self-auto transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Back to Dashboard</span>
+          </Link>
         </div>
 
         <EditListingForm key={listing._id || listing.id} listing={listing} />

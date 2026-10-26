@@ -15,6 +15,8 @@ import {
   X,
   Compass,
   Shield,
+  ArrowLeft,
+  Home as HomeIcon,
 } from 'lucide-react';
 import SecuritySettings from '../components/SecuritySettings';
 
@@ -140,11 +142,19 @@ export default function Dashboard() {
       {/* ─── Header matching user role ───────────────────────────────────────── */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-4 border-b border-outline-variant/15">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline bg-primary/10 hover:bg-primary/20 px-3 py-1 rounded-full transition-colors"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back to Home</span>
+            </Link>
+            <span className="text-outline-variant/60 text-xs hidden sm:inline">•</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/30">
               {isStudent ? 'Student Portal' : 'Owner Portal'}
             </span>
-            <span className="text-xs text-on-surface-variant font-medium">• {user?.email}</span>
+            <span className="text-xs text-on-surface-variant font-medium hidden sm:inline">• {user?.email}</span>
           </div>
           <h1 className="font-heading text-2xl sm:text-3xl font-bold text-on-background">
             {isStudent ? 'My Student Bookings & Stays' : 'Owner Property Overview'}
@@ -156,20 +166,29 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="text-right hidden sm:block">
             <p className="font-semibold text-xs text-on-surface">{user?.name || 'NestMate Member'}</p>
             <p className="text-[11px] text-primary capitalize font-medium">{user?.role || 'student'} Account</p>
           </div>
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container/40 flex items-center justify-center bg-primary text-white font-bold text-sm shadow-xs">
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container/40 flex items-center justify-center bg-primary text-white font-bold text-sm shadow-xs shrink-0">
             {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
+
+          <Link
+            to="/"
+            className="border border-outline-variant/40 hover:border-primary/40 text-on-surface hover:text-primary text-xs font-semibold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"
+            title="Return to NestMate Homepage"
+          >
+            <HomeIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Home</span>
+          </Link>
 
           {/* List Property button: ONLY shown to Owners & Admins, NEVER to Students! */}
           {isOwner && (
             <Link
               to="/listing/new"
-              className="bg-primary text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5 ml-2"
+              className="bg-primary text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5"
             >
               <Plus className="h-4 w-4" />
               <span>List Property</span>
@@ -179,7 +198,7 @@ export default function Dashboard() {
           {isStudent && (
             <Link
               to="/browse"
-              className="bg-primary text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5 ml-2"
+              className="bg-primary text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5"
             >
               <Compass className="h-4 w-4" />
               <span>Browse Rooms</span>

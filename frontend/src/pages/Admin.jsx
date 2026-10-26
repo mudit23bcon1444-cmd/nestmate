@@ -12,6 +12,8 @@ import {
   UserCheck,
   IndianRupee,
   MapPin,
+  ArrowLeft,
+  Home as HomeIcon,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -122,6 +124,14 @@ export default function Admin() {
         </div>
 
         <div className="flex items-center gap-3 self-end md:self-auto">
+          <Link
+            to="/"
+            className="border border-outline-variant/40 hover:border-primary/40 text-on-surface hover:text-primary text-xs font-semibold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"
+            title="Return to NestMate Homepage"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Home</span>
+          </Link>
           <div className="text-right">
             <p className="text-xs font-bold text-on-surface">Superadmin Console</p>
             <p className="text-[10px] uppercase tracking-wider text-primary font-bold">Admin Portal</p>

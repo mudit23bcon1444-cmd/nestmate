@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api/client';
 import {
@@ -33,7 +33,7 @@ export default function CreateListing() {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedAmenities, setSelectedAmenities] = useState(['WiFi', 'Air Conditioning']);
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState('');
@@ -126,13 +126,22 @@ export default function CreateListing() {
 
         {/* Form Container */}
         <div className="bg-surface rounded-2xl sharp-shadow-lg p-6 sm:p-8 border border-outline-variant/30">
-          <div className="mb-6">
-            <h1 className="font-heading text-2xl font-bold text-on-background mb-1">
-              Basic Information
-            </h1>
-            <p className="text-xs text-on-surface-variant">
-              Let's start with the core details of your student property.
-            </p>
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-on-background mb-1">
+                Basic Information
+              </h1>
+              <p className="text-xs text-on-surface-variant">
+                Let's start with the core details of your student property.
+              </p>
+            </div>
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline bg-primary/10 px-3 py-1.5 rounded-xl self-start sm:self-auto transition-colors"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back to Dashboard</span>
+            </Link>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Eye, EyeOff, ShieldCheck, AlertCircle } from 'lucide-react';
 
 // Lazy-loaded zxcvbn instance cache
@@ -19,7 +19,6 @@ export default function PasswordInput({
   minLength = 10,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [strength, setStrength] = useState({ score: 0, feedback: {} });
   const [isZxcvbnLoaded, setIsZxcvbnLoaded] = useState(!!zxcvbnModule);
 
   useEffect(() => {
@@ -37,27 +36,31 @@ export default function PasswordInput({
     }
   }, [showStrengthMeter]);
 
-  useEffect(() => {
+  // Memoized user inputs key to prevent re-evaluation on referential array changes
+  const userInputsKey = Array.isArray(userInputs) ? userInputs.filter(Boolean).join('|') : '';
+
+  // Synchronously derived strength score via useMemo: avoids setState in effects entirely
+  const strength = useMemo(() => {
     if (!showStrengthMeter || !value) {
-      setStrength({ score: 0, feedback: {} });
-      return;
+      return { score: 0, feedback: {} };
     }
 
     if (zxcvbnModule) {
-      const res = zxcvbnModule(value, userInputs);
-      setStrength({
+      const inputs = userInputsKey ? userInputsKey.split('|') : [];
+      const res = zxcvbnModule(value, inputs);
+      return {
         score: res.score,
         feedback: res.feedback || {},
-      });
-    } else {
-      // Basic fallback estimation until zxcvbn finishes lazy loading
-      let score = 0;
-      if (value.length >= 10) score = 1;
-      if (value.length >= 12 && /[A-Z]/.test(value) && /[0-9]/.test(value)) score = 2;
-      if (value.length >= 14 && /[^A-Za-z0-9]/.test(value)) score = 3;
-      setStrength({ score, feedback: {} });
+      };
     }
-  }, [value, showStrengthMeter, isZxcvbnLoaded, userInputs]);
+
+    // Basic fallback estimation until zxcvbn finishes lazy loading
+    let score = 0;
+    if (value.length >= 10) score = 1;
+    if (value.length >= 12 && /[A-Z]/.test(value) && /[0-9]/.test(value)) score = 2;
+    if (value.length >= 14 && /[^A-Za-z0-9]/.test(value)) score = 3;
+    return { score, feedback: {} };
+  }, [value, showStrengthMeter, isZxcvbnLoaded, userInputsKey]);
 
   // Byte length check for bcrypt 72 byte limit
   const byteLength = new TextEncoder().encode(value).length;
