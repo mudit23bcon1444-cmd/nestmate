@@ -14,8 +14,10 @@ export const clearMemoryToken = () => {
   inMemoryToken = null;
 };
 
+const apiBaseURL = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+
 const api = axios.create({
-  baseURL: '',
+  baseURL: apiBaseURL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -39,7 +41,8 @@ export const executeSilentRefresh = async () => {
   if (!refreshPromise) {
     refreshPromise = (async () => {
       try {
-        const response = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        const refreshUrl = apiBaseURL ? `${apiBaseURL}/api/auth/refresh` : '/api/auth/refresh';
+        const response = await axios.post(refreshUrl, {}, { withCredentials: true });
         const { accessToken, user } = response.data;
         setMemoryToken(accessToken);
         localStorage.setItem('logged_in', 'true');
