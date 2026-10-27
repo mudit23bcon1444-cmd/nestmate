@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { Lock, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import api from '../api/client';
 import PasswordInput from '../components/PasswordInput';
 
@@ -8,7 +8,7 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [token, setToken] = useState(() => searchParams.get('token') || '');
+  const [token] = useState(() => searchParams.get('token') || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,13 +16,11 @@ export default function ResetPassword() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const rawToken = searchParams.get('token');
-    if (rawToken) {
-      setToken(rawToken);
+    if (searchParams.get('token')) {
       // Immediately strip sensitive token from URL query parameter
       window.history.replaceState({}, '', window.location.pathname);
     }
-  }, []);
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

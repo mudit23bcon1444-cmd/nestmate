@@ -9,8 +9,11 @@ export default function VerifyEmail() {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
 
-  const [status, setStatus] = useState('verifying'); // 'verifying' | 'success' | 'error'
-  const [message, setMessage] = useState('');
+  const initialToken = searchParams.get('token');
+  const [status, setStatus] = useState(() => (initialToken ? 'verifying' : 'error'));
+  const [message, setMessage] = useState(() =>
+    initialToken ? '' : 'No verification token provided or the link is incomplete.'
+  );
   const verificationAttempted = useRef(false);
 
   useEffect(() => {
@@ -21,14 +24,8 @@ export default function VerifyEmail() {
       window.history.replaceState({}, '', window.location.pathname);
     }
 
-    if (verificationAttempted.current) return;
+    if (!rawToken || verificationAttempted.current) return;
     verificationAttempted.current = true;
-
-    if (!rawToken) {
-      setStatus('error');
-      setMessage('No verification token provided or the link is incomplete.');
-      return;
-    }
 
     const verify = async () => {
       try {

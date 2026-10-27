@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Eye, EyeOff, ShieldCheck, AlertCircle } from 'lucide-react';
 
 // Lazy-loaded zxcvbn instance cache
@@ -19,7 +19,7 @@ export default function PasswordInput({
   minLength = 10,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isZxcvbnLoaded, setIsZxcvbnLoaded] = useState(!!zxcvbnModule);
+  const [, setIsZxcvbnLoaded] = useState(!!zxcvbnModule);
 
   useEffect(() => {
     if (!showStrengthMeter) return;
@@ -60,7 +60,7 @@ export default function PasswordInput({
     if (value.length >= 12 && /[A-Z]/.test(value) && /[0-9]/.test(value)) score = 2;
     if (value.length >= 14 && /[^A-Za-z0-9]/.test(value)) score = 3;
     return { score, feedback: {} };
-  }, [value, showStrengthMeter, isZxcvbnLoaded, userInputsKey]);
+  }, [value, showStrengthMeter, userInputsKey]);
 
   // Byte length check for bcrypt 72 byte limit
   const byteLength = new TextEncoder().encode(value).length;
