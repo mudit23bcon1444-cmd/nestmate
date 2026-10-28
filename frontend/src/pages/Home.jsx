@@ -338,10 +338,21 @@ export default function Home() {
                   ? { text: 'NEW', color: 'bg-primary text-white' }
                   : { text: 'POPULAR', color: 'bg-tertiary text-white' };
 
+              const targetUrl = item._id ? `/property/${item._id}` : '/browse';
+
               return (
                 <div
                   key={item._id || item.id || idx}
-                  className="bg-surface rounded-2xl overflow-hidden border-subtle sharp-shadow hover-lift group flex flex-col justify-between"
+                  onClick={() => navigate(targetUrl)}
+                  role="link"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate(targetUrl);
+                    }
+                  }}
+                  className="bg-surface rounded-2xl overflow-hidden border-subtle sharp-shadow hover-lift group flex flex-col justify-between cursor-pointer"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-surface-container">
                     <img
@@ -361,7 +372,10 @@ export default function Home() {
 
                     <button
                       type="button"
-                      className="absolute top-4 right-4 w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center text-primary transition-colors hover:text-red-500 shadow-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      className="absolute top-4 right-4 w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center text-primary transition-colors hover:text-red-500 shadow-sm z-10"
                     >
                       <span className="material-symbols-outlined text-[20px]">favorite</span>
                     </button>
@@ -370,12 +384,9 @@ export default function Home() {
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="space-y-1 flex-1 pr-2">
-                        <Link
-                          to={item._id ? `/property/${item._id}` : '/browse'}
-                          className="font-heading font-semibold text-lg text-on-surface line-clamp-1 hover:text-primary transition-colors"
-                        >
+                        <h3 className="font-heading font-semibold text-lg text-on-surface line-clamp-1 group-hover:text-primary transition-colors">
                           {item.title}
-                        </Link>
+                        </h3>
                         <p className="flex items-center gap-1.5 text-on-surface-variant/70 text-xs line-clamp-1">
                           <span className="material-symbols-outlined text-[16px] text-primary">location_on</span>
                           {item.location}

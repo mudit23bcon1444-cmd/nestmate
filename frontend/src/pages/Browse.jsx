@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/client';
 import PropertyMap from '../components/PropertyMap';
@@ -24,6 +24,7 @@ const AMENITY_OPTIONS = [
 ];
 
 export default function Browse() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Filter state
@@ -355,10 +356,21 @@ export default function Browse() {
                 item.image_url ||
                 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80';
 
+              const propertyUrl = `/property/${item._id || item.id}`;
+
               return (
                 <div
                   key={item._id || item.id || idx}
-                  className="bg-surface rounded-2xl hover-lift overflow-hidden border border-outline-variant/30 flex flex-col justify-between shadow-xs group"
+                  onClick={() => navigate(propertyUrl)}
+                  role="link"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate(propertyUrl);
+                    }
+                  }}
+                  className="bg-surface rounded-2xl hover-lift overflow-hidden border border-outline-variant/30 flex flex-col justify-between shadow-xs group cursor-pointer"
                 >
                   {/* Photo with Floating Price Badge */}
                   <div className="relative aspect-[16/11] overflow-hidden bg-surface-container">
@@ -389,12 +401,11 @@ export default function Browse() {
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex justify-between items-start mb-1.5">
-                        <Link
-                          to={`/property/${item._id || item.id}`}
-                          className="font-heading text-base font-bold text-on-surface line-clamp-1 hover:text-primary transition-colors"
+                        <h3
+                          className="font-heading text-base font-bold text-on-surface line-clamp-1 group-hover:text-primary transition-colors"
                         >
                           {item.title}
-                        </Link>
+                        </h3>
                         <div className="flex items-center gap-1 text-secondary font-bold text-xs bg-secondary/10 px-2 py-0.5 rounded-full shrink-0">
                           <span
                             className="material-symbols-outlined text-[14px] text-amber-500"
